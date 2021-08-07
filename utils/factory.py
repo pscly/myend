@@ -22,6 +22,9 @@ def create_app():
     conf = load_conf(mode)
     app.config.update(conf)
 
+    # 注册api
+    from app01.api.router.routers import routers
+    register_api(app, routers)
 
     return app
 
