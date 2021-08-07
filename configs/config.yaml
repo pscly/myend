@@ -1,0 +1,17 @@
+COMMON: &common
+  PORT: 31001
+
+  # 数据库配置
+  SQLALCHEMY_DATABASE_URI: mysql+pymysql://root:@127.0.0.1/myend?charset=utf8
+  SQLALCHEMY_TRACK_MODIFICATIONS: False
+  SQLALCHEMY_ECHO: False
+  #  SQLALCHEMY_POOL_SIZE: 100
+
+DEVELOPMENT: &development
+  <<: *common
+  
+
+PRODUCTION: &production 
+  <<: *common
+  SQLALCHEMY_DATABASE_URI: mysql+pymysql://root:@127.0.0.1/myend?charset=utf8
+
