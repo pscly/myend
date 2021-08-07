@@ -1,5 +1,5 @@
 
-from flask import Blueprint,request,jsonify,current_app
+from flask import Blueprint,request,jsonify,current_app,g
 
 service_name = 'end1'
 bp = Blueprint(service_name, __name__, url_prefix='/end1')
