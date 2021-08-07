@@ -1,7 +1,8 @@
 
 from flask import Blueprint
 
-bp = Blueprint('/', __name__)
+service_name = '/'
+bp = Blueprint(service_name, __name__)
 
 
 # /
