@@ -9,7 +9,7 @@ def load_conf(mode:str, conf_name:str = 'config.yaml'):
     mode: 是什么环境， 开发还是生产(DEVELOPMENT, PRODUCTION)
     conf_nae: 配置文件名
     """
-    with open("configs/{}.yml".format(conf_name)) as f:
+    with open("configs/{}".format(conf_name)) as f:
         conf = yaml.safe_load(f)
 
     return conf[mode.upper()]
@@ -23,7 +23,8 @@ def create_app():
     app.config.update(conf)
 
     # 注册api
-    from app01.api.router.routers import routers
+    from app01.route import router
+    from app01.apis.router.routers import routers
     register_api(app, routers)
 
     return app
