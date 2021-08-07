@@ -1,6 +1,7 @@
-from flask import Flask
+from flask import Flask, Blueprint
 import yaml
 import os
+from app01.route import routers
 
 
 def load_conf(mode:str, conf_name:str = 'config.yaml'):
@@ -22,10 +23,10 @@ def create_app():
     conf = load_conf(mode)
     app.config.update(conf)
 
-    # 注册api
-    from app01.route import router
-    from app01.apis.router.routers import routers
-    register_api(app, routers)
+    # 注册api  # 其实可以街道方法中
+    for router in routers:
+        if isinstance(router, Blueprint):
+            app.register_blueprint(router)
 
     return app
 
