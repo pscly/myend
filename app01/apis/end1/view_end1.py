@@ -22,15 +22,13 @@ def index():
         "to_url": base_url,
         "who": header.get("who"),
     }
-    for i in header:
-        data[i] = header.get(i)
-
     if header.get('is_y') not in [1, '1']:
         data['is_y'] = 0
         print('非1', ip)
         return data
 
-    # 拿取ip地址
+    data |= request.json
+
     # 写入数据库
     myfuncs.write_data(data)
     

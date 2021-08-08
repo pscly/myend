@@ -16,5 +16,5 @@ def write_file(data):
     """
     with open(f"data/{data['who']}.txt", 'a') as f:
         for i in data:
-            f.write(data[i] + ',')
+            f.write(str(data[i]) + ',')
         f.write('\n')
