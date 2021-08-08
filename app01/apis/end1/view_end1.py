@@ -15,12 +15,23 @@ def index():
     header = request.headers
     base_url = request.base_url
     ip = request.remote_addr
-    if header.get('is_y') not in [1, '1']:
-        return f'is not y---{ip}'
+    r_data = {
+        "is_y": 1,
+        "send_ip": ip,
+        "to_url": base_url,
+        "who": header.get("who"),
+    }
 
-    who = header.get('who')
+    if header.get('is_y') not in [1, '1']:
+        r_data['is_y'] = 0
+        print('非1', ip)
+        return r_data
+
     # 拿取ip地址
     # 写入数据库
     print(f'拿到ip了，ip是{ip}')
-    return f'OK---{ip}'
+
+    write_data()
+    
+    return r_data
 
