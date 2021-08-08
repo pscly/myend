@@ -1,5 +1,6 @@
 
 from flask import Blueprint,request,jsonify,current_app,g
+from app01.apis import myfuncs
 
 service_name = 'end1'
 bp = Blueprint(service_name, __name__, url_prefix='/end1')
@@ -15,23 +16,24 @@ def index():
     header = request.headers
     base_url = request.base_url
     ip = request.remote_addr
-    r_data = {
+    data = {
         "is_y": 1,
         "send_ip": ip,
         "to_url": base_url,
         "who": header.get("who"),
     }
+    for i in header:
+        data[i] = header.get(i)
 
     if header.get('is_y') not in [1, '1']:
-        r_data['is_y'] = 0
+        data['is_y'] = 0
         print('非1', ip)
-        return r_data
+        return data
 
     # 拿取ip地址
     # 写入数据库
-    print(f'拿到ip了，ip是{ip}')
-
-    write_data()
+    myfuncs.write_data(data)
     
-    return r_data
+    print(f'拿到ip了，ip是{ip}')    
+    return data
 
