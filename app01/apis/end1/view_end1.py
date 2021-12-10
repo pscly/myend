@@ -1,6 +1,7 @@
 
 from flask import Blueprint,request,jsonify,current_app,g
 from app01 import myfuncs
+from datetime import datetime
 
 service_name = 'end1'
 bp = Blueprint(service_name, __name__, url_prefix='/end1')
@@ -20,15 +21,18 @@ def index():
         "is_y": 1,
         "send_ip": ip,
         "to_url": base_url,
-        "who": header.get("who"),
+        "who": header.get("who", '匿名'),
     }
     if header.get('is_y') not in [1, '1']:
         data['is_y'] = 0
         print('非1', ip)
         return data
 
-    data |= request.json
+    if request.json:
+        data |= request.json
 
+    data['time'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    
     # 写入数据库
     myfuncs.write_data(data)
     
