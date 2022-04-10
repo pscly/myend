@@ -1,5 +1,5 @@
 
-from flask import Blueprint
+from flask import Blueprint, redirect, request, g
 
 service_name = '/'
 bp = Blueprint(service_name, __name__)
@@ -14,4 +14,23 @@ def index():
 @bp.route('/robot.txt', methods=['GET'])
 def robot():
     return 'User-agent: *\nDisallow: /'
+
+
+@bp.route('/md', methods=['GET'])
+def md():
+    ip = request.remote_addr
+    hostname = request.host
+    
+    return {
+        'ip': ip,
+        'hostname': hostname,
+        'e_wy': 'UXQSTCRIEKULJEDL',
+    }
+
+# /emi/*
+@bp.route('/emi/', methods=['GET', 'POST'])
+def emi():
+    # 带着arg和postdata跳转到email模块
+    # print(app.config)
+    return redirect('/email/', request.base_url)
 
