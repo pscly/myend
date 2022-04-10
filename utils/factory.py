@@ -10,7 +10,7 @@ def load_conf(mode:str, conf_name:str = 'config.yaml'):
     mode: 是什么环境， 开发还是生产(DEVELOPMENT, PRODUCTION)
     conf_nae: 配置文件名
     """
-    with open("configs/{}".format(conf_name)) as f:
+    with open(f"configs/{conf_name}", encoding='utf-8') as f:
         conf = yaml.safe_load(f)
 
     return conf[mode.upper()]
