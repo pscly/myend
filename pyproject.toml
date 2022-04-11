@@ -1,0 +1,32 @@
+[project]
+name = ""
+version = ""
+description = ""
+authors = [
+    {name = "pscly", email = "pscly@outlook.com"},
+]
+dependencies = [
+    "certifi==2021.5.30",
+    "click==8.0.1",
+    "colorama==0.4.4",
+    "flask==2.0.1",
+    "itsdangerous==2.0.1",
+    "jinja2==3.0.1",
+    "markupsafe==2.0.1",
+    "pyyaml==5.4.1",
+    "werkzeug==2.0.1",
+    "wincertstore==0.2",
+    "yagmail>=0.15.277",
+]
+requires-python = ">=3.10"
+license = {text = "MIT"}
+
+[tool.pdm]
+[[tool.pdm.source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[build-system]
+requires = ["pdm-pep517"]
+build-backend = "pdm.pep517.api"
