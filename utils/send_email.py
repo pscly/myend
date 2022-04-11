@@ -1,23 +1,25 @@
 import yagmail
 import os
-import requests
+# import requests
 from flask import g
 
-def send_email(email_address, subject, body, email_data:dict):
-    yag = yagmail.SMTP(email_data['addr'], email_data['key'], host='smtp.163.com')
-    text = ['python测试1 ', '01点45分', '333333']
+def send_email(body, email_data:dict={}):
+    # key = UXQSTCRIEKULJEDL
+
+    yag = yagmail.SMTP('pscly1@163.com', 'UXQSTCRIEKULJEDL', host='smtp.163.com')
+    # yag = yagmail.SMTP(email_data['addr'], email_data['key'], host='smtp.163.com')
     ip = ''
     try:
-        yag.send('pscly@qq.com', '来自my_end,', text)
+        yag.send('pscly@qq.com', '来自my_end,', body)
         return True
     except Exception as e:
         print(e)
         return False
 
+
+send_email(['asdf'])
 # def get_ip():
     
     
 
-print(x,'a')
-print('adsf')
 
