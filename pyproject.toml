@@ -17,8 +17,9 @@ dependencies = [
     "werkzeug==2.0.1",
     "wincertstore==0.2",
     "yagmail>=0.15.277",
+    "addict>=2.4.0",
 ]
-requires-python = ">=3.10"
+requires-python = ">=3.7"
 license = {text = "MIT"}
 
 [tool.pdm]
@@ -30,3 +31,7 @@ verify_ssl = true
 [build-system]
 requires = ["pdm-pep517"]
 build-backend = "pdm.pep517.api"
+
+[tool.pdm.scripts]
+start = "python app.py"
+
