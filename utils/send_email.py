@@ -17,9 +17,10 @@ def send_email(body, email_data:dict={}):
         return False
 
 
-send_email(['asdf'])
-# def get_ip():
-    
-    
+def get_ip():
+    res1 = requests.get("pscly.cn:31001/md")
 
+
+
+    
 

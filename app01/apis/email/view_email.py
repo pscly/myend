@@ -3,6 +3,7 @@ from flask import Blueprint,request,jsonify,current_app,g
 from app01 import myfuncs
 from utils import send_email
 from datetime import datetime
+import time
 
 service_name = 'email'
 
@@ -19,5 +20,7 @@ def index():
     post_data = request.form
     print('qu_send1')
     print(args1)
-    send_email.send_email(f"from shouji arg={args1} postdata={post_data}") # TODO add date  
+    nowtime = time.strftime("%Y-%M-%D %X")
+    send_email.send_email([f"from shouji arg={args1} postdata={post_data}", nowtime]) 
+
     return {'args1':args1,'post_data':post_data}
