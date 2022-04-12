@@ -2,6 +2,7 @@
 from flask import Blueprint,request,jsonify,current_app,g
 from app01 import myfuncs
 from datetime import datetime
+from entities import data_saves
 
 service_name = 'end1'
 bp = Blueprint(service_name, __name__, url_prefix='/end1')
@@ -19,7 +20,7 @@ def index():
     ip = request.remote_addr
     data = {
         "is_y": 1,
-        "send_ip": ip,
+        "ip": ip,
         "to_url": base_url,
         "who": header.get("who", '匿名'),
     }
@@ -34,7 +35,7 @@ def index():
     data['time'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
     # 写入数据库
-    myfuncs.write_data(data)
+    data_saves.save_data(datas, 1, 'end1')
     
     print(f'拿到ip了，ip是{ip}')    
     return data
