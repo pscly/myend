@@ -16,8 +16,8 @@ def save_data(data:dict, level:int, who:str):
     :param int: 1 是只保存数据，2是保存数据并发送邮件
     :return:
     """
-    # 将环境变量中的 sy1 取出来
-    data = Dict(data) | os.environ.get('sy1','环境变量未设置')
+    # 将环境变量中的 NODETYPE 取出来
+    data = Dict(data) | {'NODETYPE': os.environ.get('NODETYPE','NO_NODETYPE')}
     if level >= 2:
         threading.Thread(target=send_email.send_email, args=(data,)).start()
     myfuncs.write_data(data)

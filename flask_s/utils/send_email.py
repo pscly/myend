@@ -17,13 +17,3 @@ def send_email(body, email_data:dict={}):
     except Exception as e:
         print(e)
         return False
-
-
-def get_ip():
-    if res1 := requests.get("http://127.0.0.1:31001/md"):
-        data = json.loads(res1.text)
-    return data.get('ip')
-
-if __name__ == '__main__':
-    get_ip()
-
