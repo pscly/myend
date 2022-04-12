@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3'
 services:
   my_end_py:
     build: 
@@ -8,8 +8,8 @@ services:
     command: sh run.sh
     environment:
       - NODETYPE=${NODETYPE}
-    env_file:
-      - ${NODETYPE}.env
+    # env_file:
+    #   - ${NODETYPE}.env
     ports:
       - "31002:31001"
     volumes:
