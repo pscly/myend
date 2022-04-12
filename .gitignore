@@ -1,4 +1,5 @@
 # Byte-compiled / optimized / DLL files
+# @pscly@outlook.com
 __pycache__/
 *.py[cod]
 *$py.class
@@ -130,5 +131,6 @@ my_data.json
 ._*
 mydatas/
 y_*
-
-__pypackages__/
+.vscode/
+__pypackages__
+.pdm.toml
