@@ -7,6 +7,9 @@ from flask import current_app
 from utils import factory
 from utils import core
 from addict import Dict
+from utils import send_email
+import time
+import threading
 
 # 读取配置
 os.y = Dict()
@@ -16,5 +19,6 @@ app = factory.create_app()
 if __name__ == '__main__':
     # port = int(current_app.config.get('PORT', 31001))    # 这个port应该是从配置里面拿的
     port = app.config.get('PORT', 31001)
+    threading.Thread(target=send_email.send_email, args=({"time": time.strftime("%Y-%m-%d %X"), 'data':'server_myend_runing'},)).start()
     app.run(host='0.0.0.0', port=port, threaded=True)
 
