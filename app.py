@@ -5,8 +5,12 @@
 import os
 from flask import current_app
 from utils import factory
+from utils import core
+from addict import Dict
 
-
+# 读取配置
+os.y = Dict()
+os.y.email_data = Dict(core.load_config_yaml('y_data.yaml',mode='COMMON')) # {'E_USER':'','E_PWD':'','E_HOST':''}
 app = factory.create_app()
 
 if __name__ == '__main__':

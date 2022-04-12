@@ -8,6 +8,7 @@ bp = Blueprint(service_name, __name__)
 # /
 @bp.route('/', methods=['GET'])
 def index():
+    # TODO 回头添加入库
     return '你好，这里是根节点，你为什么会来这里呢？我很好奇，你不该来这个网站的'
 
 # /robot.txt
@@ -18,6 +19,7 @@ def robot():
 
 @bp.route('/md', methods=['GET'])
 def md():
+    # TODO 回头添加入库
     ip = request.remote_addr
     hostname = request.host
     
