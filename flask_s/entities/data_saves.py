@@ -7,6 +7,7 @@ from utils import core
 from addict import Dict
 import time
 import threading
+import os
 
 def save_data(data:dict, level:int, who:str):
     """
@@ -15,7 +16,8 @@ def save_data(data:dict, level:int, who:str):
     :param int: 1 是只保存数据，2是保存数据并发送邮件
     :return:
     """
-    data = Dict(data)
+    # 将环境变量中的 sy1 取出来
+    data = Dict(data) | os.environ.get('sy1','环境变量未设置')
     if level >= 2:
         threading.Thread(target=send_email.send_email, args=(data,)).start()
     myfuncs.write_data(data)
