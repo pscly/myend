@@ -6,6 +6,10 @@ services:
       dockerfile: Dockerfile
     container_name: flask_myend_${NODETYPE}
     command: sh run.sh
+    environment:
+      - NODETYPE=${NODETYPE}
+    env_file:
+      - ${NODETYPE}.env
     ports:
       - "31002:31001"
     volumes:
