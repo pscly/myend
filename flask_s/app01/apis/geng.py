@@ -12,17 +12,19 @@ bp = Blueprint(service_name, __name__)
 def index():
     data = {
         'time': time.strftime("%Y-%m-%d %X"),
-        'ip': request.remote_addr,
+        'ip': request.headers.get('X-Forwarded-For', request.remote_addr),
     }
     data_saves.save_data(data, 1, 'gen')
     return '你好，这里是根节点，你为什么会来这里呢？我很好奇，你不该来这个网站的'
 
 # /robot.txt
+
+
 @bp.route('/robot.txt', methods=['GET'])
 def robot():
     data = {
         'time': time.strftime("%Y-%m-%d %X"),
-        'ip': request.remote_addr,
+        'ip': request.headers.get('X-Forwarded-For', request.remote_addr),
     }
     data_saves.save_data(data, 1, 'robot')
     return 'User-agent: *\nDisallow: /'
@@ -32,13 +34,15 @@ def robot():
 def md():
     data = {
         'time': time.strftime("%Y-%m-%d %X"),
-        'ip': request.remote_addr,
+        'ip': request.headers.get('X-Forwarded-For', request.headers.get('X-Forwarded-For', request.remote_addr)),
         'hostname': request.host
     }
     data_saves.save_data(data, 1, 'gen')
     return data
 
 # /emi/*
+
+
 @bp.route('/emi/', methods=['GET', 'POST'])
 def emi():
     # 带着arg和postdata跳转到email模块
