@@ -17,7 +17,7 @@ def load_conf(mode: str, conf_name: str = 'config.yaml'):
 
 
 def create_app():
-    app = Flask(__name__, template_folder=os.path.join(
+    app = Flask('app', template_folder=os.path.join(
         'static', 'jinja_templates'), static_folder='static', static_url_path='/static')
     mode = os.environ.get('MODE', "DEVELOPMENT")
     conf = load_conf(mode)
