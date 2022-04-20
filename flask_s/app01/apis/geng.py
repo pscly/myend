@@ -7,7 +7,6 @@ service_name = '/'
 bp = Blueprint(service_name, __name__)
 
 
-# /
 @bp.route('/', methods=['GET'])
 def index():
     data = {
@@ -15,11 +14,7 @@ def index():
         'ip': request.headers.get('X-Forwarded-For', request.remote_addr),
     }
     data_saves.save_data(data, 1, 'gen')
-    return render_template('index.html')
-    # return '你好，这里是根节点，你为什么会来这里呢？我很好奇，你不该来这个网站的'
-
-# /robot.txt
-
+    return '你好，这里是根节点，你为什么会来这里呢？我很好奇，你不该来这个网站的'
 
 @bp.route('/robot.txt', methods=['GET'])
 def robot():
@@ -40,8 +35,6 @@ def md():
     }
     data_saves.save_data(data, 1, 'gen')
     return data
-
-# /emi/*
 
 
 @bp.route('/emi/', methods=['GET', 'POST'])
