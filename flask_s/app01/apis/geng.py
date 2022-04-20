@@ -1,5 +1,5 @@
 
-from flask import Blueprint, redirect, request, g
+from flask import Blueprint, redirect, request, g, render_template
 from entities import data_saves
 import time
 
@@ -15,7 +15,8 @@ def index():
         'ip': request.headers.get('X-Forwarded-For', request.remote_addr),
     }
     data_saves.save_data(data, 1, 'gen')
-    return '你好，这里是根节点，你为什么会来这里呢？我很好奇，你不该来这个网站的'
+    return render_template('index.html')
+    # return '你好，这里是根节点，你为什么会来这里呢？我很好奇，你不该来这个网站的'
 
 # /robot.txt
 

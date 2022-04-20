@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, current_app, g, send_file
+from flask import Blueprint, request, jsonify, current_app, g, send_file, render_template
 from app01 import myfuncs
 from addict import Dict
 from utils import send_email
@@ -25,7 +25,10 @@ def index():
         'who': 'files'
     })
     x = core.get_files(os.y.up_files_path)
-    return jsonify(x)
+    # return jsonify(x)
+    # return render_template(os.path.join(os.y.root_path1,
+    #                                     'templates', 'down.html'), x=x)
+    return render_template('down.html')
 
 
 @bp.route('/<string:file_name>', methods=('GET',))
@@ -44,6 +47,7 @@ def up_file():
     if request.method == 'POST':
         file = request.files.get('file')
         file_name = file.filename
-        myfuncs.save_file(request.files.get('file'), os.path.join(os.y.up_files_path, file_name))
+        myfuncs.save_file(request.files.get('file'),
+                          os.path.join(os.y.up_files_path, file_name))
         # 将文件信息保存到数据库
         return jsonify({"msg": "ok"})
