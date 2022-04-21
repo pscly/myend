@@ -41,14 +41,14 @@ def down(file_name):
 def up_file():
     if request.method == "GET":
         date1 = time.strftime("%d%H")
-        if request.args.get('y1') == date1:
+        if request.args.get('y') == date1:
             return render_template('up_file.html')
-        return jsonify({'msg': '请求错误'})
+        return jsonify({'msg': '请求错误', 'y': request.args.get('y')})
 
     if request.method == 'POST':
         file = request.files.get('file')
         file_name = file.filename
         myfuncs.save_file(request.files.get('file'),
                           os.path.join(os.y.up_files_path, file_name))
-        # 将文件信息保存到数据库
-        return jsonify({"msg": "ok"})
+        # return jsonify({"msg": "ok"})
+        return render_template('down_ok.html')
