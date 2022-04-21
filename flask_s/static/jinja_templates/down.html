@@ -3,8 +3,31 @@
 
 {% block content %}
 <h1>下载</h1>
-    {% for item in navigation %}
-    <li><a href="{{ item }}">{{ item }}</a></li>
-    {% endfor %}
+<br>
+<table class="table table-hover">
+    <caption></caption>
+    <thead>
+
+        <tr class="table-primary">
+            <th scope="col">#</th>
+            <th scope="col">文件名</th>
+            <!-- <th scope="col">用户</th> -->
+            <th scope="col">更新时间</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in files %}
+        <tr>
+            <th scope="row">{{loop.index}}</th>
+            <td><a href="{{ item[1] }}">{{item[1]}}</a></td>
+            <!-- <td>{{ item[1] }}</td> -->
+            <td>{{ item[0] }}</td>
+            <!-- <td><a href="{{ item[0] }}">下载</a></td> -->
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
 
 {% endblock %}

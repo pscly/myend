@@ -25,9 +25,8 @@ def index():
         'who': 'files'
     })
     data_saves.save_data(datas, 1, 'files')
-    x = core.get_files(os.y.up_files_path)
-    x2 = list(zip(list(x), [str(i) for i in x]))
-    return render_template('down.html', navigation=x)
+    files = core.get_files(os.y.up_files_path)
+    return render_template('down.html', files=files)
 
 
 @bp.route('/<string:file_name>', methods=('GET',))
