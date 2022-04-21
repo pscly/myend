@@ -1,37 +1,37 @@
 #  简介
 
-这个东西是为了让我的后端能够更好的使用
-(emmmm. 才发现end不是后的意思，是结束的意思，我这库名多少有点离谱)
+此项目是集大家于一身的项目
+实现功能:
+
+1. 模拟共享网盘系统
+2. 后端专用接口模拟
+3. 文本加密签名验证
 
 ## 运行
 
-1. 安装python
-2. pip install -r requirements.txt
-3. python app.py
+### 使用docker
 
-## 功能
+1. docker-compose up -d
+   
+### 使用python
 
-1. 通过接受请求，来将ip写入数据库，或者文件中，让我能够进行ip地址查看，或者是其他情况
-    1. header 中的参数
-       1. is_y: 必须, 而且是1
-       2. who: 可选 我是谁
+### 使用原生python运行
 
-## 问题
+```bash
+cd flask_s
+python3 install -r ./requirements.txt
+python3 app.py 0.0.0.0:80
+```
 
-- [ ] 直接把数据库的密码上传过去不太好吧
-  - [ ] 1. IP地址使用腾讯的内网地址
-  - [ ] 2. 代码库使用我的gitea平台，而不是github
+#### 使用pdm (python虚拟环境管理运行)
 
-## TODO 
-- [ ] 得把IP数据写入到数据库中
-  - [ ] 如何写入呢？
-    - [ ] 环境变量配置策略
-    - [ ] 本地直接docker部署一个数据库
-    - [ ] 云服务器的内网来连接数据库
-- [ ] 统计一个客户端的请求总量
+```
+cd flask_s
+pdm update
+pdm run start
+```
 
-## API
 
-### 127.0.0.1:5000/end1/
+## TODO
 
-拿到你的访问ip并且打印，入库(TODO)
+1. 考虑补充开放API文档

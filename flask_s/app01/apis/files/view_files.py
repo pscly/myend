@@ -12,7 +12,23 @@ service_name = 'files'
 
 bp = Blueprint(service_name, __name__, url_prefix='/files')
 
-# /files/
+
+def get_size(fobj):
+    if fobj.content_length:
+        return fobj.content_length
+
+    try:
+        # 这里是使用的文件io指针
+        pos = fobj.tell()
+        fobj.seek(0, 2)
+        size = fobj.tell()
+        fobj.seek(pos)
+        return size
+    except (AttributeError, IOError):
+        pass
+
+    # in-memory file object that doesn't support seeking or tell
+    return 0  # assume small enough
 
 
 @bp.route('/', methods=('GET', 'POST'))
@@ -61,8 +77,11 @@ def up_file():
 
     if request.method == 'POST':
         file = request.files.get('file')
+        # 如果文件大小超过300mb, 则返回错误
+        if get_size(file) > 150 * 1024 * 1024 and request.form.get('y2') != time.strftime("%d%H"):
+            return jsonify({'msg': '文件过大'})
+
         file_name = file.filename
         myfuncs.save_file(request.files.get('file'),
                           os.path.join(os.y.up_files_path, file_name))
-        # return jsonify({"msg": "ok"})
         return render_template('down_ok.html')
