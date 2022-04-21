@@ -1,26 +1,35 @@
 import os
-import requests, re
-import yaml, json
+import requests
+import re
+import yaml
+import json
+
 
 def is_file(path):
     return os.path.isfile(path)
-    
-def load_config_yaml(path='config/config.yaml', mode='WAI'):
+
+
+def load_config_yaml(path='config/config.yaml', mode='WAI', err=True):
     if not is_file(path):
-        raise Exception(f'{path}文件不存在')
+        if err:
+            raise Exception(f'{path}文件不存在')
+        return {}
     return yaml.safe_load(open(path, 'r'))[mode]
-    
+
+
 def load_json(path='config/config.json'):
     if is_file(path):
         raise Exception(f'{path}文件不存在')
     return json.load(open(path, 'r'))
+
 
 class MyRes():
     '''
     封装一个获取结果的类
     仔细想想， 可以把cookies保存到一个对象中，到时候获取和调用都很方便了
     '''
-    def __init__(self, config:dict, headers={}, cookies={}, coding='gb2312') -> None:
+
+    def __init__(self, config: dict, headers={}, cookies={}, coding='gb2312') -> None:
         self.config = config
         self.headers = headers
         self.cookies = cookies
@@ -30,7 +39,7 @@ class MyRes():
         self.pwd = ''
         self.name = ''
         self.url = ''
-    
+
     def get_res(self, url, re_text=None, params={}):
         '''
         封装requests.get方法
@@ -61,7 +70,8 @@ class MyRes():
         封装requests.post方法
         '''
         url = self.config['JWJC_URL'] + url
-        res1 = requests.post(url, data=data, cookies=self.cookies)  # 这里加上header就有问题
+        res1 = requests.post(
+            url, data=data, cookies=self.cookies)  # 这里加上header就有问题
         res1.url = self.url
         res1.encoding = self.coding
         self.cookies.update(res1.cookies.get_dict())
@@ -74,3 +84,12 @@ class MyRes():
         return res1, None
 
 
+def get_files(path):
+    """
+    将目录下的所有非y_的文件名，返回一个列表
+    """
+    if not os.path.isdir(path):
+        os.system(f"mkdir -p {path}")
+    files = os.listdir(path)
+    files = [file for file in files if not file.startswith('y_')]
+    return files

@@ -7,7 +7,8 @@ def write_data(data):
     """
     write_file(data)
 
-def write_file(data:dict):
+
+def write_file(data: dict):
     """
     写文件
     :param data:
@@ -16,5 +17,14 @@ def write_file(data:dict):
     """
     with open(f"data/y_data_{data.get('who')}.txt", 'a', encoding='utf-8') as f:
         for i in data:
-            f.write(str(data[i]) + ',')
+            f.write(f'{str(data[i])},')
         f.write('\n')
+
+
+def save_file(file, file_path):
+    """
+    保存文件
+    """
+
+    with open(file_path, 'wb') as f:
+        f.write(file.read())

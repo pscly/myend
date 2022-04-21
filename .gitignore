@@ -134,3 +134,5 @@ y_*
 .vscode/
 __pypackages__
 .pdm.toml
+
+up_files/
