@@ -3,6 +3,7 @@ import requests
 import re
 import yaml
 import json
+import time
 
 
 def is_file(path):
@@ -86,10 +87,22 @@ class MyRes():
 
 def get_files(path):
     """
-    将目录下的所有非y_的文件名，返回一个列表
+    将目录下的所有非y_的文件名，返回一个列表，通过文件的创建时间排序
     """
     if not os.path.isdir(path):
         os.system(f"mkdir -p {path}")
-    files = os.listdir(path)
-    files = [file for file in files if not file.startswith('y_')]
+    files_path = os.listdir(path)
+    files = [
+        [file for file in files_path if not file.startswith('y_')],
+        ]
+    files.sort(key=lambda x: os.path.getmtime(
+        os.path.join(path, x)), reverse=True)
+    t_files = list(
+        zip(
+            [time.strftime("%Y-%m-%d %X", time.localtime(os.path.getmtime(
+                os.path.join(path, file)))) for file in files],
+            files,
+            [os.path.getmtime(os.path.join(path, file)) for file in files],
+        )
+    )
     return files
