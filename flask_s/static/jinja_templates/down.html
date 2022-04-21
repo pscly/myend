@@ -1,0 +1,10 @@
+{% extends "index.html" %}
+{% block title %}下载{% endblock %}
+
+{% block content %}
+<h1>下载</h1>
+    {% for item in navigation %}
+    <li><a href="{{ item }}">{{ item }}</a></li>
+    {% endfor %}
+
+{% endblock %}
