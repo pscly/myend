@@ -92,17 +92,16 @@ def get_files(path):
     if not os.path.isdir(path):
         os.system(f"mkdir -p {path}")
     files_path = os.listdir(path)
-    files = [
-        [file for file in files_path if not file.startswith('y_')],
-        ]
-    files.sort(key=lambda x: os.path.getmtime(
-        os.path.join(path, x)), reverse=True)
+    files = [file for file in files_path if not file.startswith('y_')]
+    files_dates = [os.path.getmtime(os.path.join(path, file))
+                   for file in files]
     t_files = list(
         zip(
-            [time.strftime("%Y-%m-%d %X", time.localtime(os.path.getmtime(
-                os.path.join(path, file)))) for file in files],
+            [time.strftime("%Y-%m-%d %X", time.localtime(files_date))
+                           for files_date in files_dates],
             files,
-            [os.path.getmtime(os.path.join(path, file)) for file in files],
+            files_dates,
         )
     )
-    return files
+    t_files.sort(key=lambda x: x[2], reverse=True)
+    return t_files

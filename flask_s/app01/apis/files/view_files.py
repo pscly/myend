@@ -26,7 +26,7 @@ def index():
     })
     data_saves.save_data(datas, 1, 'files')
     files = core.get_files(os.y.up_files_path)
-    return render_template('down.html', navigation=files)
+    return render_template('down.html', files=files)
 
 
 @bp.route('/<string:file_name>', methods=('GET',))
