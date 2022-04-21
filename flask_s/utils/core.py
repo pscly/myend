@@ -88,6 +88,8 @@ def get_files(path):
     """
     将目录下的所有非y_的文件名，返回一个列表
     """
+    if not os.path.isdir(path):
+        os.system(f"mkdir -p {path}")
     files = os.listdir(path)
     files = [file for file in files if not file.startswith('y_')]
     return files

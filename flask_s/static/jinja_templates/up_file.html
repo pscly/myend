@@ -1,0 +1,18 @@
+{% extends "index.html" %}
+{% block title %}上传{% endblock %}
+
+{% block content %}
+<h1>上传</h1>
+<form action="" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="exampleFormControlFile1">选择上传文件</label>
+        <input type="file" class="form-control-file" name="file">
+    </div>
+    <input type="hidden" name="y" value="y">
+    <div class="form-group">
+        <label for="exampleInputPassword1">上传用户</label>
+        <input type="text" class="form-control" name="user">
+    </div>
+    <button type="submit" class="btn btn-primary">上传</button>
+</form>
+{% endblock %}

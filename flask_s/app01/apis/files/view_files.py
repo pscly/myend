@@ -25,10 +25,8 @@ def index():
         'who': 'files'
     })
     x = core.get_files(os.y.up_files_path)
-    # return jsonify(x)
-    # return render_template(os.path.join(os.y.root_path1,
-    #                                     'templates', 'down.html'), x=x)
-    return render_template('down.html')
+    x2 = list(zip(list(x), [str(i) for i in x]))
+    return render_template('down.html', navigation=x)
 
 
 @bp.route('/<string:file_name>', methods=('GET',))
@@ -36,13 +34,16 @@ def down(file_name):
     x = os.path.join(os.y.up_files_path, file_name)
     if os.path.isfile(x):
         return send_file(x)
-    return jsonify({'msg': 'file not found'})
+    return jsonify({'msg': '文件不存在'})
 
 
 @bp.route(rule='/up', methods=('GET', 'POST'))
 def up_file():
     if request.method == "GET":
-        return send_file(os.path.join(os.y.root_path1, 'static', 'up_file.html'))
+        date1 = time.strftime("%d%H")
+        if request.args.get('y1') == date1:
+            return render_template('up_file.html')
+        return jsonify({'msg': '请求错误'})
 
     if request.method == 'POST':
         file = request.files.get('file')
