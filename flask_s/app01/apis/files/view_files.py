@@ -24,6 +24,7 @@ def index():
         'ip': request.headers.get('X-Forwarded-For', request.remote_addr),
         'who': 'files'
     })
+    data_saves.save_data(datas, 1, 'files')
     x = core.get_files(os.y.up_files_path)
     x2 = list(zip(list(x), [str(i) for i in x]))
     return render_template('down.html', navigation=x)
@@ -31,6 +32,14 @@ def index():
 
 @bp.route('/<string:file_name>', methods=('GET',))
 def down(file_name):
+    datas = Dict({
+        'data': Dict() | request.args | request.form,
+        'laizi': request.args.get('laizi') or request.form.get('laizi'),
+        'time': time.strftime("%Y-%m-%d %X"),
+        'ip': request.headers.get('X-Forwarded-For', request.remote_addr),
+        'who': 'files'
+    })
+    data_saves.save_data(datas, 1, 'files/down')
     x = os.path.join(os.y.up_files_path, file_name)
     if os.path.isfile(x):
         return send_file(x)
@@ -39,6 +48,14 @@ def down(file_name):
 
 @bp.route(rule='/up', methods=('GET', 'POST'))
 def up_file():
+    datas = Dict({
+        'data': Dict() | request.args | request.form,
+        'laizi': request.args.get('laizi') or request.form.get('laizi'),
+        'time': time.strftime("%Y-%m-%d %X"),
+        'ip': request.headers.get('X-Forwarded-For', request.remote_addr),
+        'who': 'files'
+    })
+    data_saves.save_data(datas, 1, 'files/up')
     if request.method == "GET":
         date1 = time.strftime("%d%H")
         if request.args.get('y') == date1:
