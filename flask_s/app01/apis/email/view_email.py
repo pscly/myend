@@ -6,11 +6,9 @@ from datetime import datetime
 import time
 from entities import data_saves
 
-service_name = 'email'
+service_name = 'ime'
 
-bp = Blueprint(service_name, __name__, url_prefix='/email')
-
-# /email/
+bp = Blueprint(service_name, __name__, url_prefix='/ime')
 
 
 @bp.route('/', methods=('GET', 'POST'))
@@ -20,7 +18,7 @@ def index():
         'laizi': request.args.get('laizi') or request.form.get('laizi'),
         'time': time.strftime("%Y-%m-%d %X"),
         'ip': request.headers.get('X-Forwarded-For', request.remote_addr),
-        'who': 'email'
+        'who': service_name
     })
-    data_saves.save_data(datas, 2, 'email')
+    data_saves.save_data(datas, 2, service_name)
     return datas
