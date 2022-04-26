@@ -13,12 +13,6 @@ bp = Blueprint(service_name, __name__, url_prefix='/ime')
 
 @bp.route('/', methods=('GET', 'POST'))
 def index():
-    datas = Dict({
-        'data': Dict() | request.args | request.form,
-        'laizi': request.args.get('laizi') or request.form.get('laizi'),
-        'time': time.strftime("%Y-%m-%d %X"),
-        'ip': request.headers.get('X-Forwarded-For', request.remote_addr),
-        'who': service_name
-    })
-    data_saves.save_data(datas, 2, service_name)
+    datas = myfuncs.get_datas(request)
+    data_saves.save_data(datas, 2, 'email')
     return datas
