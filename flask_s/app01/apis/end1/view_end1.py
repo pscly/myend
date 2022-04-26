@@ -28,6 +28,6 @@ def index():
         data |= request.json
 
     # 写入数据库
-    data_saves.save_data(datas, 1, 'end1')
+    data_saves.save_data(datas, 1, service_name)
     print(f'拿到ip了，ip是{data.ip}')
     return jsonify(data)

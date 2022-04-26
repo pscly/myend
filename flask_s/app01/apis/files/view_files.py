@@ -34,7 +34,7 @@ def get_size(fobj):
 @bp.route('/', methods=('GET', 'POST'))
 def index():
     datas = myfuncs.get_datas(request)
-    data_saves.save_data(datas, 1, 'files')
+    data_saves.save_data(datas, 1, service_name)
     files = core.get_files(os.y.up_files_path)
     return render_template('down.html', files=files)
 
@@ -42,7 +42,7 @@ def index():
 @bp.route('/<string:file_name>', methods=('GET',))
 def down(file_name):
     datas = myfuncs.get_datas(request)
-    data_saves.save_data(datas, 1, 'files/down')
+    data_saves.save_data(datas, 1, f'{service_name}/down')
     x = os.path.join(os.y.up_files_path, file_name)
     if os.path.isfile(x):
         return send_file(x)
@@ -52,7 +52,7 @@ def down(file_name):
 @bp.route(rule='/up', methods=('GET', 'POST'))
 def up_file():
     datas = myfuncs.get_datas(request)
-    data_saves.save_data(datas, 1, 'files/up')
+    data_saves.save_data(datas, 1, f'{service_name}/up')
     if request.method == "GET":
         date1 = time.strftime("%d%H")
         if request.args.get('y') == date1:
