@@ -1,12 +1,13 @@
-from flask import Blueprint, request, jsonify, current_app, g, send_file, render_template
-from app01 import myfuncs
-from addict import Dict
-from utils import send_email
-from datetime import datetime
-import time
 import os
+import time
+from datetime import datetime
+
+from addict import Dict
+from app01 import myfuncs
 from entities import data_saves
-from utils import core
+from flask import (Blueprint, current_app, g, jsonify, render_template,
+                   request, send_file)
+from utils import core, send_email
 
 service_name = 'files'
 
@@ -35,6 +36,8 @@ def get_size(fobj):
 def index():
     datas = myfuncs.get_datas(request)
     data_saves.save_data(datas, 1, 'files')
+    if current_app.config["COS"]:
+        print(datas)
     files = core.get_files(os.y.up_files_path)
     return render_template('down.html', files=files)
 
@@ -62,7 +65,7 @@ def up_file():
     if request.method == 'POST':
         file = request.files.get('file')
         # 如果文件大小超过300mb, 则返回错误
-        if get_size(file) > 150 * 10 and request.form.get('y2') != time.strftime("%d%H"):
+        if get_size(file) > 150 * 1024  * 1024 and request.form.get('y2') != time.strftime("%d%H"):
             return jsonify({'msg': '文件过大'})
 
         file_name = file.filename

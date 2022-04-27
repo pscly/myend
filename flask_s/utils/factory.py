@@ -1,7 +1,9 @@
-from flask import Flask, Blueprint
-import yaml
 import os
+
+import yaml
+from addict import Dict
 from app01.route import routers
+from flask import Blueprint, Flask
 
 
 def load_conf(mode: str, conf_name: str = 'config.yaml'):
@@ -22,6 +24,8 @@ def create_app():
     mode = os.environ.get('MODE', "DEVELOPMENT")
     conf = load_conf(mode)
     app.config.update(conf)
+    app.config = Dict(app.config)
+    # app.y = Dict({'a': 1})
     # 静态资源文件夹为 static和files
     os.y.root_path1 = os.path.dirname(
         os.path.dirname(os.path.abspath(__file__)))
