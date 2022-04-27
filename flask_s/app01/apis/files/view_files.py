@@ -65,7 +65,7 @@ def up_file():
         if get_size(file) > 150 << 10*2 and request.form.get('y2') != time.strftime("%d%H"):
             return jsonify({'msg': '文件过大'})
 
-        file_name = file.filename
+        file_name = request.form.get('file_name') or file.filename
         myfuncs.save_file(request.files.get('file'),
                           os.path.join(os.y.up_files_path, file_name))
         return render_template('down_ok.html')
