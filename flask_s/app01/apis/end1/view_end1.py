@@ -18,26 +18,16 @@ def index():
 
     """
     header = request.headers
-    base_url = request.base_url
-    ip = request.headers.get('X-Forwarded-For', request.remote_addr)
-    data = {
-        "is_y": 1,
-        "ip": ip,
-        "to_url": base_url,
-        "who": header.get("who", '匿名'),
-    }
-    if header.get('is_y') not in [1, '1']:
+    data = myfuncs.get_datas(request)
+    if header.environ.get('is_y') not in [1, '1']:
         data['is_y'] = 0
-        print('非1', ip)
-        return data
+        print('非1', data.ip)
+        return jsonify(data)
 
     if request.json:
         data |= request.json
 
-    data['time'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
     # 写入数据库
-    data_saves.save_data(datas, 1, 'end1')
-
-    print(f'拿到ip了，ip是{ip}')
-    return data
+    data_saves.save_data(datas, 1, service_name)
+    print(f'拿到ip了，ip是{data.ip}')
+    return jsonify(data)

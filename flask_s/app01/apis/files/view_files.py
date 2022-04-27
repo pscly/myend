@@ -33,28 +33,16 @@ def get_size(fobj):
 
 @bp.route('/', methods=('GET', 'POST'))
 def index():
-    datas = Dict({
-        'data': Dict() | request.args | request.form,
-        'laizi': request.args.get('laizi') or request.form.get('laizi'),
-        'time': time.strftime("%Y-%m-%d %X"),
-        'ip': request.headers.get('X-Forwarded-For', request.remote_addr),
-        'who': 'files'
-    })
-    data_saves.save_data(datas, 1, 'files')
+    datas = myfuncs.get_datas(request)
+    data_saves.save_data(datas, 1, service_name)
     files = core.get_files(os.y.up_files_path)
     return render_template('down.html', files=files)
 
 
 @bp.route('/<string:file_name>', methods=('GET',))
 def down(file_name):
-    datas = Dict({
-        'data': Dict() | request.args | request.form,
-        'laizi': request.args.get('laizi') or request.form.get('laizi'),
-        'time': time.strftime("%Y-%m-%d %X"),
-        'ip': request.headers.get('X-Forwarded-For', request.remote_addr),
-        'who': 'files'
-    })
-    data_saves.save_data(datas, 1, 'files/down')
+    datas = myfuncs.get_datas(request)
+    data_saves.save_data(datas, 1, f'{service_name}/down')
     x = os.path.join(os.y.up_files_path, file_name)
     if os.path.isfile(x):
         return send_file(x)
@@ -63,14 +51,8 @@ def down(file_name):
 
 @bp.route(rule='/up', methods=('GET', 'POST'))
 def up_file():
-    datas = Dict({
-        'data': Dict() | request.args | request.form,
-        'laizi': request.args.get('laizi') or request.form.get('laizi'),
-        'time': time.strftime("%Y-%m-%d %X"),
-        'ip': request.headers.get('X-Forwarded-For', request.remote_addr),
-        'who': 'files'
-    })
-    data_saves.save_data(datas, 1, 'files/up')
+    datas = myfuncs.get_datas(request)
+    data_saves.save_data(datas, 1, f'{service_name}/up')
     if request.method == "GET":
         date1 = time.strftime("%d%H")
         return render_template('up_file.html')
@@ -78,10 +60,10 @@ def up_file():
     if request.method == 'POST':
         file = request.files.get('file')
         # 如果文件大小超过300mb, 则返回错误
-        if get_size(file) > 150 * 1024 * 1024 and request.form.get('y2') != time.strftime("%d%H"):
+        if get_size(file) > 150 << 10*2 and request.form.get('y2') != time.strftime("%d%H"):
             return jsonify({'msg': '文件过大'})
 
-        file_name = file.filename
+        file_name = request.form.get('file_name') or file.filename
         myfuncs.save_file(request.files.get('file'),
                           os.path.join(os.y.up_files_path, file_name))
         return render_template('down_ok.html')
