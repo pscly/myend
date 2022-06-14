@@ -1,8 +1,9 @@
 
-from flask import Blueprint, redirect, request, g, render_template
+from flask import Blueprint, redirect, request, g, render_template, render_template
 from entities import data_saves
 from .. import myfuncs
 import time
+import random
 
 service_name = '/'
 bp = Blueprint(service_name, __name__)
@@ -12,7 +13,18 @@ bp = Blueprint(service_name, __name__)
 def index():
     data = myfuncs.get_datas(request)
     data_saves.save_data(data, 1, 'gen')
-    return '你好，这里是根节点，你为什么会来这里呢？我很好奇，你不该来这个网站的'
+    yyids = [
+        28188427,
+        1407112865,
+        1919147134,
+        1453957944,
+        1886371886,
+        450853439
+    ]
+    return render_template('geng.html', yyid=random.choice(yyids), imgid=str(random.randint(1, 18)))
+    # return render_template('down.html', files=files, imgid=str(random.randint(1, 18)))
+    # return render_template('down.html', datas={"files": files, "imgid": random.randint(1, 18)})
+
 
 @bp.route('/robot.txt', methods=['GET'])
 def robot():
