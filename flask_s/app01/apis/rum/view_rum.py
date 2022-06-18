@@ -102,3 +102,44 @@ def addkey():
     mo = MyMongo1('key')
     mo.save(key_list)
     return jsonify({'msg': 'ok', 'key_list': key_list1})
+
+
+@bp.route('/getkey', methods=('GET', 'POST'))
+def getkey():
+    y = request.args.get('y') or request.form.get('y')
+    if y != time.strftime("%d%H"):
+        return jsonify({'msg': '错误, 此页面暂时不允许访问, 服务器内部错误'})
+    gq = request.args.get('gq') or request.form.get('gq') or 0  # 是否要看过期的
+    mo = MyMongo1('key')
+    # 查询 time = 0 和 time > time.time()
+    x = mo.find_many({})
+    if gq == '1':
+        x1 = [{
+            '类型': '未使用的',
+            'key': i['key'],
+            'time': i['time'],
+            'create_time': i['create_time'],
+            'endtime': i.get('endtime'),
+            '机器码s': i.get('jiqimas'),
+        } for i in x if i['time'] == 0]
+    elif gq == '2':
+        x1 = [{
+            '类型': '全部',
+            'key': i['key'],
+            'time': i['time'],
+            'create_time': i['create_time'],
+            'endtime': i.get('endtime'),
+            '机器码s': i.get('jiqimas'),
+        } for i in x]
+    elif gq == '3':
+        x1 = [{
+            '类型': '使用中的',
+            'key': i['key'],
+            'time': i['time'] - time.time(),
+            'create_time': i['create_time'],
+            'endtime': i.get('endtime'),
+            '机器码s': i.get('jiqimas', []),
+        } for i in x if i['time'] > time.time()]
+    else:
+        x1 = []
+    return jsonify({'msg': 'ok', 'key_list': x1})

@@ -31,6 +31,8 @@ class MyMongo1():
     def find(self, tiaojian: dict):
         return self.table_user.find_one(tiaojian)  # 这个又是相当于是普通的find，返回对象，需要for
 
+    def find_many(self, tiaojian):
+        return self.table_user.find(tiaojian)
     # #7、更新
     def update(self, tiaojian: dict, data: dict, hebing=False):
         '''
