@@ -32,6 +32,8 @@ def index():
         return jsonify({"code": -1, "msg": "激活码错误"})
     mo = MyMongo1('key')
     if key_data := mo.find({'key': key}):
+        mo.update({'key': key_data['key']}, {
+                  'endtime': time.strftime("%Y-%m-%d %X")})
         key_data = Dict(key_data)
         if key_data['time'] > time.time():
             return jsonify({"code": 1, "msg": f"剩余时间: {round(int(key_data['time'] - time.time()) / 60 / 60 / 24,2)}天", 'time': key_data['time']})
@@ -44,7 +46,7 @@ def index():
                 key_data.time = time.time() + 60 * 60 * 24
             elif key[:2] == 'yk':
                 # 月卡
-                key_data.time = time.time() + 60 * 60 * 24 * 30
+                key_data.time = time.time() + 60 * 60 * 24 * 31
             elif key[:2] == 'nk':
                 # 年卡
                 key_data.time = time.time() + 60 * 60 * 24 * 365
