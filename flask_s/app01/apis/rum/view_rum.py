@@ -120,7 +120,8 @@ def addkey():
     if not head:
         return jsonify({'msg': '错误,缺失创建者'})
     # 将head的每个字符 +1
-    key_num = 20
+    if not k_num:
+        k_num = '20'
     if k_num.isdigit() and int(k_num) > 0:
         key_num = int(k_num)
     key_list = [{'key': f'{key}{core.get_ran_str(24)}',
@@ -185,10 +186,10 @@ def upkey():
     if y != time.strftime("%d%H"):
         return jsonify({'msg': '错误, 此页面暂时不允许访问, 服务器内部错误'})
     key = request.args.get('key') or request.form.get('key')
-    if not key:
-        return jsonify({'msg': '错误,缺失key'})
     time_a = request.args.get('time_a') or request.form.get('time_a')
     addtime = request.args.get('addtime') or request.form.get('addtime')
+    if addtime and time_a and key:
+        return jsonify({'msg': '参数错误'})
     mo = MyMongo1('key')
     mo_key = mo.find({'key': key})
     if not mo_key:
