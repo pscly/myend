@@ -4,6 +4,9 @@ import re
 import yaml
 import json
 import time
+import random
+import uuid
+
 
 
 def is_file(path):
@@ -22,6 +25,19 @@ def load_json(path='config/config.json'):
     if is_file(path):
         raise Exception(f'{path}文件不存在')
     return json.load(open(path, 'r'))
+
+
+def get_ran_str(s_len: int, luan=False):
+    """
+    返回任意长度的随机字符串
+    args:
+        s_len: 随机字符串的长度
+        luan: 乱数, 默认为False
+    """
+    s = 'abcdefghijklmnopqrstuvwxyz1234567890'
+    if luan:
+        s = 'abcdefghijklmnopqrstuvwxyz!@#$%^&*()_+-=1234567890'
+    return ''.join(random.sample(s, s_len))
 
 
 class MyRes():

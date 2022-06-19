@@ -26,6 +26,7 @@ def create_app():
     os.y.root_path1 = os.path.dirname(
         os.path.dirname(os.path.abspath(__file__)))
     os.y.up_files_path = os.path.join(os.y.root_path1, 'static', 'up_files')
+    os.y.config = conf
     static_folder = os.path.join(os.y.root_path1, 'static')
 
     # 注册api  # 其实可以街道方法中

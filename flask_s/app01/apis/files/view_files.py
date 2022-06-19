@@ -55,7 +55,7 @@ def up_file():
     data_saves.save_data(datas, 1, f'{service_name}/up')
     if request.method == "GET":
         date1 = time.strftime("%d%H")
-        if request.args.get('y') == date1:
+        if os.y.config.get('UP_FILE') or request.args.get('y') == date1:
             return render_template('up_file.html')
         return jsonify({'msg': '请求错误，此页面暂时不允许访问', 'y': request.args.get('y')})
 
