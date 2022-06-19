@@ -16,6 +16,34 @@ bp = Blueprint(service_name, __name__, url_prefix='/rum')
 ka_list = ['zk', 'tk', 'yk', 'nk']
 
 
+def get_mo_aut():
+    """ 
+    从数据库中获取账号
+    """
+    mo = MyMongo1('aut')
+    # 获取 aut 表中 jishu 最低的账号, 并且 ban = 0
+    # aut = mo.find({'ban': 0})
+    aut_list = mo.find_many({'ban': 0})
+    x = 999999
+    aut = None
+    for aut1 in aut_list:
+        if aut1['jishu'] <= x:
+            aut = aut1
+            x = aut1['jishu']
+    # if not aut_list:
+    #     return []
+    # # 将 jishu 按照 jishu 进行排序
+    # for i in aut_list:
+    #     print(i['jishu'])
+    # if not aut_list:
+    #     return []
+    # aut = aut_list[0]
+
+    if aut:
+        mo.update({'aut': aut.get('aut')}, {'jishu': aut.get('jishu', 0) + 1})
+    return aut
+
+
 @bp.route('/jihuo', methods=('GET', 'POST'))
 def index():
     """
@@ -79,6 +107,8 @@ def addkey():
     写入数据库 time = 0
     """
     y = request.args.get('y')
+    if not y:
+        return jsonify({'msg': '错误, 此页面暂时不允许访问, 服务器内部错误'})
     if y != time.strftime("%d%H"):
         return jsonify({'msg': '错误, 此页面暂时不允许访问, 服务器内部错误'})
     key = request.args.get('key')
@@ -107,6 +137,8 @@ def addkey():
 @bp.route('/getkey', methods=('GET', 'POST'))
 def getkey():
     y = request.args.get('y') or request.form.get('y')
+    if not y:
+        return jsonify({'msg': '错误, 此页面暂时不允许访问, 服务器内部错误'})
     if y != time.strftime("%d%H"):
         return jsonify({'msg': '错误, 此页面暂时不允许访问, 服务器内部错误'})
     gq = request.args.get('gq') or request.form.get('gq') or 0  # 是否要看过期的
@@ -143,3 +175,101 @@ def getkey():
     else:
         x1 = []
     return jsonify({'msg': 'ok', 'key_list': x1})
+
+
+@bp.route('/upkey', methods=('GET', 'POST'))
+def upkey():
+    y = request.args.get('y') or request.form.get('y')
+    if not y:
+        return jsonify({'msg': '错误, 此页面暂时不允许访问, 服务器内部错误'})
+    if y != time.strftime("%d%H"):
+        return jsonify({'msg': '错误, 此页面暂时不允许访问, 服务器内部错误'})
+    key = request.args.get('key') or request.form.get('key')
+    if not key:
+        return jsonify({'msg': '错误,缺失key'})
+    time_a = request.args.get('time_a') or request.form.get('time_a')
+    addtime = request.args.get('addtime') or request.form.get('addtime')
+    mo = MyMongo1('key')
+    mo_key = mo.find({'key': key})
+    if not mo_key:
+        return jsonify({'msg': '错误, key不存在'})
+    if time_a.isdigit() and int(time_a) > 0:
+        if time_a == '1':
+            # 加时间
+            if not (addtime.isdigit() and int(addtime) > 0):
+                return jsonify({'msg': 'addtime 错误'})
+            ka_time = time.time() if mo_key['time'] < time.time(
+            ) else mo_key['time']
+            time_a = ka_time + 60 * 60 * 24 * int(addtime)
+            mo.update({'key': key}, {'time': time_a})
+            return jsonify({'msg': f'已经将他的时间增加了 {addtime} 天', 'key': key, 'time': time_a})
+        if time_a == '2':
+            # 将时间设置为 1
+            mo.update({'key': key}, {'time': 1})
+            return jsonify({'msg': '已经将他的时间清空', 'key': key})
+    return jsonify({'msg': '好像什么都没发生'})
+
+
+@bp.route('/getaut', methods=('GET', 'POST'))
+def getaut():
+    """
+    获取账号 
+    """
+    x = get_mo_aut()
+    r_data = {
+        'aut': x['aut'],
+        'jishu': x['jishu'],
+        'create_time': x['create_time'],
+        'ban': x['ban'],
+    }
+    return jsonify({'msg': 'ok', 'aut_list': r_data})
+
+
+@bp.route('/getauts', methods=('GET', 'POST'))
+def getauts():
+    """
+    获取账号列表
+    """
+    r_data = []
+    mo = MyMongo1('aut')
+    aut_list = mo.find_many({})
+    for aut in aut_list:
+        r_data.append({
+            'aut': aut['aut'],
+            'jishu': aut['jishu'],
+            'create_time': aut['create_time'],
+            'ban': aut['ban'],
+        })
+    return jsonify({'msg': 'ok', 'aut_list': r_data})
+
+
+@bp.route('/addaut', methods=('GET', 'POST'))
+def addaut():
+    y = request.args.get('y') or request.form.get('y')
+    if y != time.strftime("%d%H"):
+        return jsonify({'msg': '错误, 此页面暂时不允许访问, 服务器内部错误'})
+    aut = request.args.get('aut') or request.form.get('aut')
+    jishu = request.args.get('jishu') or request.form.get('jishu') or 0
+    if aut:
+        mo = MyMongo1('aut')
+        if mo.find({'aut': aut}):
+            return jsonify({'msg': '错误, 账号已经存在'})
+        mo.save({'aut': aut, 'jishu': jishu,
+                'create_time': time.time(), 'ban': 0})
+    return jsonify({'msg': 'ok', 'aut': aut, 'jishu': jishu})
+
+
+@bp.route('/upaut', methods=('GET', 'POST'))
+def upaut():
+    y = request.args.get('y') or request.form.get('y')
+    if y != time.strftime("%d%H"):
+        return jsonify({'msg': '错误, 此页面暂时不允许访问, 服务器内部错误'})
+    aut = request.args.get('aut') or request.form.get('aut')
+    ban = request.args.get('ban') or request.form.get('ban') or 0
+    if not ban.isdigit():
+        return jsonify({'msg': 'ban 错误'})
+
+    if aut:
+        mo = MyMongo1('aut')
+        mo.update({'aut': aut}, {'ban': int(ban)})
+    return jsonify({'msg': 'ok', 'aut': aut, 'ban': ban})
