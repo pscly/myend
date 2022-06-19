@@ -1,1 +1,1 @@
-pdm update;pdm run python app.py
+python3 app.py
