@@ -14,3 +14,26 @@ services:
       - "31002:31001"
     volumes:
       - ./flask_s/:/py_end
+    depends_on:
+      - mongodb
+    links:
+      - mongodb:mongodb
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    # environment:
+    #   - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+    #   - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+    #   - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
+    #   - MONGO_INITDB_USER=${MONGO_INITDB_USER}
+    #   - MONGO_INITDB_PASSWORD=${MONGO_INITDB_PASSWORD}
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongo_data:/data/
+
+
+
+
+
+    
