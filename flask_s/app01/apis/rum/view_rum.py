@@ -56,7 +56,7 @@ def index():
             now = 80
     """
     key = request.args.get('key') or request.form.get('key')
-    if key[:2] not in ka_list:
+    if (not key) or key[:2] not in ka_list:
         return jsonify({"code": -1, "msg": "激活码错误"})
     jiqima = request.args.get('mqj') or request.form.get('mqj')  # 机器码
     if not jiqima:
@@ -67,12 +67,20 @@ def index():
                   'endtime': time.strftime("%Y-%m-%d %X")})
         key_data = Dict(key_data)
         if key_data['time'] > time.time():
+            y_url = get_mo_aut().get('aut')
             if key_data['jiqima'] != jiqima:
-                jf = 1
+                jf = 0.3
                 mo.update({'key': key_data['key']}, {
                     'time': key_data['time'] - (60 * 60 * 24 * jf), 'jiqima': jiqima, 'jiqimas': key_data['jiqimas'] + [jiqima]})
-                return jsonify({"code": 1, "msg": f"解绑成功，激活码时间减少{jf}天, 当前剩余时间: {round(int(key_data['time'] - time.time()) / 60 / 60 / 24,2) -1 }天", 'time': key_data['time']})
-            return jsonify({"code": 1, "msg": f"剩余时间: {round(int(key_data['time'] - time.time()) / 60 / 60 / 24,2)}天", 'time': key_data['time']})
+                return jsonify({"code": 1,
+                                "msg": f"解绑成功，激活码时间减少{jf}天, 当前剩余时间: {round(int(key_data['time'] - time.time()) / 60 / 60 / 24,2) -1 }天",
+                                'time': key_data['time'],
+                                'yurl': y_url})
+
+            return jsonify({"code": 1,
+                            "msg": f"剩余时间: {round(int(key_data['time'] - time.time()) / 60 / 60 / 24,2)}天",
+                            'time': key_data['time'],
+                            'yurl': y_url})
         elif key_data['time'] == 0:
             if key[:2] == 'zk':
                 # 周卡
@@ -91,7 +99,9 @@ def index():
             key_data.jiqima = jiqima
             key_data.jiqimas = [jiqima]
             mo.update({'key': key}, key_data)
-            return jsonify({"code": 1, 'msg': f"剩余时间: {round(int(key_data['time'] - time.time()) / 60 / 60 / 24,2)}天", 'time': key_data['time']})
+            return jsonify({"code": 1,
+                            'msg': f"剩余时间: {round(int(key_data['time'] - time.time()) / 60 / 60 / 24,2)}天",
+                            'time': key_data['time']})
         else:
             return jsonify({"code": -1, "msg": "激活码过期"})
 
