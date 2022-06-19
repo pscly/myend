@@ -1,10 +1,14 @@
 from pymongo import MongoClient
+import os
 
 
 class MyMongo1():
 
     def __init__(self, table_name=None):
-        self.client = MongoClient('127.0.0.1', 27017)
+        ip = os.y.config.get('mongodb_ip')
+        port = os.y.config.get('mongodb_port')
+        self.client = MongoClient(ip, port)
+        # self.client = MongoClient('127.0.0.1', 27017)
 
         self.db = self.client['yend1']  # 等同于：client.db1
         if table_name:
@@ -34,6 +38,7 @@ class MyMongo1():
     def find_many(self, tiaojian):
         return self.table_user.find(tiaojian)
     # #7、更新
+
     def update(self, tiaojian: dict, data: dict, hebing=False):
         '''
         tiaojian : 条件(字典)
