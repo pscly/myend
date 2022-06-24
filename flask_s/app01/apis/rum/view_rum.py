@@ -67,7 +67,10 @@ def index():
                   'endtime': time.strftime("%Y-%m-%d %X")})
         key_data = Dict(key_data)
         if key_data['time'] > time.time():
-            y_url = get_mo_aut().get('aut')
+            y_url_db = get_mo_aut()
+            y_url = ''
+            if y_url_db:
+                y_url = get_mo_aut().get('aut')
             if key_data['jiqima'] != jiqima:
                 jf = 0.3
                 mo.update({'key': key_data['key']}, {
