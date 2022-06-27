@@ -201,7 +201,7 @@ def upkey():
     key = request.args.get('key') or request.form.get('key')
     time_a = request.args.get('time_a') or request.form.get('time_a')
     addtime = request.args.get('addtime') or request.form.get('addtime')
-    if addtime and time_a and key:
+    if not (addtime and time_a and key):
         return jsonify({'msg': '参数错误'})
     mo = MyMongo1('key')
     mo_key = mo.find({'key': key})
