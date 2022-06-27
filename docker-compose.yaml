@@ -34,8 +34,4 @@ services:
       - ./mongo_conf:/etc/mongodb/
       - ./mongo_db:/data/db/
 
-
-
-
-
     
