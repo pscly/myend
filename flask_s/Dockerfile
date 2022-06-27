@@ -21,9 +21,9 @@ RUN rm -rf /etc/apt/sources.list && \
 
 WORKDIR /py_end
 
-COPY ./requirements.txt requirements.txt
+# COPY ./requirements.txt requirements.txt
 # 安装pip包
 # RUN pip3 install pdm
-RUN pip3 install -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
+RUN pip3 install -r ./requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
 # RUN pdm config pypi.url https://mirrors.aliyun.com/pypi/simple/            
 

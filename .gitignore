@@ -136,3 +136,4 @@ __pypackages__
 .pdm.toml
 
 up_files/
+mongo_*/
