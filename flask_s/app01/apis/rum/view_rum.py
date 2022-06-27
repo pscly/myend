@@ -52,13 +52,33 @@ def jiqima_db_up(db_data, jiqima):
     old_data = db_data.get('jiqimas')
     now_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     if isinstance(old_data, dict):
-        new_data = {'机器码': jiqima, '机器码s': old_data.get('机器码s').append(
-            jiqima), '时间s': old_data.get('时间s').append(now_time), 'end时间': ''}
+        # new_data = {'机器码': jiqima, '机器码s': old_data.get('机器码s').append(
+        #     jiqima), '时间s': old_data.get('时间s').append(now_time), 'end时间': now_time}
+        # 如果 机器码不是第一次出现, 那就光更新机器码, 然后时间s 增加就行了
+        if isinstance(old_data.get('时间s'), list):
+            old_data['时间s'] = {jiqima: []}
+        if not old_data.get('机器码s'):
+            old_data['机器码s'] = []
+        if jiqima in old_data.get('机器码s'):
+            # 如果这个机器码以前出现过
+            if not old_data.get('时间s').get(jiqima):
+                old_data.get('时间s')[jiqima] = []
+            old_data.get('时间s').get(jiqima).append(now_time)
+            new_data = {'机器码': jiqima, '机器码s': old_data.get(
+                '机器码s'), '时间s': old_data.get('时间s'), 'end时间': now_time}
+        else:
+            # 此机器码没有出现过
+            old_data.get('时间s')[jiqima] = [now_time]
+            old_data.get('机器码s').append(jiqima)
+            new_data = {'机器码': jiqima, '机器码s': old_data.get('机器码s'),
+                        '时间s': old_data.get('时间s'), 'end时间': now_time}
     else:
         # 是列表, 是老版本
         old_data2 = set(old_data)
-        new_data = {'机器码': jiqima, '机器码s': list(old_data2).append(jiqima),
-                    '时间s': [now_time], 'end时间': now_time}
+        x = list(old_data2)
+        x.append(jiqima)
+        new_data = {'机器码': jiqima, '机器码s': x,
+                    '时间s': {jiqima: [now_time]}, 'end时间': now_time}
 
     return new_data
 
