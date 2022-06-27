@@ -44,6 +44,24 @@ def get_mo_aut():
     return aut
 
 
+def jiqima_db_up(db_data, jiqima):
+    """
+    数据库中应该保存的格式 [{'机器码': jiqima,'机器码s': ['xx1', 'xx2'], '时间s': ['xxxx-xx-xx xx:xx:xx', 'xxxx-xx-xx xx:xx:xx'], 'end时间': 'xxxx-xx-xx xx:xx:xx'}]'}] 
+    """
+    # key_data['jiqimas'] + [jiqima]
+    old_data = db_data.get(jiqima)
+    now_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    if isinstance(old_data, dict):
+        new_data = {'机器码': jiqima, '机器码s': old_data.get('机器码s').append(jiqima), '时间s': old_data.get('时间s').append(now_time), 'end时间': ''}
+    else:
+        # 是列表, 是老版本
+        old_data2 = set(old_data)
+        new_data = {'机器码': jiqima, '机器码s': jiqima,
+                    '时间s': list(old_data2), 'end时间': ''}
+
+    return 1
+
+
 @bp.route('/jihuo', methods=('GET', 'POST'))
 def index():
     """
@@ -75,6 +93,7 @@ def index():
                 jf = 0.3
                 mo.update({'key': key_data['key']}, {
                     'time': key_data['time'] - (60 * 60 * 24 * jf), 'jiqima': jiqima, 'jiqimas': key_data['jiqimas'] + [jiqima]})
+                    # 'time': key_data['time'] - (60 * 60 * 24 * jf), 'jiqima': jiqima, 'jiqimas': jiqima_db_up(key_data, jiqima)})
                 return jsonify({"code": 1,
                                 "msg": f"解绑成功，激活码时间减少{jf}天, 当前剩余时间: {round(int(key_data['time'] - time.time()) / 60 / 60 / 24,2) -1 }天",
                                 'time': key_data['time'],
