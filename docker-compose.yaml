@@ -27,10 +27,12 @@ services:
     #   - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
     #   - MONGO_INITDB_USER=${MONGO_INITDB_USER}
     #   - MONGO_INITDB_PASSWORD=${MONGO_INITDB_PASSWORD}
-    ports:
-      - "27017:27017"
+    # ports:
+    #   - "27017:27017"
     volumes:
       - ./mongo_data:/data/
+      - ./mongo_conf:/etc/mongodb/
+      - ./mongo_db:/data/db/
 
 
 
