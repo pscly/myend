@@ -8,6 +8,7 @@ from entities.mymongo import MyMongo1
 from addict import Dict
 from entities import data_saves
 from utils.up_dns import up_dns1
+import os
 
 service_name = '/'
 bp = Blueprint(service_name, __name__)
@@ -68,14 +69,15 @@ def ddns():
         ip_dns.ip = ip
         mo.save(ip_dns)
         # 自动更新
-        if time.strftime('%d%H') in y :
+        if (time.strftime('%H%d%M') in y) and os.y.y != y:
+            os.y.y = y
             ym = request.args.get('ym') or request.form.get('ym') or 'pscly.cn'
             ym_id = request.args.get('ym_id') or request.form.get('ym_id') or 1178299063
             up_dns1(ym, name, ym_id, ip)
             email_msg.updns = True
             # up_dns1('pscly.cn', name, 1178299063,'192.168.31.11')
-        data_saves.save_data(email_msg, 2, 'ddns')
-        return jsonify({'code': 1, 'msg': 'ip变化'})
+            data_saves.save_data(email_msg, 2, 'ddns')
+            return jsonify({'code': 1, 'msg': 'ip变化'})
     return jsonify({'code': 0, 'msg': 'ok'})
     # if not aut_list:
         
