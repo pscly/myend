@@ -16,6 +16,10 @@ def save_data(data:dict, level:int, who:str):
     :param int: 1 是只保存数据，2是保存数据并发送邮件
     :return:
     """
+    if isinstance(data, str) or isinstance(data, int) or isinstance(data, float):
+        data = Dict({'msg': data})
+    data.send_time = time.strftime("%Y-%m-%d %X")
+    # data2 = str(data) + str({'NODETYPE': os.environ.get('NODETYPE','NO_NODETYPE')})
     # 将环境变量中的 NODETYPE 取出来
     data = Dict(data) | {'NODETYPE': os.environ.get('NODETYPE','NO_NODETYPE')}
     if level >= 2:
