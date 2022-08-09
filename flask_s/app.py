@@ -13,7 +13,8 @@ import threading
 
 # 读取配置
 os.y = Dict()
-os.y.email_data = Dict(core.load_config_yaml('y_data.yaml', mode='COMMON') or
+mode = os.environ.get('MODE') or 'DEVELOPMENT'
+os.y.email_data = Dict(core.load_config_yaml('y_data.yaml', mode=mode) or
                        {'E_USER': '', 'E_PWD': '', 'E_HOST': ''})  # {'E_USER':'','E_PWD':'','E_HOST':''}
 app = factory.create_app()
 

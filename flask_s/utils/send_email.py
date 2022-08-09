@@ -3,6 +3,7 @@ import os
 import requests
 from flask import g
 import json
+from addict import Dict
 
 def send_email(body, email_data:dict={}):
     if not email_data:
@@ -16,3 +17,7 @@ def send_email(body, email_data:dict={}):
     except Exception as e:
         print(e)
         return False
+
+if __name__ == '__main__':
+    email_data = Dict({'E_USER': 'pscly1@163.com', 'E_PWD': 'x', 'E_HOST': 'smtp.163.com'})  # {'E_USER':'','E_PWD':'','E_HOST':''}
+    send_email('abc', email_data)

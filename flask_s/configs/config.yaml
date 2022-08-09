@@ -15,8 +15,9 @@ COMMON: &common
 DEVELOPMENT: &development
   <<: *common
   
+  
 
 PRODUCTION: &production 
   <<: *common
   SQLALCHEMY_DATABASE_URI: mysql+pymysql://root:@127.0.0.1/myend?charset=utf8
-
+  mongodb_ip : '127.0.0.1'
