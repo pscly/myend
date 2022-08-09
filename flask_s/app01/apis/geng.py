@@ -74,10 +74,7 @@ def ddns():
             ym_id = request.args.get('ym_id') or request.form.get('ym_id') or 1178299063
             up_dns1(ym, name, ym_id, ip)
             email_msg.updns = True
-            # up_dns1('pscly.cn', name, 1178299063,'192.168.31.11')
             # data_saves.save_data(email_msg, 2, 'ddns')
-            # 排序
-            ip_dns = Dict(mo.find({'name': name}))
             mo.save(ip_dns)
             ip_dns.pop('_id')
             return jsonify({'code': 1, 'msg': 'ip变化', 'ip_dns': ip_dns})
