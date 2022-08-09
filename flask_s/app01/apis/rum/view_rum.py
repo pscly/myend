@@ -93,15 +93,21 @@ def index():
         数据库中拿到 key， 查看是否当前时间, 
             sjk = 100
             now = 80
+            
+    参数:
+        key: 密钥
+        rj_id: 软件id
+        mqj: 机器码
     """
     key = request.args.get('key') or request.form.get('key')
+    rj_id = request.args.get('rj_id') or request.form.get('rj_id') or '' # 软件id
     if (not key) or key[:2] not in ka_list:
         return jsonify({"code": -1, "msg": "激活码错误"})
     jiqima = request.args.get('mqj') or request.form.get('mqj')  # 机器码
     if not jiqima:
         return jsonify({"code": -1, "msg": "激活码错误."})
     mo = MyMongo1('key')
-    if key_data := mo.find({'key': key}):
+    if key_data := mo.find({'key': key, 'rj_id': rj_id}):
         mo.update({'key': key_data['key']}, {
                   'endtime': time.strftime("%Y-%m-%d %X")})
         key_data = Dict(key_data)
@@ -111,7 +117,7 @@ def index():
             if y_url_db:
                 y_url = get_mo_aut().get('aut')
             if key_data['jiqima'] != jiqima:
-                jf = 0.3
+                jf = 1  # 换机器码扣除几天
                 mo.update({'key': key_data['key']}, {
                     # 'time': key_data['time'] - (60 * 60 * 24 * jf), 'jiqima': jiqima, 'jiqimas': key_data['jiqimas'] + [jiqima]})
                     'time': key_data['time'] - (60 * 60 * 24 * jf), 'jiqima': jiqima, 'jiqimas': jiqima_db_up(key_data, jiqima)})
@@ -158,8 +164,15 @@ def addkey():
     指定开头 [zk,tk,yk,nk]
     一次性生成 开头+uuid
     写入数据库 time = 0
+    请求参数:
+        rj_id: 软件id
+        y: 验证器
+        key: 卡类型[zk,tk,yk,nk]
+        head: 谁的卡
+        num: 卡数量
     """
     y = request.args.get('y')
+    rj_id = request.args.get('rj_id') or request.form.get('rj_id') or '' # 软件id
     if not y:
         return jsonify({'msg': '错误, 此页面暂时不允许访问, 服务器内部错误'})
     if y != time.strftime("%d%H"):
@@ -180,6 +193,7 @@ def addkey():
     key_list = [{'key': f'{key}{core.get_ran_str(24)}',
                  'time': 0,
                  'create_time': time.strftime("%Y-%m-%d %H:%M:%S"),
+                 'rj_id': rj_id,
                  'user': head}
                 for i in range(key_num)]
     key_list1 = [i['key'] for i in key_list]
@@ -191,6 +205,7 @@ def addkey():
 @bp.route('/getkey', methods=('GET', 'POST'))
 def getkey():
     y = request.args.get('y') or request.form.get('y')
+    rj_id = request.args.get('rj_id') or request.form.get('rj_id') or '' # 软件id
     if not y:
         return jsonify({'msg': '错误, 此页面暂时不允许访问, 服务器内部错误'})
     if y != time.strftime("%d%H"):
@@ -207,7 +222,7 @@ def getkey():
             'create_time': i['create_time'],
             'endtime': i.get('endtime'),
             '机器码s': i.get('jiqimas'),
-        } for i in x if i['time'] == 0]
+        } for i in x if i['time'] == 0 and i['rj_id'] == rj_id]
     elif gq == '2':
         x1 = [{
             '类型': '全部',
@@ -216,7 +231,7 @@ def getkey():
             'create_time': i['create_time'],
             'endtime': i.get('endtime'),
             '机器码s': i.get('jiqimas'),
-        } for i in x]
+        } for i in x if i['rj_id'] == rj_id]
     elif gq == '3':
         x1 = [{
             '类型': '使用中的',
@@ -225,7 +240,7 @@ def getkey():
             'create_time': i['create_time'],
             'endtime': i.get('endtime'),
             '机器码s': i.get('jiqimas', []),
-        } for i in x if i['time'] > time.time()]
+        } for i in x if i['time'] > time.time() and i['rj_id'] == rj_id]
     else:
         x1 = []
     return jsonify({'msg': 'ok', 'key_list': x1})
