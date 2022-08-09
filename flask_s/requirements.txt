@@ -16,6 +16,7 @@ premailer==3.10.0
 pymongo==4.1.1
 PyYAML==5.4.1
 requests==2.27.1
+tencentcloud-sdk-python==3.0.709
 urllib3==1.26.9
 Werkzeug==2.0.1
 wincertstore==0.2
