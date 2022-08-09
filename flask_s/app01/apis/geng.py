@@ -1,9 +1,12 @@
 
-from flask import Blueprint, redirect, request, g, render_template, render_template
+from flask import Blueprint, redirect, request, g, render_template, render_template, jsonify
 from entities import data_saves
 from .. import myfuncs
 import time
 import random
+from entities.mymongo import MyMongo1
+from addict import Dict
+from entities import data_saves
 
 service_name = '/'
 bp = Blueprint(service_name, __name__)
@@ -39,6 +42,33 @@ def md():
     data_saves.save_data(data, 1, 'gen')
     return data
 
+@bp.route('/ddns', methods=['GET', 'POST'])
+def ddns():
+    ip = request.remote_addr
+    name = request.args.get('name') or request.form.get('name')
+    if not (name and ip):
+        return jsonify({'code': 1, 'msg': '参数错误'})
+    # 连接 mongo 数据库
+    mo = MyMongo1('ddns')
+    # d1 = {'time': time.time()}
+    # mo.save(d1)
+    ip_dns = Dict(mo.find({'name': name}))
+    if not ip_dns:
+        d1 = Dict({'name': name, 'ip': ip, 'time': time.strftime('%Y-%m-%d %X'), 'ips': [{'time':time.time(), 'ip':ip}]})
+        mo.save(d1)
+        ip_dns = d1
+
+    if ip != ip_dns.ip:
+        # 发送邮件警报
+        data_saves.save_data(f'-> {name} -< ip update, {ip_dns.ip} --->  {ip}', 2, 'ddns')
+        ip_dns.ips.append({'time':time.strftime('%Y-%m-%d %X'), 'ip':ip})
+        ip_dns.ip = ip
+        mo.save(ip_dns)
+        return jsonify({'code': 1, 'msg': 'ip变化'})
+    return jsonify({'code': 0, 'msg': 'ok'})
+    # if not aut_list:
+        
+        
 
 @bp.route('/emi/', methods=['GET', 'POST'])
 def emi():
