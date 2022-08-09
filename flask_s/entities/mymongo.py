@@ -37,6 +37,12 @@ class MyMongo1():
 
     def find_many(self, tiaojian):
         return self.table_user.find(tiaojian)
+    
+    def find_all(self):
+        """ 
+        出去后需要自己转换一下才能用 [Dict(i) for i in data]
+        """ 
+        return self.table_user.find()
     # #7、更新
 
     def update(self, tiaojian: dict, data: dict, hebing=False):
