@@ -67,7 +67,6 @@ def ddns():
         email_msg = Dict({'msg': f'-> {name} -< ip update, {ip_dns.ip} --->  {ip}'})
         ip_dns.ips.append({'time':time.strftime('%Y-%m-%d %X'), 'ip':ip})
         ip_dns.ip = ip
-        mo.save(ip_dns)
         # 自动更新
         if (time.strftime('%H%d%M') in y) and os.y.y != y:
             os.y.y = y
@@ -76,8 +75,12 @@ def ddns():
             up_dns1(ym, name, ym_id, ip)
             email_msg.updns = True
             # up_dns1('pscly.cn', name, 1178299063,'192.168.31.11')
-            data_saves.save_data(email_msg, 2, 'ddns')
-            return jsonify({'code': 1, 'msg': 'ip变化'})
+            # data_saves.save_data(email_msg, 2, 'ddns')
+            # 排序
+            ip_dns = Dict(mo.find({'name': name}))
+            mo.save(ip_dns)
+            ip_dns.pop('_id')
+            return jsonify({'code': 1, 'msg': 'ip变化', 'ip_dns': ip_dns})
     return jsonify({'code': 0, 'msg': 'ok'})
     # if not aut_list:
         
