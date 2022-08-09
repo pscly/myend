@@ -222,7 +222,7 @@ def getkey():
             'create_time': i['create_time'],
             'endtime': i.get('endtime'),
             '机器码s': i.get('jiqimas'),
-        } for i in x if i['time'] == 0 and i['rj_id'] == rj_id]
+        } for i in x if i['time'] == 0 and i.get('rj_id') == rj_id]
     elif gq == '2':
         x1 = [{
             '类型': '全部',
@@ -231,7 +231,7 @@ def getkey():
             'create_time': i['create_time'],
             'endtime': i.get('endtime'),
             '机器码s': i.get('jiqimas'),
-        } for i in x if i['rj_id'] == rj_id]
+        } for i in x if i.get('rj_id') == rj_id]
     elif gq == '3':
         x1 = [{
             '类型': '使用中的',
@@ -240,7 +240,7 @@ def getkey():
             'create_time': i['create_time'],
             'endtime': i.get('endtime'),
             '机器码s': i.get('jiqimas', []),
-        } for i in x if i['time'] > time.time() and i['rj_id'] == rj_id]
+        } for i in x if i['time'] > time.time() and i.get('rj_id') == rj_id]
     else:
         x1 = []
     return jsonify({'msg': 'ok', 'key_list': x1})
