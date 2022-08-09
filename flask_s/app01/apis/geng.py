@@ -45,7 +45,8 @@ def md():
 
 @bp.route('/ddns', methods=['GET', 'POST'])
 def ddns():
-    ip = request.remote_addr
+    # ip = request.remote_add
+    ip = request.headers.get('X-Forwarded-For', request.remote_addr)
     name = request.args.get('name') or request.form.get('name')
     y = request.args.get('y') or request.form.get('y') or ''
     if not (name and ip):
