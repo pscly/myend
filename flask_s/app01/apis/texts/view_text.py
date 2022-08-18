@@ -31,6 +31,7 @@ def index():
         key: 密钥
         rj_id: 软件id
         mqj: 机器码
+        text: 保存的数据文本
     """
     mo = MyMongo1('texts')
     text = request.args.get('text') or request.form.get('text') or ''

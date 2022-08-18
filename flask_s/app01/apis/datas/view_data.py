@@ -37,7 +37,7 @@ def index():
     if not text:
         return jsonify({'msg': 'j1 错误，缺少参数'})
     try:
-        data1 = json.loads(text)
+        data1 = Dict(json.loads(text))
     except Exception as e:
         return jsonify({'msg': 'j1 错误，不是json格式'})
     if not data1.get('zhu'):
