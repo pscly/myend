@@ -37,6 +37,7 @@ def get_datas(request, who=''):
         'data': Dict() | request.args | request.form,
         'laizi': request.args.get('laizi') or request.form.get('laizi'),
         'time': time.strftime("%Y-%m-%d %X"),
+        'time2': time.time(),
         'ip': request.headers.get('X-Forwarded-For', request.remote_addr),
         'who':  request.args.get('who') or request.form.get('who') or who,
         'urls': request.url
