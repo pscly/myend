@@ -116,7 +116,12 @@ def index():
             y_url = ''
             if y_url_db:
                 y_url = get_mo_aut().get('aut')
-            if key_data['jiqima'] != jiqima:
+            if key_data['jiqima'] != jiqima and key_data['jiqima'] != '':   # 如果机器码变动并且不是空
+                if key_data.get('jiqima_nojie'):
+                    # key_data.jiqima_jie = 1
+                    # 可否被解解机器码
+                    return jsonify({"code": -1, "msg": "绑定机器码错误"})
+            
                 jf = 1  # 换机器码扣除几天
                 mo.update({'key': key_data['key']}, {
                     # 'time': key_data['time'] - (60 * 60 * 24 * jf), 'jiqima': jiqima, 'jiqimas': key_data['jiqimas'] + [jiqima]})
@@ -126,6 +131,8 @@ def index():
                                 'time': key_data['time'],
                                 'yurl': y_url})
 
+            key_data.jiqima = jiqima
+            key_data.jiqimas.append(jiqima)
             return jsonify({"code": 1,
                             "msg": f"剩余时间: {round(int(key_data['time'] - time.time()) / 60 / 60 / 24,2)}天",
                             'time': key_data['time'],
@@ -169,31 +176,35 @@ def addkey():
         y: 验证器
         key: 卡类型[zk,tk,yk,nk]
         head: 谁的卡
+        jie: 是否完全绑定机器码 1,0   
         num: 卡数量
     """
     y = request.args.get('y')
     rj_id = request.args.get('rj_id') or request.form.get('rj_id') or '' # 软件id
+    jie = request.args.get('jie') or request.form.get('jie') or '' # 是否可以被解绑
     if not y:
         return jsonify({'msg': '错误, 此页面暂时不允许访问, 服务器内部错误'})
     if y != time.strftime("%d%H"):
         return jsonify({'msg': '错误, 此页面暂时不允许访问, 服务器内部错误'})
     key = request.args.get('key')
-
     if key not in ka_list:
         return jsonify({'msg': '错误, 此页面暂时不允许访问, 服务器内部错误'})
+    
     k_num = request.args.get('num')
     head = request.args.get('head')
     if not head:
         return jsonify({'msg': '错误,缺失创建者'})
+    
     # 将head的每个字符 +1
     if not k_num:
-        k_num = '20'
+        k_num = '5'
     if k_num.isdigit() and int(k_num) > 0:
         key_num = int(k_num)
     key_list = [{'key': f'{key}{core.get_ran_str(24)}',
                  'time': 0,
                  'create_time': time.strftime("%Y-%m-%d %H:%M:%S"),
                  'rj_id': rj_id,
+                 'jiqima_nojie': jie,
                  'user': head}
                 for i in range(key_num)]
     key_list1 = [i['key'] for i in key_list]
@@ -248,6 +259,14 @@ def getkey():
 
 @bp.route('/upkey', methods=('GET', 'POST'))
 def upkey():
+    """ 
+    args:
+        y: 验证器
+        key: 卡
+        time_a:
+        add_time:
+        jie: 解除机器码
+    """ 
     y = request.args.get('y') or request.form.get('y')
     if not y:
         return jsonify({'msg': '错误, 此页面暂时不允许访问, 服务器内部错误'})
@@ -256,27 +275,32 @@ def upkey():
     key = request.args.get('key') or request.form.get('key')
     time_a = request.args.get('time_a') or request.form.get('time_a')
     addtime = request.args.get('addtime') or request.form.get('addtime')
-    if not (addtime and time_a and key):
-        return jsonify({'msg': '参数错误'})
-    mo = MyMongo1('key')
-    mo_key = mo.find({'key': key})
-    if not mo_key:
-        return jsonify({'msg': '错误, key不存在'})
-    if time_a.isdigit() and int(time_a) > 0:
-        if time_a == '1':
-            # 加时间
-            if not (addtime.isdigit() and int(addtime) > 0):
-                return jsonify({'msg': 'addtime 错误'})
-            ka_time = time.time() if mo_key['time'] < time.time(
-            ) else mo_key['time']
-            time_a = ka_time + 60 * 60 * 24 * int(addtime)
-            mo.update({'key': key}, {'time': time_a})
-            return jsonify({'msg': f'已经将他的时间增加了 {addtime} 天', 'key': key, 'time': time_a})
-        if time_a == '2':
-            # 将时间设置为 1
-            mo.update({'key': key}, {'time': 1})
-            return jsonify({'msg': '已经将他的时间清空', 'key': key})
-    return jsonify({'msg': '好像什么都没发生'})
+    jie = request.args.get('jie') or request.form.get('jie')
+    if jie:
+        # TODO 解除机器码
+        pass
+    if time_a:
+        if not (addtime and time_a and key):
+            return jsonify({'msg': '参数错误'})
+        mo = MyMongo1('key')
+        mo_key = mo.find({'key': key})
+        if not mo_key:
+            return jsonify({'msg': '错误, key不存在'})
+        if time_a.isdigit() and int(time_a) > 0:
+            if time_a == '1':
+                # 加时间
+                if not (addtime.isdigit() and int(addtime) > 0):
+                    return jsonify({'msg': 'addtime 错误'})
+                ka_time = time.time() if mo_key['time'] < time.time(
+                ) else mo_key['time']
+                time_a = ka_time + 60 * 60 * 24 * int(addtime)
+                mo.update({'key': key}, {'time': time_a})
+                return jsonify({'msg': f'已经将他的时间增加了 {addtime} 天', 'key': key, 'time': time_a})
+            if time_a == '2':
+                # 将时间设置为 1
+                mo.update({'key': key}, {'time': 1})
+                return jsonify({'msg': '已经将他的时间清空', 'key': key})
+        return jsonify({'msg': '好像什么都没发生'})
 
 
 @bp.route('/getaut', methods=('GET', 'POST'))
