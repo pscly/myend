@@ -33,7 +33,7 @@ def get_size(fobj):
 def index():
     datas = myfuncs.get_datas(request)
     data_saves.save_data(datas, 1, service_name)
-    files = core.get_files(os.y.up_files_path)
+    files = core.get_files(f'{os.y.up_files_path}2')
     return render_template('down.html', files=files)
 
 
@@ -41,7 +41,7 @@ def index():
 def down(file_name):
     datas = myfuncs.get_datas(request)
     data_saves.save_data(datas, 1, f'{service_name}/down')
-    x = os.path.join(os.y.up_files_path, file_name)
+    x = os.path.join(f'{os.y.up_files_path}2', file_name)
     if os.path.isfile(x):
         return send_file(x)
     return jsonify({'msg': '文件不存在'})
@@ -63,5 +63,5 @@ def up_file():
 
         file_name = request.form.get('file_name') or file.filename
         myfuncs.save_file(request.files.get('file'),
-                          os.path.join(os.y.up_files_path, file_name))
+                          os.path.join(f'{os.y.up_files_path}2', file_name))
         return render_template('down_ok.html')

@@ -136,4 +136,5 @@ __pypackages__
 .pdm.toml
 
 up_files/
+up_files2/
 mongo_*/
