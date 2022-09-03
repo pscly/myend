@@ -7,6 +7,7 @@ from app01.apis.rum.view_rum import bp as rum_bp
 from app01.apis.texts.view_text import bp as texts_bp
 from app01.apis.datas.view_data import bp as datas_bp
 from app01.apis.to_video.view_video import bp as to_v_bp
+from app01.apis.to_url.view_url import bp as to_url_bp
 
 routers = [
     geng_bp,        # 根路由
@@ -18,4 +19,5 @@ routers = [
     texts_bp,         # rum 相关
     datas_bp,         # rum 相关
     to_v_bp,         # to_v 相关
+    to_url_bp,         # to_v 相关
 ]
