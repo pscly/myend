@@ -13,16 +13,17 @@ from entities.mymongo import MyMongo1
 service_name = 'to_v'
 
 bp = Blueprint(service_name, __name__, url_prefix=f'/{service_name}')
+data_path = './app01/apis/to_video/y_config.json'     # 这个东西的数据目录
 
 def load_json():
-    with open('./app01/apis/to_video/config.json', 'r') as f:
+    with open(data_path, 'r') as f:
         z = f.read()
         if not z:
             return Dict({})
         return Dict(json.loads(z))
 
 def save_json(data):
-    with open('./app01/apis/to_video/config.json', 'w') as f:
+    with open(data_path, 'w') as f:
         json.dump(data, f, indent=4)
 
 @bp.route('/', methods=('GET', 'POST'))
