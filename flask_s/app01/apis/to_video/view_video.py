@@ -45,7 +45,7 @@ def index():
     "v3": [0, 'http://{ip}:30080/D%3A/FFOutput/v3.mp4'],
     "v4": [0, 'http://{ip}:30080/D%3A/FFOutput/v4.mp4'],
     })
-    if not os.path.exists('./app01/apis/to_video/config.json'):
+    if not os.path.exists(data_path):
         save_json(video_data.to_dict())
         
 
