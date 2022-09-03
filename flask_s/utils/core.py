@@ -18,7 +18,7 @@ def load_config_yaml(path='config/config.yaml', mode='WAI', err=True):
         if err:
             raise Exception(f'{path}文件不存在')
         return {}
-    return yaml.safe_load(open(path, 'r')).get(mode)
+    return yaml.safe_load(open(path, 'r', encoding='utf-8')).get(mode)
 
 
 def load_json(path='config/config.json'):

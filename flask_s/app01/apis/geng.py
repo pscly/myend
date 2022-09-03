@@ -26,7 +26,7 @@ def index():
         1886371886,
         450853439
     ]
-    return render_template('geng.html', yyid=random.choice(yyids), imgid=str(random.randint(1, 18)))
+    return render_template('geng.html', yyid=random.choice(yyids), imgid=str(random.randint(1, 18)), beian=os.y.data2.BEIAN)
     # return render_template('down.html', files=files, imgid=str(random.randint(1, 18)))
     # return render_template('down.html', datas={"files": files, "imgid": random.randint(1, 18)})
 

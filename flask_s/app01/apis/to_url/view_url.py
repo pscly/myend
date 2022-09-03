@@ -33,7 +33,7 @@ def index():
     
 
     """
-    error_url = 'http://baidu.com'
+    error_url = 'https://www.4399.com/'
     
     x = request.args.get('x') or request.form.get('x')
     if not x:
@@ -53,6 +53,8 @@ def index():
             return redirect(error_url)
         return jsonify({"code": -1, "msg": "error"})
     urls_data[x][0] -= 1
+    urls_data.open = urls_data.open or 0
+    urls_data.open += 1
     save_json(urls_data, data_path)
     return redirect(urls_data[x][1])
 
