@@ -20,7 +20,10 @@ def up_dns1(yuming1,yuming2, dns_id:int, dns_ip, dns_tokens:dict = {}, dns_type=
             "SecretKey" : " ",
             }
         dns_type : A 或者 CNAME
-        
+    域名对应:{
+        'ny1':1214683704,
+        'wc1':1178299063,
+    }
     """
     if isinstance(dns_id, str):
         if dns_id.isdigit():

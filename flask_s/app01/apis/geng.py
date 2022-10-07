@@ -47,11 +47,16 @@ def md():
 @bp.route('/ddns', methods=['GET', 'POST'])
 def ddns():
     # ip = request.remote_add
-    ip = request.headers.get('X-Forwarded-For', request.remote_addr)
+    ip = request.args.get('ip') or request.form.get('ip') or request.headers.get('X-Forwarded-For', request.remote_addr)
     name = request.args.get('name') or request.form.get('name')
     y = request.args.get('y') or request.form.get('y') or ''
+    v = request.args.get('v') or request.form.get('v') or ''
     if not (name and ip):
         return jsonify({'code': 1, 'msg': '参数错误'})
+    dns_type = 'A'
+    if v == '6':
+        dns_type = 'AAAA'
+            
     # 连接 mongo 数据库
     mo = MyMongo1('ddns')
     # d1 = {'time': time.time()}
@@ -68,15 +73,17 @@ def ddns():
         ip_dns.ips.append({'time':time.strftime('%Y-%m-%d %X'), 'ip':ip})
         ip_dns.ip = ip
         # 自动更新
-        if (time.strftime('%H%d%M') in y) and os.y.y != y:
+        if (time.strftime('%H%d%M') in y) and os.y.y != y:  # 如果 y 的时间是正确的, 并且 y 没有被用过
             os.y.y = y
             ym = request.args.get('ym') or request.form.get('ym') or 'pscly.cn'
-            ym_id = request.args.get('ym_id') or request.form.get('ym_id') or 1178299063
-            up_dns1(ym, name, ym_id, ip)
+            ym_id = request.args.get('ym_id') or request.form.get('ym_id')
+            if not (ym and ym_id):
+                jsonify({'code': 1, 'msg': 'ym or ym_id 参数错误'})
+            up_dns1(ym, name, ym_id, ip,dns_type=dns_type)
             email_msg.updns = True
             # data_saves.save_data(email_msg, 2, 'ddns')
             mo.save(ip_dns)
-            ip_dns.pop('_id')
+            ip_dns.pop('_id')   # 这是 mongo 的 id, 不需要返回给用户
             return jsonify({'code': 1, 'msg': 'ip变化', 'ip_dns': ip_dns})
     return jsonify({'code': 0, 'msg': 'ok'})
     # if not aut_list:
