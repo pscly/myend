@@ -51,6 +51,10 @@ def ddns():
     name = request.args.get('name') or request.form.get('name')
     y = request.args.get('y') or request.form.get('y') or ''
     v = request.args.get('v') or request.form.get('v') or ''
+    r_len = request.args.get('r_len') or request.form.get('r_len') or '5'
+    if not r_len.isdigit():
+        return jsonify({'code': 1, 'msg': 'r_len error'})
+    r_len = int(r_len)
     if not (name and ip):
         return jsonify({'code': 1, 'msg': '参数错误'})
     dns_type = 'A'
@@ -60,7 +64,6 @@ def ddns():
     # 连接 mongo 数据库
     mo = MyMongo1('ddns')
     # d1 = {'time': time.time()}
-    # mo.save(d1)
     ip_dns = Dict(mo.find({'name': name}))
     if not ip_dns:
         d1 = Dict({'name': name, 'ip': ip, 'time': time.strftime('%Y-%m-%d %X'), 'ips': [{'time':time.time(), 'ip':ip}]})
@@ -84,7 +87,11 @@ def ddns():
             # data_saves.save_data(email_msg, 2, 'ddns')
             mo.save(ip_dns)
             ip_dns.pop('_id')   # 这是 mongo 的 id, 不需要返回给用户
-            return jsonify({'code': 1, 'msg': 'ip变化', 'ip_dns': ip_dns})
+            r_len = 0 - r_len
+            ip_dns.ips = ip_dns.ips[r_len:]
+            return jsonify({'code': 2, 'msg': 'ip变化', 'ip_dns': ip_dns})
+        else:
+            return jsonify({'code': 0, 'msg': 'ok1'})
     return jsonify({'code': 0, 'msg': 'ok'})
     # if not aut_list:
         
