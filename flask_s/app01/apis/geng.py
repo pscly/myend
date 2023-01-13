@@ -48,17 +48,20 @@ def md():
 def ddns():
     # ip = request.remote_add
     ip = request.args.get('ip') or request.form.get('ip') or request.headers.get('X-Forwarded-For', request.remote_addr)
-    name = request.args.get('name') or request.form.get('name')
+    ym = request.args.get('ym') or request.form.get('ym') or 'pscly.cn' # 域名1 :pscly.cn
+    name = request.args.get('name') or request.form.get('name')  # 域名2 :wc1
+    ym_id = request.args.get('ym_id') or request.form.get('ym_id')  # 例如 1178299063
     y = request.args.get('y') or request.form.get('y') or ''
     v = request.args.get('v') or request.form.get('v') or ''
-    r_len = request.args.get('r_len') or request.form.get('r_len') or '5'
+    r_len = request.args.get('r_len') or request.form.get('r_len') or '5'   # 返回的历史ip长度
     if not r_len.isdigit():
         return jsonify({'code': 1, 'msg': 'r_len error'})
     r_len = int(r_len)
     if not (name and ip):
         return jsonify({'code': 1, 'msg': '参数错误'})
     dns_type = 'A'
-    if v == '6':
+    
+    if str(v) == '6':
         dns_type = 'AAAA'
             
     # 连接 mongo 数据库
@@ -67,6 +70,7 @@ def ddns():
     ip_dns = Dict(mo.find({'name': name}))
     if not ip_dns:
         d1 = Dict({'name': name, 'ip': ip, 'time': time.strftime('%Y-%m-%d %X'), 'ips': [{'time':time.time(), 'ip':ip}]})
+        up_dns1(ym, name, ym_id, ip,dns_type=dns_type)
         mo.save(d1)
         ip_dns = d1
 
@@ -78,8 +82,6 @@ def ddns():
         # 自动更新
         if (time.strftime('%H%d%M') in y) and os.y.y != y:  # 如果 y 的时间是正确的, 并且 y 没有被用过
             os.y.y = y
-            ym = request.args.get('ym') or request.form.get('ym') or 'pscly.cn'
-            ym_id = request.args.get('ym_id') or request.form.get('ym_id')
             if not (ym and ym_id):
                 jsonify({'code': 1, 'msg': 'ym or ym_id 参数错误'})
             up_dns1(ym, name, ym_id, ip,dns_type=dns_type)

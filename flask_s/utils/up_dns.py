@@ -23,7 +23,10 @@ def up_dns1(yuming1,yuming2, dns_id:int, dns_ip, dns_tokens:dict = {}, dns_type=
     域名对应:{
         'ny1':1214683704,
         'wc1':1178299063,
+        'hy':1309354307,
     }
+    id 可以通过此接口获取
+        https://console.cloud.tencent.com/api/explorer?Product=dnspod&Version=2021-03-23&Action=DescribeRecordList
     """
     if isinstance(dns_id, str):
         if dns_id.isdigit():
