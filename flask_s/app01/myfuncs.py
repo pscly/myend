@@ -1,3 +1,4 @@
+import os
 import time
 from addict import Dict
 
@@ -27,7 +28,8 @@ def save_file(file, file_path):
     """
     保存文件
     """
-
+    if not os.path.exists(os.path.dirname(file_path)):
+        os.makedirs(os.path.dirname(file_path))
     with open(file_path, 'wb') as f:
         f.write(file.read())
 

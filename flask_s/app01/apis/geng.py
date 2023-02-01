@@ -1,5 +1,5 @@
 
-from flask import Blueprint, redirect, request, g, render_template, render_template, jsonify
+from flask import Blueprint, redirect, request, g, render_template, render_template, jsonify, send_from_directory
 from entities import data_saves
 from .. import myfuncs
 import time
@@ -84,6 +84,7 @@ def ddns():
             os.y.y = y
             if not (ym and ym_id):
                 jsonify({'code': 1, 'msg': 'ym or ym_id 参数错误'})
+            # print('更新x')
             up_dns1(ym, name, ym_id, ip,dns_type=dns_type)
             email_msg.updns = True
             # data_saves.save_data(email_msg, 2, 'ddns')
@@ -104,3 +105,12 @@ def emi():
     # 带着arg和postdata跳转到email模块
     # print(app.config)
     return redirect('/email/', request.base_url)
+
+# 将 static/geng 文件夹下的文件列为跟目录下的文件(可以直接访问)
+@bp.route('/<path:filename>', methods=['GET'])
+def geng(filename):
+    """ 
+    todo: 上传文件处最好可以选择可以上传到此文件夹下 static/geng
+    """ 
+    app = os.y.app
+    return send_from_directory(os.path.join(app.root_path, 'static/geng'), filename)
