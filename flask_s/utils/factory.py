@@ -29,6 +29,7 @@ def create_app():
     os.y.config = conf
     os.y.app = app
     static_folder = os.path.join(os.y.root_path1, 'static')
+    os.y.static_folder = static_folder
 
     # 注册api  # 其实可以街道方法中
     for router in routers:

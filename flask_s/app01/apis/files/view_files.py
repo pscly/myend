@@ -57,7 +57,7 @@ def up_file():
         date1 = time.strftime("%d%H")
         if os.y.config.get('UP_FILE') or request.args.get('y') == date1:
             return render_template('up_file.html')
-        return jsonify({'msg': '请求错误，此页面暂时不允许访问', 'y': request.args.get('y')})
+        return jsonify({'msg': '请求错误，此页面暂时不允许访问 -y1'})
 
     if request.method == 'POST':
         file = request.files.get('file')
@@ -67,5 +67,34 @@ def up_file():
 
         file_name = request.form.get('file_name') or file.filename
         myfuncs.save_file(request.files.get('file'),
-                          os.path.join(os.y.up_files_path, file_name))
+                            os.path.join(os.y.up_files_path, file_name))
+        return render_template('down_ok.html')
+
+
+@bp.route('/geng/', methods=('GET', 'POST'))
+def index_geng():
+    y = request.args.get('y')
+    if y != time.strftime("%d%H"):
+        return jsonify({'msg': '请求错误，此页面暂时不允许访问 -y1'})
+    datas = myfuncs.get_datas(request)
+    data_saves.save_data(datas, 1, service_name)
+    files = core.get_files(os.path.join(os.y.static_folder, 'geng'))
+    return render_template('down.html', files=files)
+
+@bp.route(rule='/up_geng', methods=('GET', 'POST'))
+def up_file_geng():
+    datas = myfuncs.get_datas(request)
+    data_saves.save_data(datas, 1, f'{service_name}/up')
+    if request.method == "GET":
+        date1 = time.strftime("%d%H")
+        if os.y.config.get('UP_FILE') or request.args.get('y') == date1:
+            return render_template('up_file.html')
+        return jsonify({'msg': '请求错误，此页面暂时不允许访问 -y1'})
+
+    if request.method == 'POST':
+        file = request.files.get('file')
+
+        file_name = request.form.get('file_name') or file.filename
+        myfuncs.save_file(request.files.get('file'),
+                            os.path.join(os.y.static_folder, 'geng', file_name))
         return render_template('down_ok.html')

@@ -112,5 +112,4 @@ def geng(filename):
     """ 
     todo: 上传文件处最好可以选择可以上传到此文件夹下 static/geng
     """ 
-    app = os.y.app
-    return send_from_directory(os.path.join(app.root_path, 'static/geng'), filename)
+    return send_from_directory(os.path.join(os.y.static_folder, 'geng'), filename)
