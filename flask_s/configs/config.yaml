@@ -7,7 +7,7 @@ COMMON: &common
   SQLALCHEMY_ECHO: False
   JSON_AS_ASCII: False
   UP_FILE: 1    # 是否可以匿名上传
-  mongodb_ip : 'mongodb'
+  mongodb_ip : '127.0.0.1'
   mongodb_port: 27017
   # max_content_length: 150 *  1024 * 1024  # 这里是限制上传文件大小的，通过flask进行限制
   #  SQLALCHEMY_POOL_SIZE: 100

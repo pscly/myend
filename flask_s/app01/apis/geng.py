@@ -67,9 +67,11 @@ def ddns():
     # 连接 mongo 数据库
     mo = MyMongo1('ddns')
     # d1 = {'time': time.time()}
-    ip_dns = Dict(mo.find({'name': name}))
+    f_name = name + "." + ym
+    ip_dns = Dict(mo.find({'f_name': f_name}))
     if not ip_dns:
-        d1 = Dict({'name': name, 'ip': ip, 'time': time.strftime('%Y-%m-%d %X'), 'ips': [{'time':time.time(), 'ip':ip}]})
+        d1 = Dict({'f_name': f_name, 'ip': ip, 'time': time.strftime('%Y-%m-%d %X'), 'ips': [{'time':time.time(), 'ip':ip}]})
+        # print('更新x')
         up_dns1(ym, name, ym_id, ip,dns_type=dns_type)
         mo.save(d1)
         ip_dns = d1
