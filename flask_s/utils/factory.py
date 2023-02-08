@@ -28,6 +28,7 @@ def create_app():
     os.y.up_files_path = os.path.join(os.y.root_path1, 'static', 'up_files')
     os.y.config = conf
     os.y.app = app
+    os.y.y = [] # 用于验证判断
     static_folder = os.path.join(os.y.root_path1, 'static')
     os.y.static_folder = static_folder
 

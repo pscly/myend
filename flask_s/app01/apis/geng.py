@@ -75,13 +75,13 @@ def ddns():
         ip_dns = d1
 
     if ip != ip_dns.ip:
-        # 发送邮件警报
-        email_msg = Dict({'msg': f'-> {name} -< ip update, {ip_dns.ip} --->  {ip}'})
-        ip_dns.ips.append({'time':time.strftime('%Y-%m-%d %X'), 'ip':ip})
-        ip_dns.ip = ip
-        # 自动更新
-        if (time.strftime('%H%d%M') in y) and os.y.y != y:  # 如果 y 的时间是正确的, 并且 y 没有被用过
-            os.y.y = y
+        if (time.strftime('%H%d%M') in y) and (y not in os.y.y):  # 如果 y 的时间是正确的, 并且 y 没有被用过
+            # 发送邮件警报
+            email_msg = Dict({'msg': f'-> {name} -< ip update, {ip_dns.ip} --->  {ip}'})
+            ip_dns.ips.append({'time':time.strftime('%Y-%m-%d %X'), 'ip':ip})
+            ip_dns.ip = ip
+            # 自动更新
+            os.y.y.append(y)
             if not (ym and ym_id):
                 jsonify({'code': 1, 'msg': 'ym or ym_id 参数错误'})
             # print('更新x')
@@ -95,7 +95,7 @@ def ddns():
             return jsonify({'code': 2, 'msg': 'ip变化', 'ip_dns': ip_dns, 'name': name, 'ym': ym, 'ip': ip})
         else:
             return jsonify({'code': 0, 'msg': 'ok1_y_ok2'})
-    return jsonify({'code': 0, 'msg': 'ok'})
+    return jsonify({'code': 0, 'msg': 'ok ip没变', 'ip_dns': ip_dns, 'name': name, 'ym': ym, 'ip': ip})
     # if not aut_list:
         
         
