@@ -92,10 +92,10 @@ def ddns():
             ip_dns.pop('_id')   # 这是 mongo 的 id, 不需要返回给用户
             r_len = 0 - r_len
             ip_dns.ips = ip_dns.ips[r_len:]
-            return jsonify({'code': 2, 'msg': 'ip变化', 'ip_dns': ip_dns, 'name': name, 'ym': ym, 'ip': ip})
+            return jsonify({'code': 2, 'msg': 'ip变化', 'name': name, 'ym': ym, 'ip': ip})
         else:
             return jsonify({'code': 0, 'msg': 'ok1_y_ok2'})
-    return jsonify({'code': 0, 'msg': 'ok ip没变', 'ip_dns': ip_dns, 'name': name, 'ym': ym, 'ip': ip})
+    return jsonify({'code': 0, 'msg': 'ok ip没变', 'name': name, 'ym': ym, 'ip': ip})
     # if not aut_list:
         
         
