@@ -41,8 +41,6 @@ def get_datas(request, who=''):
         'time': time.strftime("%Y-%m-%d %X"),
         'time2': time.time(),
         'ip': request.headers.get('X-Forwarded-For', request.remote_addr),
-        'ip2': request.headers.get('X-Real-IP', request.remote_addr),
-        'ip3': request.headers.get('remote_addr', request.remote_addr),
         'who':  request.args.get('who') or request.form.get('who') or who,
         'urls': request.url
     })

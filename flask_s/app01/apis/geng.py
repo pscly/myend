@@ -46,23 +46,23 @@ def md():
 
 @bp.route('/ddns', methods=['GET', 'POST'])
 def ddns():
-    # ip = request.remote_add
     ip = request.args.get('ip') or request.form.get('ip') or request.headers.get('X-Forwarded-For', request.remote_addr)
     ym = request.args.get('ym') or request.form.get('ym') or 'pscly.cn' # 域名1 :pscly.cn
     name = request.args.get('name') or request.form.get('name')  # 域名2 :wc1
     ym_id = request.args.get('ym_id') or request.form.get('ym_id')  # 例如 1178299063
+    ym_id = int(ym_id) if ym_id.isdigit() else 0
+    if not ym_id:
+        return jsonify({'code': 1, 'msg': 'ym_id error'})
     y = request.args.get('y') or request.form.get('y') or ''
     v = request.args.get('v') or request.form.get('v') or ''
     r_len = request.args.get('r_len') or request.form.get('r_len') or '5'   # 返回的历史ip长度
-    if not r_len.isdigit():
+
+    r_len = int(r_len) if r_len.isdigit() else 0
+    if not r_len:
         return jsonify({'code': 1, 'msg': 'r_len error'})
-    r_len = int(r_len)
     if not (name and ip):
         return jsonify({'code': 1, 'msg': '参数错误'})
-    dns_type = 'A'
-    
-    if str(v) == '6':
-        dns_type = 'AAAA'
+    dns_type = 'AAAA' if str(v) == '6' else 'A'
             
     # 连接 mongo 数据库
     mo = MyMongo1('ddns')
@@ -92,9 +92,9 @@ def ddns():
             ip_dns.pop('_id')   # 这是 mongo 的 id, 不需要返回给用户
             r_len = 0 - r_len
             ip_dns.ips = ip_dns.ips[r_len:]
-            return jsonify({'code': 2, 'msg': 'ip变化', 'ip_dns': ip_dns})
+            return jsonify({'code': 2, 'msg': 'ip变化', 'ip_dns': ip_dns, 'name': name, 'ym': ym, 'ip': ip})
         else:
-            return jsonify({'code': 0, 'msg': 'ok1'})
+            return jsonify({'code': 0, 'msg': 'ok1_y_ok2'})
     return jsonify({'code': 0, 'msg': 'ok'})
     # if not aut_list:
         

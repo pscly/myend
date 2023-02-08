@@ -28,14 +28,9 @@ def up_dns1(yuming1,yuming2, dns_id:int, dns_ip, dns_tokens:dict = {}, dns_type=
     id 可以通过此接口获取
         https://console.cloud.tencent.com/api/explorer?Product=dnspod&Version=2021-03-23&Action=DescribeRecordList
     """
-    if isinstance(dns_id, str):
-        if dns_id.isdigit():
-            dns_id = int(dns_id)
-        else:
-            dns_id = 1178299063
     dns_tokens = dns_tokens or os.y.data2
     dns_tokens = Dict(dns_tokens)
-    print(dns_tokens)
+    # print(dns_tokens)
     try:
         # 实例化一个认证对象，入参需要传入腾讯云账户secretId，secretKey,此处还需注意密钥对的保密
         # 密钥可前往https://console.cloud.tencent.com/cam/capi网站进行获取
