@@ -6,7 +6,7 @@ import json
 import time
 import random
 import uuid
-
+import bcrypt
 
 
 def is_file(path):
@@ -39,6 +39,19 @@ def get_ran_str(s_len: int, luan=False):
         s = 'abcdefghijklmnopqrstuvwxyz!@#$%^&*()_+-=1234567890'
     return ''.join(random.sample(s, s_len))
 
+def hash_password(password):
+    # 生成随机的salt
+    salt = bcrypt.gensalt()
+    # 使用salt对密码进行哈希
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
+    # 返回哈希后的密码
+    return hashed_password
+
+def verify_password(password, hashed_password):
+    if not isinstance(hashed_password,bytes):
+        hashed_password = hashed_password.encode('utf-8')
+    # 验证密码是否匹配
+    return bcrypt.checkpw(password.encode('utf-8'), hashed_password)
 
 class MyRes():
     '''

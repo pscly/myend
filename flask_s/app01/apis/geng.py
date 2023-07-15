@@ -1,5 +1,5 @@
 
-from flask import Blueprint, redirect, request, g, render_template, render_template, jsonify, send_from_directory
+from flask import Blueprint, redirect, request, g, render_template, render_template, jsonify, send_from_directory, url_for
 from entities import data_saves
 from .. import myfuncs
 import time
@@ -8,7 +8,11 @@ from entities.mymongo import MyMongo1
 from addict import Dict
 from entities import data_saves
 from utils.up_dns import up_dns1
+from flask_login import login_user, logout_user, login_required, current_user
 import os
+from utils.core import hash_password, verify_password
+
+from utils.login1 import User, save_all_users, get_all_users, get_one_user, save_one_user
 
 service_name = '/'
 bp = Blueprint(service_name, __name__)
@@ -115,3 +119,62 @@ def geng(filename):
     todo: 上传文件处最好可以选择可以上传到此文件夹下 static/geng
     """ 
     return send_from_directory(os.path.join(os.y.static_folder, 'geng'), filename)
+
+@bp.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        try:
+            name = request.form.get("name")
+            pwd = request.form.get("pwd")
+            if not (name and pwd):
+                return render_template('register.html', error='用户名或密码不全')
+            
+            # users = get_all_users()
+            users = get_one_user(name)
+            
+            # if users[name] and verify_password(pwd, users[name].get("pwd")):
+            if users and verify_password(pwd, users.get("pwd")):
+                user = User()
+                user.id = name
+                login_user(user)
+                return redirect(url_for('/.index'))
+            else:
+                return render_template('login.html', error='用户名或密码错误')
+        except:
+            return render_template('login.html', error='用户名或密码错误_特殊类型')
+    else:
+        return render_template('login.html', )
+
+@bp.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('/.index'))
+
+@bp.route('/reg', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        name = request.form.get("name")
+        pwd = request.form.get("pwd")
+        if not (name and pwd):
+            return render_template('register.html', error='用户名或密码不全')
+        users = get_one_user(name)
+        if name in users:
+            return render_template('register.html', error='Username already exists')
+        else:
+            users = Dict({
+                "name": name,
+                "pwd": hash_password(pwd),
+                "ban": 0
+                })
+            save_one_user(users)
+            return redirect(url_for('/.login'))
+    else:
+        return render_template('register.html')
+    
+@bp.route("/ok1", methods=["GET", "POST"])
+def ok1():
+    # 如果用户已经登录
+    if current_user.is_authenticated:
+        return jsonify({"msg": "login ok, 11111", "user": current_user.id})
+    return '<h1>你没有登录</h1>\n<a herf="http://127.0.0.1/login">no 登录 </a>'
+

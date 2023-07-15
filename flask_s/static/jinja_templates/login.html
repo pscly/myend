@@ -1,0 +1,15 @@
+{% extends "index.html" %}
+{% block title %}登录{% endblock %}
+
+{% block content %}
+<h1>登录</h1>
+<p style="color: red;">{{ error }}</p>
+<form method="post">
+    <label>用户名:</label>
+    <input type="text" name="name"><br>
+    <label>密码:</label>
+    <input type="password" name="pwd"><br>
+    <input type="submit" value="Login">
+</form>
+{% endblock %}
+
