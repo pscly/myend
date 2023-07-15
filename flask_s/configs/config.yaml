@@ -6,9 +6,9 @@ COMMON: &common
   SQLALCHEMY_TRACK_MODIFICATIONS: False
   SQLALCHEMY_ECHO: False
   JSON_AS_ASCII: False
-  UP_FILE: 1    # 是否可以匿名上传
-  # mongodb_ip : 'mongodb'
-  mongodb_ip : '127.0.0.1'
+  UP_FILE: 1 # 是否可以匿名上传
+  mongodb_ip : 'mongodb'
+  # mongodb_ip: "127.0.0.1"
   mongodb_port: 27017
   mongodb_user: root
   mongodb_pwd: x
@@ -17,10 +17,8 @@ COMMON: &common
 
 DEVELOPMENT: &development
   <<: *common
-  
-  
 
-PRODUCTION: &production 
+PRODUCTION: &production
   <<: *common
   SQLALCHEMY_DATABASE_URI: mysql+pymysql://root:@127.0.0.1/myend?charset=utf8
-  mongodb_ip : '127.0.0.1'
+  mongodb_ip: "127.0.0.1"

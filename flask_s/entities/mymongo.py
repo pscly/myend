@@ -88,7 +88,7 @@ class MyMongo1:
     def find_many(self, tiaojian):
         if tiaojian:
             return self.table_user.find(tiaojian)
-        return self.table_user.find()   # 返回所有
+        return self.table_user.find()  # 返回所有
 
     def find_all(self):
         """
@@ -128,7 +128,7 @@ if __name__ == "__main__":
                 "mongodb_port": "27017",
                 "mongodb_user": "root",
                 # "mongodb_user": "",
-                "mongodb_pwd": "x",
+                "mongodb_pwd": "y2YhNRHkIpYB54P3Tupt8PJz3D2BcTZaKRMZ",
                 # "mongodb_pwd": "",
             }
         }

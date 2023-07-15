@@ -11,15 +11,15 @@ from app01.apis.to_url.view_url import bp as to_url_bp
 from app01.apis.ts1.view_ts1 import bp as ts1_bp
 
 routers = [
-    geng_bp,        # 根路由
-    end1_bp,        # 后端1的路由
-    emi_bp,         # 邮件路由
-    files_bp,       # 文件共享路由
-    files2_bp,       # 文件共享路由
-    rum_bp,         # rum 相关
-    texts_bp,         # rum 相关
-    datas_bp,         # rum 相关
-    to_v_bp,         # to_v 相关
-    to_url_bp,         # to_v 相关
-    ts1_bp,         # 手机消息 相关
+    geng_bp,  # 根路由
+    end1_bp,  # 后端1的路由
+    emi_bp,  # 邮件路由
+    files_bp,  # 文件共享路由
+    files2_bp,  # 文件共享路由
+    rum_bp,  # rum 相关
+    texts_bp,  # rum 相关
+    datas_bp,  # rum 相关
+    to_v_bp,  # to_v 相关
+    to_url_bp,  # to_v 相关
+    ts1_bp,  # 手机消息 相关
 ]
