@@ -6,26 +6,103 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{% block title %}{% endblock %}</title>
-  <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css')}}" /> -->
   <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap5.3.0.min.css')}}" />
   <meta name="baidu_union_verify" content="d4f492925bc3f3ee46df80885be178c9">
-  <!-- <link rel="stylesheet" href="static/jinja_teplates/css/bootstrap.min.css" /> -->
 </head>
 
 <body>
+  <header class="navbar navbar-expand-lg bd-navbar sticky-top">
+    <nav class="container-xxl bd-gutter flex-wrap flex-lg-nowrap" aria-label="主导航" _mstaria-label="260078" _msthash="3">
+      <div class="offcanvas-lg offcanvas-end flex-grow-1" tabindex="-1" id="bdNavbar"
+        aria-labelledby="bdNavbarOffcanvasLabel" data-bs-scroll="true">
+        <div class="offcanvas-header px-4 pb-0" _msthidden="2">
+          <h5 class="offcanvas-title text-white" id="bdNavbarOffcanvasLabel" _msttexthash="138918" _msthidden="1"
+            _msthash="11">Bootstrap</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"
+            data-bs-target="#bdNavbar" _msthidden="A" _mstaria-label="59709" _msthash="12"></button>
+        </div>
+
+        <div class="offcanvas-body p-4 pt-0 p-lg-0">
+          <hr class="d-lg-none text-white-50">
+          <ul class="nav nav-tabs">
+            <li class="nav-item">
+              <!-- 如果路由地址是geng -->
+              {% if request.path == '/' %}
+              <a class="nav-link active" aria-current="page" href="/">主页</a>
+              <!-- 如果路由地址是geng -->
+              {% else %}
+              <a class="nav-link" href="/">主页</a>
+              {% endif %}
+            </li>
+            <!-- <li class="nav-item">
+              {% if request.path == '/login' %}
+              <a class="nav-link active" aria-current="page" href="/login">登录</a>
+              {% else %}
+              <a class="nav-link" href="/login">登录</a>
+              {% endif %}
+            </li> -->
+          </ul>
+
+
+          <hr class="d-lg-none text-white-50">
+          <!-- <ul class="navbar-nav flex-row flex-wrap ms-md-auto"> -->
+          <ul class="nav ms-md-auto">
+            {% if request|islogin1 %}
+            <!-- {{ request|islogin1 }} -->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                {{ request|islogin1 }}
+              </a>
+              <ul class="dropdown-menu">
+                <li>
+                  <p class="dropdown-item">yy: {{request|get_y1}}</p>
+                  <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="#">Action</a></li>
+                <li><a class="dropdown-item" href="#">Another</a></li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="#">Something </a></li>
+              </ul>
+            </li>
+
+            <button type="button" class="btn btn-light"><a class="dropdown-item" href="/logout">退出登录</a></button>
+
+            <!-- {{ request|islogin1 }} -->
+
+            {% else %}
+            <li class="nav-item">
+              {% if request.path == '/login' %}
+              <a class="nav-link" aria-current="page" href="/login">登录</a>
+              {% else %}
+              <a class="nav-link" href="/login">登录</a>
+              {% endif %}
+            </li>
+            {% endif %}
+            <li class="nav-item py-2 py-lg-1 col-12 col-lg-auto">
+              <div class="vr d-none d-lg-flex h-100 mx-lg-2 text-white"></div>
+              <hr class="d-lg-none my-2 text-white-50">
+            </li>
+
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
   <div class="container">
+
     <div class="row">
       <div class="col-sm-1">
-        <!-- One of three columns -->
       </div>
       <div class="col-sm-10">
-        <!-- 设置块 -->
         <br>
         {% block content %}
         {% endblock %}
       </div>
       <div class="col-sm-1">
-        <!-- One of three columns -->
       </div>
     </div>
   </div>
@@ -33,9 +110,5 @@
 
 </body>
 <script src="{{ url_for('static', filename='js/bootstrap5.3.0.min.js')}}"></script>
-<!-- <script src="{{ url_for('static', filename='js/jquery.slim.min.js')}}"></script>
-<script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js')}}"></script> -->
-<!-- <script src="static/jinja_teplates/js/jquery.slim.min.js"></script>
-<script src="static/jinja_teplates/js/bootstrap.bundle.min.js"></script> -->
 
 </html>

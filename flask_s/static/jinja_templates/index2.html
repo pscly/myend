@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap5.3.0.min.css')}}" />
+  <meta name="baidu_union_verify" content="d4f492925bc3f3ee46df80885be178c9">
+</head>
+
+<body>
+  <div class="container">
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <!-- 如果路由地址是geng -->
+        {% if request.path == '/' %}
+        <a class="nav-link active" aria-current="page" href="/">主页</a>
+        <!-- 如果路由地址是geng -->
+        {% else %}
+        <a class="nav-link" href="/">主页</a>
+        {% endif %}
+      </li>
+      <li class="nav-item">
+        {% if request.path == '/login' %}
+        <a class="nav-link active" aria-current="page" href="/login">登录</a>
+        {% else %}
+        <a class="nav-link" href="/login">登录</a>
+        {% endif %}
+      </li>
+      <li class="nav-item">
+        {% if request.path == '/reg' %}
+        <a class="nav-link active" aria-current="page" href="/reg">注册</a>
+        {% else %}
+        <a class="nav-link" href="/reg">注册</a>
+        {% endif %}
+      </li>
+    </ul>
+    
+    <div class="row">
+      <div class="col-sm-1">
+      </div>
+      <div class="col-sm-10">
+        <br>
+        {% block content %}
+        {% endblock %}
+      </div>
+      <div class="col-sm-1">
+      </div>
+    </div>
+  </div>
+
+
+</body>
+<script src="{{ url_for('static', filename='js/bootstrap5.3.0.min.js')}}"></script>
+
+</html>

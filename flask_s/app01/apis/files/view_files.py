@@ -61,6 +61,8 @@ def up_file():
 
     if request.method == 'POST':
         file = request.files.get('file')
+        if not get_size(file):
+            return jsonify({'msg': "没得正确的文件"})
         # 如果文件大小超过300mb, 则返回错误
         if get_size(file) > 150 << 10*2 and request.form.get('y2') != time.strftime("%d%H"):
             return jsonify({'msg': '文件过大'})

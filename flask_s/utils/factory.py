@@ -8,6 +8,7 @@ from flask_login import LoginManager, UserMixin
 
 from app01.route import routers
 from utils.login1 import User, get_all_users
+from utils.webpy import WebFunc
 
 
 def load_conf(mode: str, conf_name: str = "config.yaml"):
@@ -85,4 +86,6 @@ def create_app():
         user.id = name
         return user
 
+    # 注册过滤器
+    WebFunc(app)
     return app

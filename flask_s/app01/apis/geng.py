@@ -117,10 +117,8 @@ def ddns():
             os.y.y.append(y)
             if not (ym and ym_id):
                 jsonify({"code": 1, "msg": "ym or ym_id 参数错误"})
-            # print('更新x')
             up_dns1(ym, name, ym_id, ip, dns_type=dns_type)
             email_msg.updns = True
-            # data_saves.save_data(email_msg, 2, 'ddns')
             mo.save(ip_dns)
             ip_dns.pop("_id")  # 这是 mongo 的 id, 不需要返回给用户
             r_len = 0 - r_len
@@ -147,7 +145,6 @@ def ddns():
             "old_ip": ip_dns.ips,
         }
     )
-    # if not aut_list:
 
 
 @bp.route("/emi/", methods=["GET", "POST"])
@@ -173,25 +170,21 @@ def login():
             name = request.form.get("name")
             pwd = request.form.get("pwd")
             if not (name and pwd):
-                return render_template("register.html", error="用户名或密码不全")
-
-            # users = get_all_users()
+                return render_template("login.html", error="用户名或密码不全", r_txt="登 录")
             users = get_one_user(name)
-
-            # if users[name] and verify_password(pwd, users[name].get("pwd")):
             if users and verify_password(pwd, users.get("pwd")):
                 user = User()
                 user.id = name
                 login_user(user)
                 return redirect(url_for("/.index"))
             else:
-                return render_template("login.html", error="用户名或密码错误")
+                return render_template("login.html", error="用户名或密码错误", r_txt="登 录")
         except:
-            return render_template("login.html", error="用户名或密码错误_特殊类型")
+            return render_template("login.html", error="用户名或密码错误_特殊类型", r_txt="登 录")
     else:
-        return render_template(
-            "login.html",
-        )
+        if current_user.is_authenticated:
+            return redirect(url_for("/.index"))
+        return render_template("login.html", r_txt="登 录")
 
 
 @bp.route("/logout")
@@ -205,17 +198,24 @@ def register():
     if request.method == "POST":
         name = request.form.get("name")
         pwd = request.form.get("pwd")
+        y_code = request.form.get("y_code")
+        if y_code != time.strftime("%H%m%d"):
+            return render_template("login.html", error="邀请码错误", r_txt="注 册")
         if not (name and pwd):
-            return render_template("register.html", error="用户名或密码不全")
+            return render_template("login.html", error="用户名或密码不全", r_txt="注 册")
         users = get_one_user(name)
         if name in users:
-            return render_template("register.html", error="Username already exists")
+            return render_template(
+                "login.html", error="Username already exists", r_txt="注 册"
+            )
         else:
             users = Dict({"name": name, "pwd": hash_password(pwd), "ban": 0})
             save_one_user(users)
             return redirect(url_for("/.login"))
     else:
-        return render_template("register.html")
+        if current_user.is_authenticated:
+            return redirect(url_for("/.index"))
+        return render_template("login.html", r_txt="注 册")
 
 
 @bp.route("/ok1", methods=["GET", "POST"])
