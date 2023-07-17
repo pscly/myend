@@ -1,0 +1,33 @@
+{% extends "index.html" %}
+{% block title %}消息推送中心{% endblock %}
+
+{% block content %}
+
+你好 {{request|islogin1}}
+<br>
+这里是 {{ all_data['page_'] }}
+<h2>{{ all_data['err1'] }}</h2>
+<br>
+<a href="/msg1">设备主页</a>
+<a href="/msg1/add">添加设备</a>
+<a href="/msg1/del">删除设备</a>
+<br>
+{{ all_data['page_'] }}
+<br>
+{{ all_data['err1'] }}
+<br>
+<br>
+<form method="post">
+    <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="floatingInput" placeholder="Username" name="name">
+        <label for="floatingInput">设备别名</label>
+    </div>
+    <div class="form-floating">
+        <input type="text" class="form-control" placeholder="Username" id="floatingPassword" name="url">
+        <label for="floatingPassword">设备url</label>
+    </div>
+    <br>
+    <button type="submit" class="btn btn-primary">添 加</button>
+</form>
+
+{% endblock %}

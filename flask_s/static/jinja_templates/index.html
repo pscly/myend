@@ -51,6 +51,17 @@
               <a class="nav-link" aria-current="page" href="/files">文件盘</a>
             </li>
             {% endif %}
+            
+            <!-- 登录后有的东西 -->
+            {% if ['/msg1',request.path]|in_str %}
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/msg1">消息推送</a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="/msg1">消息推送</a>
+            </li>
+            {% endif %}
 
 
             {% else %}

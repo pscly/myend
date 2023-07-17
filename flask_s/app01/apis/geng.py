@@ -23,8 +23,6 @@ from utils.core import hash_password, verify_password
 
 from utils.login1 import (
     User,
-    save_all_users,
-    get_all_users,
     get_one_user,
     save_one_user,
 )

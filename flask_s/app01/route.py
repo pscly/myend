@@ -8,7 +8,7 @@ from app01.apis.texts.view_text import bp as texts_bp
 from app01.apis.datas.view_data import bp as datas_bp
 from app01.apis.to_video.view_video import bp as to_v_bp
 from app01.apis.to_url.view_url import bp as to_url_bp
-from app01.apis.ts1.view_ts1 import bp as ts1_bp
+from app01.apis.msg1.view_msg1 import bp as msg1_bp
 
 routers = [
     geng_bp,  # 根路由
@@ -21,5 +21,5 @@ routers = [
     datas_bp,  # rum 相关
     to_v_bp,  # to_v 相关
     to_url_bp,  # to_v 相关
-    ts1_bp,  # 手机消息 相关
+    msg1_bp,  # 手机消息 相关
 ]
