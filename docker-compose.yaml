@@ -10,6 +10,7 @@ services:
     restart: always
     environment:
       - NODETYPE=${NODETYPE}
+      - MONGODB_PWD=${MONGODB_PWD}
     ports:
       - "31002:31001"
     volumes:
