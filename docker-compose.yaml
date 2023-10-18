@@ -9,6 +9,7 @@ services:
     # command: python app.py  # 覆盖DOCKERFILE 的cmd
     restart: always
     environment:
+      - TZ=Asia/Shanghai
       - NODETYPE=${NODETYPE}
       - MONGODB_PWD=${MONGODB_PWD}
     ports:
@@ -31,6 +32,7 @@ services:
       - ./mongo/mongo_conf:/etc/mongodb/
       - ./mongo/mongo_db:/data/db/
     environment:
+      TZ: Asia/Shanghai
       MONGO_INITDB_ROOT_USERNAME: root
       # MONGO_INITDB_ROOT_PASSWORD: "xx12345xxx"
       # mongodb_pwd
