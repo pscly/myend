@@ -26,9 +26,9 @@ services:
     ports:
       - 27020:27017
     volumes:
-      - ./mongo_data:/data/
-      - ./mongo_conf:/etc/mongodb/
-      - ./mongo_db:/data/db/
+      - ./mongo/mongo_data:/data/
+      - ./mongo/mongo_conf:/etc/mongodb/
+      - ./mongo/mongo_db:/data/db/
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       # MONGO_INITDB_ROOT_PASSWORD: "xx12345xxx"

@@ -14,8 +14,8 @@ ENV FLASK_ENV=production
 
 COPY requirements.txt requirements.txt
 
-RUN pip install --upgrade pip
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --upgrade pip -i https://pypi.tuna.tsinghua.edu.cn/simple
+RUN pip install --no-cache-dir -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 # CMD [ "python3", "app.py" ]
 CMD ["flask", "run"]
