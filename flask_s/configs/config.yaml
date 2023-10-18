@@ -27,4 +27,4 @@ PRODUCTION: &production
   mongodb_ip: "y_end_mongodb"
   mongodb_port: 27017
   # python pyaml_env 读取的话必须加 !ENV
-  mongodb_pwd: !ENV ${MONGO_PWD:mongodb_pwd1234}
+  mongodb_pwd: !ENV ${MONGODB_PWD:mongodb_pwd1234}

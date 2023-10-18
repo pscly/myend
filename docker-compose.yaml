@@ -1,5 +1,5 @@
 # 如果需要从新构建 dockerfile > docker-compose down -v;docker-compose up --build
-version: '3.9'
+version: '3'
 services:
   y_end_py:
     build:
@@ -32,5 +32,7 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       # MONGO_INITDB_ROOT_PASSWORD: "xx12345xxx"
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PWD:-mongodb_pwd1234}
+      # mongodb_pwd
+      # MONGODB_PWD
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PWD:-mongodb_pwd1234}
     command: mongod --directoryperdb --port 27017
