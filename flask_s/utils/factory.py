@@ -10,6 +10,7 @@ from app01.route import routers
 from utils.login1 import User, get_all_users
 from utils.webpy import WebFunc
 
+from pyaml_env import parse_config
 
 def load_conf(mode: str, conf_name: str = "config.yaml"):
     """
@@ -17,9 +18,10 @@ def load_conf(mode: str, conf_name: str = "config.yaml"):
     mode: 是什么环境， 开发还是生产(DEVELOPMENT, PRODUCTION)
     conf_nae: 配置文件名
     """
-    with open(f"configs/{conf_name}", encoding="utf-8") as f:
-        conf = yaml.safe_load(f)
-
+    print(f'使用的是 {mode} 环境', )
+    # with open(f"configs/{conf_name}", encoding="utf-8") as f:
+    #     conf = yaml.safe_load(f)
+    conf = parse_config(f"configs/{conf_name}")
     return conf[mode.upper()]
 
 

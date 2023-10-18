@@ -24,6 +24,7 @@ DEVELOPMENT: &development
 
 PRODUCTION: &production
   <<: *common
-  mongodb_ip: "mongodb"
-  mongodb_port: 37017
-  mongodb_pwd: ${MONGO_PWD:mongodb_pwd1234~}
+  mongodb_ip: "y_end_mongodb"
+  mongodb_port: 27017
+  # python pyaml_env 读取的话必须加 !ENV
+  mongodb_pwd: !ENV ${MONGO_PWD:mongodb_pwd1234}

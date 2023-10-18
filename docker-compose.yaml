@@ -1,4 +1,5 @@
 # 如果需要从新构建 dockerfile > docker-compose down -v;docker-compose up --build
+version: '3.9'
 services:
   y_end_py:
     build:
@@ -23,13 +24,13 @@ services:
     container_name: y_end_mongodb
     restart: always
     ports:
-      - 37017:27017
+      - 27020:27017
     volumes:
       - ./mongo_data:/data/
       - ./mongo_conf:/etc/mongodb/
       - ./mongo_db:/data/db/
     environment:
-      mode: ${MODE:-production}
       MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PWD:-mongodb_pwd1234~}
-    command: bash -c 'if [ -z "$mode" ] || [ "$mode" = "production" ]; then mongod --directoryperdb --port 27017; fi'
+      # MONGO_INITDB_ROOT_PASSWORD: "xx12345xxx"
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PWD:-mongodb_pwd1234}
+    command: mongod --directoryperdb --port 27017
