@@ -26,4 +26,4 @@ PRODUCTION: &production
   <<: *common
   mongodb_ip: "mongodb"
   mongodb_port: 37017
-  mongodb_pwd: ${mongodb_pwd}
+  mongodb_pwd: ${MONGO_PWD:mongodb_pwd1234~}
