@@ -2,8 +2,8 @@
 # 重新构建 > docker build .
 FROM python:3.9
 
-# 更改时区
-ENV TIME_ZONE=Asia/Shanghai
+ENV TZ=Asia/Shanghai
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 WORKDIR /py_end
 
