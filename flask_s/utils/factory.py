@@ -22,7 +22,7 @@ def load_conf(mode: str, conf_name: str = "config.yaml"):
     # with open(f"configs/{conf_name}", encoding="utf-8") as f:
     #     conf = yaml.safe_load(f)
     conf = parse_config(f"configs/{conf_name}")
-    save_json(conf[mode.upper()], 'config/x.json')
+    save_json(conf[mode.upper()], 'configs/x.json')
     return conf[mode.upper()]
 
 
