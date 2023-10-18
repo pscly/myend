@@ -31,7 +31,7 @@ services:
       - ./mongo_conf:/etc/mongodb/
       - ./mongo_db:/data/db/
     environment:
-      mode: ${MODE:production}
+      mode: ${MODE:-production}
       MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PWD:mongodb_pwd1234~}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PWD:-mongodb_pwd1234~}
     command: bash -c 'if [ -z "$mode" ] || [ "$mode" = "production" ]; then mongod --directoryperdb --port 27017; fi'
