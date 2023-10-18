@@ -1,6 +1,4 @@
 # 如果需要从新构建 dockerfile > docker-compose down -v;docker-compose up --build
-
-version: '3.9'
 services:
   y_end_py:
     build:
