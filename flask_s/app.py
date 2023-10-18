@@ -12,7 +12,7 @@ import threading
 
 # 读取配置
 os.y = Dict()
-mode = os.environ.get("MODE") or "DEVELOPMENT"
+mode = os.environ.get("MODE").upper() or "DEVELOPMENT"
 os.y.data2 = Dict(
     core.load_config_yaml("y_data.yaml", mode=mode, err=0)
     or {"E_USER": "", "E_PWD": "", "E_HOST": ""}

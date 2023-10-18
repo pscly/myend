@@ -162,7 +162,7 @@ def geng(filename):
 
 
 @bp.route("/login", methods=["GET", "POST"])
-def login():
+def login(msg_txt="", error=""):
     if request.method == "POST":
         try:
             name = request.form.get("name")
@@ -182,7 +182,7 @@ def login():
     else:
         if current_user.is_authenticated:
             return redirect(url_for("/.index"))
-        return render_template("login.html", r_txt="登 录")
+        return render_template("login.html", r_txt="登 录", msg_txt=msg_txt, error=error)
 
 
 @bp.route("/logout")
@@ -202,14 +202,15 @@ def register():
         if not (name and pwd):
             return render_template("login.html", error="用户名或密码不全", r_txt="注 册")
         users = get_one_user(name)
-        if name in users:
+        if users:
             return render_template(
-                "login.html", error="Username already exists", r_txt="注 册"
+                "login.html", error="这个用户已经有了", r_txt="注 册"
             )
         else:
             users = Dict({"name": name, "pwd": hash_password(pwd), "ban": 0})
             save_one_user(users)
-            return redirect(url_for("/.login"))
+            login_user(users)
+            return redirect(url_for("/.index"))
     else:
         if current_user.is_authenticated:
             return redirect(url_for("/.index"))
