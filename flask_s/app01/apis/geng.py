@@ -197,7 +197,7 @@ def register():
         name = request.form.get("name")
         pwd = request.form.get("pwd")
         y_code = request.form.get("y_code")
-        if y_code != time.strftime("%H%m%d"):
+        if y_code != time.strftime("%H%M%d"):
             return render_template("login.html", error="邀请码错误", r_txt="注 册")
         if not (name and pwd):
             return render_template("login.html", error="用户名或密码不全", r_txt="注 册")

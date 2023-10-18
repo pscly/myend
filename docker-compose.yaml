@@ -1,37 +1,37 @@
-version: '3'
+# 如果需要从新构建 dockerfile > docker-compose down -v;docker-compose up --build
+
+version: '3.9'
 services:
-  my_end_py:
+  y_end_py:
     build:
       context: ./flask_s/
-      dockerfile: Dockerfile
+      dockerfile: ./Dockerfile
     container_name: flask_myend_${NODETYPE}
-    command: sh run.sh
+    # command: python app.py  # 覆盖DOCKERFILE 的cmd
     restart: always
     environment:
       - NODETYPE=${NODETYPE}
-    # env_file:
-    #   - ${NODETYPE}.env
     ports:
       - "31002:31001"
     volumes:
       - ./flask_s/:/py_end
     depends_on:
-      - mongodb
+      - y_end_mongodb 
     links:
-      - mongodb:mongodb
-  mongodb:
+      - y_end_mongodb:y_end_mongodb
+
+  y_end_mongodb:
     image: mongo
-    container_name: mongodb
+    container_name: y_end_mongodb
     restart: always
-    # environment:
-    #   - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
-    #   - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
-    #   - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
-    #   - MONGO_INITDB_USER=${MONGO_INITDB_USER}
-    #   - MONGO_INITDB_PASSWORD=${MONGO_INITDB_PASSWORD}
-    # ports:
-    #   - "27017:27017"
+    ports:
+      - 37017:27017
     volumes:
       - ./mongo_data:/data/
       - ./mongo_conf:/etc/mongodb/
       - ./mongo_db:/data/db/
+    environment:
+      mode: ${MODE}
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: ${mongodb_pwd}
+    command: bash -c 'if [ -z "$mode" ] || [ "$mode" = "production" ]; then mongod --directoryperdb --port 27017; fi'

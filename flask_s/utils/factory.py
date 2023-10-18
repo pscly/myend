@@ -44,14 +44,14 @@ def create_app():
         static_folder="static",
         static_url_path="/static",
     )
-    mode = os.environ.get("MODE", "DEVELOPMENT")
+    mode = os.environ.get("MODE", "production")
     conf = load_conf(mode)
     app.config.update(conf)
     # 静态资源文件夹为 static和files
     os.y.root_path1 = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     os.y.up_files_path = os.path.join(os.y.root_path1, "static", "up_files")
     os.y.config = conf
-    os.y.ydata = load_json()
+    # os.y.ydata = load_json()
     os.y.app = app
     os.y.y = []  # 用于验证判断
     static_folder = os.path.join(os.y.root_path1, "static")
