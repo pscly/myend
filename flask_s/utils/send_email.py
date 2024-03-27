@@ -6,7 +6,7 @@ import json
 from addict import Dict
 
 
-def send_email(body, email_data: dict = {}):
+def send_email(body, email_data: dict = {}, email_addr: str = ""):
     if not isinstance(email_data, dict) or (email_data.get("E_USER", '') == ''):
         email_data = os.y.data2
         if os.y.data2.get("E_USER", '') == '':
@@ -14,7 +14,9 @@ def send_email(body, email_data: dict = {}):
             return False
     yag = yagmail.SMTP(email_data.E_USER, email_data.E_PWD, host=email_data.E_HOST)
     send_data = ["pscly@qq.com", "来自my_end,", body]
-
+    if email_addr:
+        send_data[0] = email_addr
+    send_data[2] = json.dumps(send_data[2], ensure_ascii=False, indent=4)
     try:
         yag.send(*send_data)
         return True

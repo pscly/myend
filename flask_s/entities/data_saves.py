@@ -9,7 +9,7 @@ import time
 import threading
 import os
 
-def save_data(data:dict, level:int, who:str):
+def save_data(data:dict, level:int, who:str, email_addr=''):
     """
     保存数据
     :param data: dict
@@ -23,5 +23,6 @@ def save_data(data:dict, level:int, who:str):
     # 将环境变量中的 NODETYPE 取出来
     data = Dict(data) | {'NODETYPE': os.environ.get('NODETYPE','NO_NODETYPE')}
     if level >= 2:
-        threading.Thread(target=send_email.send_email, args=(data,)).start()
+        # send_email.send_email(data, email_addr=email_addr)
+        threading.Thread(target=send_email.send_email, args=(data,), kwargs=({'email_addr': email_addr})).start()
     myfuncs.write_data(data)
