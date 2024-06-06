@@ -1,0 +1,48 @@
+{% extends "index.html" %}
+{% block title %}消息推送中心{% endblock %}
+
+{% block content %}
+
+你好 {{request|islogin1}}
+<br>
+这里是 {{ all_data['page_'] }}
+<h2>{{ all_data['err1'] }}</h2>
+<br>
+<a href="/msg1">设备主页</a>
+<a href="/msg1/add">添加设备</a>
+<a href="/msg1/del">删除设备</a>
+<hr>
+
+<caption>你的设备</caption>
+<table>
+    <thead>
+        <tr>
+            <th>序号</th>
+            <th>别名</th>
+            <th>url</th>
+            <th>时间</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in all_data['user_devices'] %}
+        <tr>
+            <th scope="row">{{loop.index}}</th>
+            <td class="btn btn-light">{{item['device_name']}}</td>
+            <td>{{ item['device_url'] }}</td>
+            <td>{{ item['time2'] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<br>
+<form action="" method="post">
+    请输入你要删除的设备，一次一个
+    <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="floatingInput" placeholder="Username" name="name">
+        <label for="floatingInput">设备别名</label>
+    </div>
+    <button type="submit" class="btn btn-primary">删除</button>
+</form>
+
+{% endblock %}

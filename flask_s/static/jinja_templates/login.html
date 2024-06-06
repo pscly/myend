@@ -1,0 +1,29 @@
+{% extends "index.html" %}
+{% block title %}{{ r_txt }}{% endblock %}
+
+{% block content %}
+<h1>{{ r_txt }}</h1>
+<p style="color: turquoise;">{{ msg_txt }}</p>
+<p style="color: red;">{{ error }}</p>
+<form method="post">
+    <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="name">
+        <label for="floatingInput">用户名</label>
+    </div>
+    <div class="form-floating">
+        <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="pwd">
+        <label for="floatingPassword">密码</label>
+    </div>
+    <br>
+    {% if request.path == '/reg' %}
+    <div class="form-floating">
+        <input type="text" class="form-control" id="floatingPassword" placeholder="code" name="y_code">
+        <label for="floatingPassword">邀请码</label>
+    </div>
+    <br>
+    {% else %}
+    <p></p>
+    {% endif %}
+    <button type="submit" class="btn btn-primary">{{ r_txt }}</button>
+</form>
+{% endblock %}

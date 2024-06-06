@@ -1,0 +1,12 @@
+{
+    "PORT": 31001,
+    "SQLALCHEMY_DATABASE_URI": "mysql+pymysql://root:@127.0.0.1/myend?charset=utf8",
+    "SQLALCHEMY_TRACK_MODIFICATIONS": false,
+    "SQLALCHEMY_ECHO": false,
+    "JSON_AS_ASCII": false,
+    "UP_FILE": 1,
+    "mongodb_ip": "127.0.0.1",
+    "mongodb_port": 27017,
+    "mongodb_user": "root",
+    "mongodb_pwd": "y2YhNRHkIpYB54P3Tupt8PJz3D2BcTZaKRMZ"
+}
