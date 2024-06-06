@@ -9,6 +9,7 @@ from app01.apis.datas.view_data import bp as datas_bp
 from app01.apis.to_video.view_video import bp as to_v_bp
 from app01.apis.to_url.view_url import bp as to_url_bp
 from app01.apis.msg1.view_msg1 import bp as msg1_bp
+from app01.apis.msg2.view_msg2 import bp as msg2_bp
 
 routers = [
     geng_bp,  # 根路由
@@ -22,4 +23,5 @@ routers = [
     to_v_bp,  # to_v 相关
     to_url_bp,  # to_v 相关
     msg1_bp,  # 手机消息 相关
+    msg2_bp,  # 钉钉消息 相关
 ]

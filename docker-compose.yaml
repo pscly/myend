@@ -34,8 +34,5 @@ services:
     environment:
       TZ: Asia/Shanghai
       MONGO_INITDB_ROOT_USERNAME: root
-      # MONGO_INITDB_ROOT_PASSWORD: "xx12345xxx"
-      # mongodb_pwd
-      # MONGODB_PWD
       MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PWD:-mongodb_pwd1234}
     command: mongod --directoryperdb --port 27017
