@@ -1,1 +1,7 @@
-<div> {{ beian or '' }} </div>
+<div>
+    {% if beian %}
+    备案号：<a href="https://beian.miit.gov.cn/">{{ beian }} </a>
+    {% else %}
+    备案号：<a href="https://beian.miit.gov.cn/">蜀ICP备2021007847号-2</a>
+    {% endif %}
+</div>
