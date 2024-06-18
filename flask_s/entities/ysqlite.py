@@ -1,7 +1,8 @@
 import sqlite3
 from sqlite3 import Error, OperationalError  
 
-class SQLiteManager:
+
+class YSqlite1:
     """
     用于管理 SQLite 数据库的类。
 
@@ -39,24 +40,33 @@ class SQLiteManager:
         """
         关闭数据库连接。
         """
-
+        if exc_type:    # 遇到异常就回滚 
+            print(f"事务被打断: {exc_val}")
+            self.conn.rollback()  # 回滚事务
+        else:
+            self.conn.commit()  # 提交事务
         self.conn.close()
+
         
+    
     def transaction(self):
         """
         创建一个上下文管理器，用于手动控制事务。
+
+        可以通过抛出 异常来打断事务。
 
         Yields:
             SQLiteManager: 返回自身，以便在 with 语句中使用。
         """
         self.conn.isolation_level = None  # 关闭自动提交
         try:
-            yield self  # 返回自身，以便在 with 语句中执行数据库操作
+            yield self  # 返回自身，以便在 with 语句块中执行数据库操作
             self.conn.commit()  # 提交事务
-        except OperationalError as e:   # 也可能用Error来捕捉错误
-            print(f"事务执行错误: {e}")
+        except Exception as e:  # 捕获数据库操作错误
+            print(f"事务执行失败: {e}")
             self.conn.rollback()  # 回滚事务
             raise
+
 
 
     def create_table(self, table_name, columns):
@@ -91,7 +101,7 @@ class SQLiteManager:
         placeholders = ', '.join(['?'] * len(data))
         sql = f"INSERT INTO {table_name} ({columns}) VALUES ({placeholders})"
         self.cursor.execute(sql, tuple(data.values()))
-        self.conn.commit()
+        # self.conn.commit()
 
     def like_search(self, table_name, column, keyword, columns='*'):
         """
@@ -144,7 +154,7 @@ class SQLiteManager:
         set_clause = ', '.join([f"{col} = ?" for col in data.keys()])
         sql = f"UPDATE {table_name} SET {set_clause} WHERE {where}"
         self.cursor.execute(sql, tuple(data.values()))
-        self.conn.commit()
+        # self.conn.commit()
 
     def exact_search(self, table_name, column, value, columns='*'):
         """
@@ -207,7 +217,20 @@ class SQLiteManager:
         return [dict(zip(column_names, row)) for row in results]
 
 
+    def find(self, table_name, query_dict, columns='*'):
+        return self.search_by_dict(table_name, query_dict, columns)
 
+    def find_all(self, table_name):
+        """
+        拿到一个表中所有的值
+        """
+        sql = f"SELECT * FROM {table_name}"
+        self.cursor.execute(sql)
+        results = self.cursor.fetchall()
+        column_names = [desc[0] for desc in self.cursor.description]
+        return [dict(zip(column_names, row)) for row in results]
+
+        
     def delete(self, table_name, where):
         """
         从表格中删除数据。
@@ -219,31 +242,40 @@ class SQLiteManager:
 
         sql = f"DELETE FROM {table_name} WHERE {where}"
         self.cursor.execute(sql)
-        self.conn.commit()
+        # self.conn.commit()
 
 if __name__ == '__main__':
             
     # 创建 SQLiteManager 对象
-    db_manager = SQLiteManager('mydatabase.db')
+    db_manager = YSqlite1('y_database.db')
 
     # 使用 with 语句自动管理数据库连接
     with db_manager:
         # 创建表格
         db_manager.create_table('users', {'id': 'INTEGER PRIMARY KEY', 'name': 'TEXT', 'email': 'TEXT'})
 
-        # 插入数据
-        db_manager.insert('users', {'name': 'Pscly', 'email': 'Pscly@qq.com'})
-        db_manager.insert('users', {'name': 'Pslsy1', 'email': 'Pslsy1@qq.com'})
-        db_manager.insert('users', {'name': 'Ps111', 'email': 'Pslsy1@qq.com'})
+    #     # 插入数据
+    #     db_manager.insert('users', {'name': 'Pscly', 'email': 'Pscly@qq.com'})
+    #     db_manager.insert('users', {'name': 'Pslsy1', 'email': 'Pslsy1@qq.com'})
+    #     db_manager.insert('users', {'name': 'Ps111', 'email': 'Pslsy1@qq.com'})
 
-        # 查询数据
-        users = db_manager.select('users')
-        users = db_manager.search_by_dict('users', {'name': 'Pscly'})
-        users = db_manager.like_search_by_dict('users', {'name': 'Ps'})
-        print(users)
+    #     # 查询数据
+    #     users = db_manager.select('users')
+    #     users = db_manager.search_by_dict('users', {'name': 'Pscly'})
+    #     users = db_manager.like_search_by_dict('users', {'name': 'Ps'})
+    #     print(users)
 
-        # 更新数据
-        db_manager.update('users', {'email': 'john.doe@example.com'}, 'id = 1')
+    #     # 更新数据
+    #     db_manager.update('users', {'email': 'john.doe@example.com'}, 'id = 1')
 
-        # 删除数据
-        db_manager.delete('users', 'id = 1')
+    #     # 删除数据
+    #     db_manager.delete('users', 'id = 1')
+    a = 1
+    #  db_manager.transaction()
+    with db_manager:
+        db_manager.insert('users', {'name': '1231', 'email': 'Pscly@qq.com'})
+        # if a == 1:
+        #     raise Exception("a 等于 1，触发事务回滚！")
+
+        
+
