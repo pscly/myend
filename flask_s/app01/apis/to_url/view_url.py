@@ -8,7 +8,6 @@ import os
 import json
 from entities import data_saves
 from utils import core
-from entities.mymongo import MyMongo1
 
 service_name = 'to_url'
 
@@ -30,8 +29,6 @@ def save_json(data, path=data_path):
 @bp.route('/', methods=('GET', 'POST'))
 def index():
     """
-    
-
     """
     error_url = 'https://www.4399.com/'
     

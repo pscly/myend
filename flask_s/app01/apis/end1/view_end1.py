@@ -9,7 +9,6 @@ bp = Blueprint(service_name, __name__, url_prefix='/end1')
 
 # /end1/
 
-
 @bp.route('/', methods=('GET', 'POST'))
 def index():
     """

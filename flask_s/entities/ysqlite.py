@@ -1,3 +1,10 @@
+"""
+python 简单操作sqlite
+
+高级点的:  https://docs.sqlalchemy.org/en/20/tutorial/engine.html
+
+"""
+
 import sqlite3
 from sqlite3 import Error, OperationalError  
 
@@ -9,7 +16,7 @@ class YSqlite1:
     提供连接数据库、创建表格、以及执行 CRUD 操作的方法。
     """
 
-    def __init__(self, db_path):
+    def __init__(self, db_path='y_database.db'):
         """
         初始化 SQLiteManager 对象。
 
@@ -229,6 +236,97 @@ class YSqlite1:
         results = self.cursor.fetchall()
         column_names = [desc[0] for desc in self.cursor.description]
         return [dict(zip(column_names, row)) for row in results]
+
+    def save(self, table_name, data, p_key='id'):
+        """
+        保存数据到表格中。
+
+        Args:
+            table_name (str): 表格名称。
+            data (dict or list): 要保存的数据，可以是字典格式 {'列名': '值'} 
+                                  或者列表套字典 [{'列名': '值'}, {'列名': '值'}]。
+            p_key (str, optional): 主键列名，默认为 'id'。
+
+        如果 data 中包含主键值，并且该值在数据库中存在，则更新数据；
+        否则，插入新数据。
+        """
+
+        if isinstance(data, list):  # 处理列表套字典的情况
+            for item in data:
+                self._save_single_item(table_name, item, p_key)
+        elif isinstance(data, dict):  # 处理单个字典的情况
+            self._save_single_item(table_name, data, p_key)
+        else:
+            raise ValueError("data 参数必须是字典或字典列表")
+
+    def _save_single_item(self, table_name, data, p_key):
+        """
+        保存单个数据项到表格中。
+
+        Args:
+            table_name (str): 表格名称。
+            data (dict): 要保存的单个数据项，格式为 {'列名': '值'}。
+            p_key (str): 主键列名。
+        """
+        if p_key in data:
+            # 如果主键值存在，尝试更新数据
+            existing_data = self.search_by_dict(table_name, {p_key: data[p_key]})
+            if existing_data:
+                self._update_data(table_name, data, p_key)
+            else:
+                self._insert_data(table_name, data)
+        else:
+            # 如果主键值不存在，插入新数据
+            self._insert_data(table_name, data)
+
+    def _insert_data(self, table_name, data):
+        """
+        插入数据到表格。
+
+        Args:
+            table_name (str): 表格名称。
+            data (dict): 要插入的数据，格式为 {'列名': '值'}。
+        """
+        columns = ', '.join(data.keys())
+        placeholders = ', '.join(['?'] * len(data))
+        sql = f"INSERT INTO {table_name} ({columns}) VALUES ({placeholders})"
+        self.cursor.execute(sql, tuple(data.values()))
+        # try:
+        #     columns = ', '.join(data.keys())
+        #     placeholders = ', '.join(['?'] * len(data))
+        #     sql = f"INSERT INTO {table_name} ({columns}) VALUES ({placeholders})"
+        #     self.cursor.execute(sql, tuple(data.values()))
+        #     self.conn.commit()
+        # except OperationalError as e:
+        #     print(f"插入数据错误: {e}")
+        #     self.conn.rollback()
+        #     raise
+
+    def _update_data(self, table_name, data, p_key):
+        """
+        更新表格中的数据。
+
+        Args:
+            table_name (str): 表格名称。
+            data (dict): 要更新的数据，格式为 {'列名': '值'}。
+            p_key (str): 主键列名。
+        """
+        update_fields = ', '.join([f"{key} = ?" for key in data if key != p_key])
+        sql = f"UPDATE {table_name} SET {update_fields} WHERE {p_key} = ?"
+        values = list(data.values())
+        values.append(data[p_key])  # 将主键值添加到 values 的末尾
+        self.cursor.execute(sql, tuple(values))
+        # try:
+        #     update_fields = ', '.join([f"{key} = ?" for key in data if key != p_key])
+        #     sql = f"UPDATE {table_name} SET {update_fields} WHERE {p_key} = ?"
+        #     values = list(data.values())
+        #     values.append(data[p_key])  # 将主键值添加到 values 的末尾
+        #     self.cursor.execute(sql, tuple(values))
+        #     self.conn.commit()
+        # except OperationalError as e:
+        #     print(f"更新数据错误: {e}")
+        #     self.conn.rollback()
+        #     raise
 
         
     def delete(self, table_name, where):

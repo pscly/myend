@@ -8,7 +8,6 @@ import os
 import json
 from entities import data_saves
 from utils import core
-from entities.mymongo import MyMongo1
 
 service_name = 'to_v'
 
