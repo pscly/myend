@@ -8,6 +8,7 @@
   <title>{% block title %}{% endblock %}</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap5.3.0.min.css')}}" />
   <meta name="baidu_union_verify" content="d4f492925bc3f3ee46df80885be178c9">
+  {% block head %}{% endblock %}
 </head>
 
 <body>
@@ -51,7 +52,7 @@
               <a class="nav-link" aria-current="page" href="/files">文件盘</a>
             </li>
             {% endif %}
-            
+
             <!-- 登录后有的东西 -->
             {% if ['/msg1',request.path]|in_str %}
             <li class="nav-item">
@@ -120,7 +121,6 @@
   </header>
 
   <div class="container">
-
     <div class="row">
       <div class="col-sm-1">
       </div>
@@ -133,8 +133,20 @@
       </div>
     </div>
   </div>
-
-
+  
+  {% block content2 %}{% endblock %}
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-1">
+      </div>
+      <div class="col-sm-10">
+        <br>
+        {% include "page_end.html" %}
+      </div>
+      <div class="col-sm-1">
+      </div>
+    </div>
+  </div>
 </body>
 <script src="{{ url_for('static', filename='js/bootstrap5.3.0.min.js')}}"></script>
 

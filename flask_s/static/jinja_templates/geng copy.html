@@ -1,0 +1,36 @@
+{% extends "index.html" %}
+{% block title %}主页{% endblock %}
+
+
+{% block head %}
+<style>
+    #d1 {
+      background-image: url('static/images/1 (3).webp');
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+
+<!-- <img src="static/images/1 ({{imgid}}).webp" alt="" width="100%" height="100%"> -->
+
+
+{% if request|islogin1 %}
+<!-- <h1> {{ request|islogin1 }} </h1> -->
+{% else %}
+<h1> 404 </h1>
+{% endif %}
+
+<div>
+    <img src="static/images/1 ({{imgid}}).webp" alt="" width="100%" height="100%">
+</div>
+
+<!-- <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86
+    src="//music.163.com/outchain/player?type=2&id={{yyid}}&auto=1&height=66"></iframe> -->
+
+<!-- 导入 page_end -->
+
+<!-- 这个里面包含了备案的东西 -->
+{% include "page_end.html" %}
+
+{% endblock %}

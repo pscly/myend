@@ -1,19 +1,92 @@
 {% extends "index.html" %}
 {% block title %}主页{% endblock %}
 
-{% block content %}
 
+{% block head %}
+<style>
+    #d1 {
+        background-image: url('static/images/1 (15).webp');
+        background-size: cover; /* 或 contain */
+    }
+</style>
+{% endblock %}
 
+{% block content2 %}
 
+<!-- <img src="static/images/1 ({{imgid}}).webp" alt="" width="100%" height="100%"> -->
+
+<!-- 
 {% if request|islogin1 %}
-<!-- <h1> {{ request|islogin1 }} </h1> -->
+<h1> okk</h1>
 {% else %}
 <h1> 404 </h1>
 {% endif %}
+-->
 
-<div>
-    <img src="static/images/1 ({{imgid}}).webp" alt="" width="100%" height="100%">
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+            <h1>我的学习记录站</h1>
+            <p>这里不采用任何框架，只是一个静态网页，用于学习记录</p>
+        </div>
+    </div>
 </div>
+
+<div class="row">
+    <div class="col-sm-1">
+    </div>
+    <div class="col-sm" id="d1" style="color: black;">
+        <div class="row">
+            <div class="col-sm-2">
+            </div>
+            <div class="col-sm-5">
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <div class="btn btn-light">
+                    <a class="nav-link" href="./bj1.html">笔记1 _ 算法 大O表示法</a>
+                </div>
+                <br>
+                <br>
+                <div class="btn btn-light">
+                    <a class="nav-link" href="./4.快速排序.html">笔记2 _ 算法 快速排序</a>
+                </div>
+                <br>
+                <br>
+                <div class="btn btn-light">
+                    <a class="nav-link" href="./md">查看当前时间</a>
+                </div>
+            </div>
+            <div class="col-sm-5" title="" style="">
+                <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="450" src="//music.163.com/outchain/player?type=0&amp;id=7609184459&amp;auto=0&amp;height=430"
+                    __idm_id__="2154497" title="" style=""></iframe>
+            </div>
+        </div>
+        <br>
+        <div>
+        </div>
+        <div>
+            <br>
+            <!-- <div class="btn btn-light">
+                                      <a class="nav-link" href="https://pcly.cn:30002">笔记1</a>
+                                </div>
+                                <div class="btn btn-light">
+                                      <a class="nav-link" href="https://pcly.cn:30003">笔记2</a>
+                                </div> -->
+        </div>
+    </div>
+    <div class="col-sm-1">
+    </div>
+</div>
+</div>
+
 
 <!-- <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86
     src="//music.163.com/outchain/player?type=2&id={{yyid}}&auto=1&height=66"></iframe> -->
@@ -21,6 +94,5 @@
 <!-- 导入 page_end -->
 
 <!-- 这个里面包含了备案的东西 -->
-{% include "page_end.html" %}
 
 {% endblock %}
