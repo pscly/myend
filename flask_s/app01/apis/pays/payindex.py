@@ -86,6 +86,7 @@ def remove_user_device(user, device_name):
     mo = MyMongo1("msg1_user_devices")
     mo.delete({"user": user, "device_name": device_name})
 
+
 def format_money(pay_money):
     try:
         # 尝试将 pay_money 转换为浮点数
@@ -95,8 +96,7 @@ def format_money(pay_money):
         return formatted_money
     except ValueError:
         # 如果转换失败，返回原始字符串的前部分
-        return pay_money.split('.')[0] + '.00'
-
+        return pay_money.split(".")[0] + ".00"
 
 
 def get_sign_from_query_string(query_string, key):
@@ -138,7 +138,7 @@ def index():
     if (not pay_money) or (not p_type or not p_type in pay_dic):
         return render_template(
             "404.html",
-            msg="支付失败，参数错误",
+            msg="支付失败，参数错误 p_type  money",
         )
 
     pay_type = pay_dic.get(p_type)[0]
@@ -193,13 +193,10 @@ def any_pay():
 
     datas = myfuncs.get_datas(request)
     data1 = datas.get("data")
-    p_type = data1.get("p_type")  
+    p_type = data1.get("p_type")
     if (not p_type) or (not p_type in pay_dic):
         return render_template(
             "404.html",
-            msg="支付失败，参数错误",
+            msg="支付失败，参数错误_ p_type  money",
         )
-    return render_template(
-        "anypay.html"
-    )
-
+    return render_template("anypay.html")
