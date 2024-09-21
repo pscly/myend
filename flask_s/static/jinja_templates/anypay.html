@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>支付页面</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .payment-container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .amount-input {
+            font-size: 2rem;
+            text-align: right;
+        }
+        .numeric-keypad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        .numeric-keypad button {
+            font-size: 1.5rem;
+            padding: 20px;
+        }
+        .btn-confirm {
+            grid-column: span 3;
+            font-size: 1.5rem;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="payment-container text-center">
+    <img src="https://via.placeholder.com/50" class="rounded-circle mb-3" alt="Logo">
+    <h4 class="mb-4">顺金集团</h4>
+    <div class="mb-3">
+        <input type="text" id="amount" class="form-control amount-input" placeholder="请输入付款金额" value="¥1" readonly>
+    </div>
+    <div class="numeric-keypad mb-4">
+        <button class="btn btn-light" onclick="appendNumber('1')">1</button>
+        <button class="btn btn-light" onclick="appendNumber('2')">2</button>
+        <button class="btn btn-light" onclick="appendNumber('3')">3</button>
+        <button class="btn btn-light" onclick="appendNumber('4')">4</button>
+        <button class="btn btn-light" onclick="appendNumber('5')">5</button>
+        <button class="btn btn-light" onclick="appendNumber('6')">6</button>
+        <button class="btn btn-light" onclick="appendNumber('7')">7</button>
+        <button class="btn btn-light" onclick="appendNumber('8')">8</button>
+        <button class="btn btn-light" onclick="appendNumber('9')">9</button>
+        <button class="btn btn-light" onclick="appendNumber('0')">0</button>
+        <button class="btn btn-light" onclick="appendNumber('.')">.</button>
+        <button class="btn btn-light" onclick="deleteLast()">&larr;</button>
+    </div>
+    <button class="btn btn-primary btn-confirm w-100" onclick="confirmPayment()">确认支付</button>
+    <p class="mt-3 text-muted"><small>由 岛安云支付 提供服务支持</small></p>
+</div>
+
+<script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+<script>
+    function appendNumber(number) {
+        var amountInput = document.getElementById('amount');
+        var currentValue = amountInput.value.replace('¥', '');
+        if (number === '.' && currentValue.includes('.')) return;
+        if (currentValue === '0' && number !== '.') {
+            currentValue = number;
+        } else {
+            currentValue += number;
+        }
+        amountInput.value = '¥' + currentValue;
+    }
+
+    function deleteLast() {
+        var amountInput = document.getElementById('amount');
+        var currentValue = amountInput.value.replace('¥', '');
+        if (currentValue.length > 1) {
+            currentValue = currentValue.slice(0, -1);
+        } else {
+            currentValue = '0';
+        }
+        amountInput.value = '¥' + currentValue;
+    }
+
+    function confirmPayment() {
+        var amountInput = document.getElementById('amount');
+        var currentValue = amountInput.value.replace('¥', '');
+        // p_type 通过 url 参数传递
+        var p_type = window.location.search.split('p_type=')[1];
+        if (!p_type) {
+            p_type = 1;
+        }
+        var url = window.location.protocol + '//' + window.location.host+ '/pays?money=' + currentValue + '&p_type=' + p_type;
+        window.location.href = url;
+
+    }
+
+
+</script>
+</body>
+</html>
