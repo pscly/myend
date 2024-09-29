@@ -27,8 +27,8 @@ ENV FLASK_RUN_HOST=0.0.0.0
 ENV FLASK_RUN_PORT=31001
 ENV FLASK_ENV=production
 
-RUN useradd -m myuser
-USER myuser
+# RUN useradd -m myuser
+# USER myuser
 
 EXPOSE 31001
 
