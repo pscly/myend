@@ -1,3 +1,6 @@
+# # 重新构建 > docker build .
+# docker compose up -d --build
+
 FROM python:3.12.6-slim as builder
 
 ENV TZ=Asia/Shanghai
