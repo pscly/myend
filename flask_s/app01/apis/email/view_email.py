@@ -39,4 +39,4 @@ def index2():
         else:
             data_saves.save_data(datas, 2, 'email')
         return datas
-    return '''http://127.0.0.1:31001/ime/2/?msg=xxx&addr=xxx@qq.com'''
+    return '''http://127.0.0.1:31001/ime/v2/?msg=xxx&addr=xxx@qq.com'''

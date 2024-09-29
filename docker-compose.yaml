@@ -16,23 +16,23 @@ services:
       - "31002:31001"
     volumes:
       - ./flask_s/:/py_end
-    depends_on:
-      - y_end_mongodb 
-    links:
-      - y_end_mongodb:y_end_mongodb
+    # depends_on:
+    #   - y_end_mongodb 
+    # links:
+    #   - y_end_mongodb:y_end_mongodb
 
-  y_end_mongodb:
-    image: mongo
-    container_name: y_end_mongodb
-    restart: always
-    ports:
-      - 27020:27017
-    volumes:
-      - ./mongo/mongo_data:/data/
-      - ./mongo/mongo_conf:/etc/mongodb/
-      - ./mongo/mongo_db:/data/db/
-    environment:
-      TZ: Asia/Shanghai
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PWD:-mongodb_pwd1234}
-    command: mongod --directoryperdb --port 27017
+  # y_end_mongodb:
+  #   image: mongo
+  #   container_name: y_end_mongodb
+  #   restart: always
+  #   ports:
+  #     - 27020:27017
+  #   volumes:
+  #     - ./mongo/mongo_data:/data/
+  #     - ./mongo/mongo_conf:/etc/mongodb/
+  #     - ./mongo/mongo_db:/data/db/
+  #   environment:
+  #     TZ: Asia/Shanghai
+  #     MONGO_INITDB_ROOT_USERNAME: root
+  #     MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PWD:-mongodb_pwd1234}
+  #   command: mongod --directoryperdb --port 27017
