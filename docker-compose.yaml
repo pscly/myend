@@ -15,7 +15,7 @@ services:
     ports:
       - "31002:31001"
     volumes:
-      - ./flask_s/:/py_end
+      - ./flask_s/:/app
     # depends_on:
     #   - y_end_mongodb 
     # links:
