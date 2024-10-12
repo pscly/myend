@@ -65,10 +65,36 @@ xiaoding = DingtalkChatbot(webhook, secret=secret)
 
 @bp.route("/", methods=["POST", "GET"])
 def send_message():
+    """
+    发送消息到钉钉群的接口
+
+    此接口接收POST或GET请求，用于发送消息到指定的钉钉群。
+
+    请求参数:
+    - bt (str, 可选): 消息标题
+    - content (str 或 dict): 消息内容
+
+    返回:
+    - JSON对象:
+        - message (str): 操作结果描述
+        - 消息内容是 (str): 发送的消息内容
+        - 标题是 (str): 发送的消息标题
+
+    使用方法:
+    1. 如果提供了 'bt' (标题)，将使用markdown格式发送消息，标题为 'bt'，内容为 'content'
+    2. 如果没有提供 'bt'，将把整个请求数据作为JSON发送，标题默认为 "无标题的消息(json)"
+
+    注意:
+    - 本接口使用了钉钉机器人API，确保 webhook 和 secret 已正确配置
+    - 消息发送是同步的，可能会影响接口响应时间
+    """
+
+    
     datas = myfuncs.get_datas(request)
-    message_type = datas.get('data', {}).get('type')
     bt = datas.get('data', {}).get('bt')
-    content = datas.get('data', {}).get('content')
+    content = datas.get('data', {}).get('content') or datas.get('data', {})
+
+    content = f"# {bt}\n\n{content}\n\n---\n\n> {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
     
     if bt:
         xiaoding.send_markdown(title=bt, text=content)
@@ -78,9 +104,15 @@ def send_message():
 ```json
 {json.dumps(datas, ensure_ascii=False, indent=4)}
 ```
-"""
-        xiaoding.send_markdown(title="无标题的消息", text=send_data)
+"""     
+        bt = "无标题的消息(json)"
+        xiaoding.send_markdown(title=bt, text=send_data)
+        content = send_data
     
-    return jsonify({"message": "已经尝试发送消息了"}), 200
+    return jsonify({
+        "message": "已经尝试发送消息了", 
+        "消息内容是": content,
+        "标题是": bt,
+            }), 200
 
 
