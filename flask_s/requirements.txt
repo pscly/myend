@@ -13,6 +13,7 @@ DingtalkChatbot==1.5.7
 dnspython==2.6.1
 Flask==3.0.3
 Flask-Login==0.6.3
+greenlet==3.1.1
 idna==3.10
 itsdangerous==2.2.0
 Jinja2==3.1.4
@@ -21,13 +22,16 @@ MarkupSafe==2.1.5
 more-itertools==10.5.0
 Naked==0.1.32
 premailer==3.10.0
+psycopg2==2.9.10
 pyaml-env==1.2.1
 pycryptodome==3.20.0
 pymongo==4.9.1
 PyYAML==6.0.2
 requests==2.32.3
 shellescape==3.8.1
+SQLAlchemy==2.0.36
 tencentcloud-sdk-python==3.0.1241
+typing_extensions==4.12.2
 urllib3==2.2.3
 Werkzeug==3.0.4
 wincertstore==0.2.1
