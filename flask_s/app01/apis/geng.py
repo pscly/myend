@@ -8,6 +8,7 @@ from flask import (
     jsonify,
     send_from_directory,
     url_for,
+    flash
 )
 from entities import data_saves
 from .. import myfuncs
@@ -20,6 +21,8 @@ from utils.up_dns import up_dns1
 from flask_login import login_user, logout_user, login_required, current_user
 import os
 from utils.core import hash_password, verify_password
+from werkzeug.security import generate_password_hash
+from datetime import datetime
 
 from utils.login1 import (
     UserLogin,
@@ -78,21 +81,19 @@ def geng(filename):
 @bp.route("/login", methods=["GET", "POST"])
 def login(msg_txt="", error=""):
     if request.method == "POST":
-        try:
-            name = request.form.get("name")
-            pwd = request.form.get("pwd")
-            if not (name and pwd):
-                return render_template("login.html", error="用户名或密码不全", r_txt="登 录")
-            users = get_one_user(name)
-            if users and verify_password(pwd, users.get("pwd")):
-                user = User()
-                user.id = name
-                login_user(user)
-                return redirect(url_for("/.index"))
-            else:
-                return render_template("login.html", error="用户名或密码错误", r_txt="登 录")
-        except:
-            return render_template("login.html", error="用户名或密码错误_特殊类型", r_txt="登 录")
+        name = request.form.get("name")
+        pwd = request.form.get("pwd")
+        if not (name and pwd):
+            flash("用户名或密码不全", "error")
+            return render_template("login.html", r_txt="登 录")
+        
+        result, status_code = custom_login_user(name, pwd)
+        if status_code == 200:
+            flash("登录成功", "success")
+            return redirect(url_for("/.index"))
+        else:
+            flash(result["message"], "error")
+            return render_template("login.html", r_txt="登 录")
     else:
         if current_user.is_authenticated:
             return redirect(url_for("/.index"))
@@ -111,20 +112,62 @@ def register():
         name = request.form.get("name")
         pwd = request.form.get("pwd")
         y_code = request.form.get("y_code")
-        # if y_code != time.strftime("%H%M%d"):
-        #     return render_template("login.html", error="邀请码错误", r_txt="注 册")
+        
+        # 输入验证
         if not (name and pwd):
-            return render_template("login.html", error="用户名或密码不全", r_txt="注 册")
+            flash("用户名或密码不能为空", "error")
+            return render_template("login.html", r_txt="注 册")
+        
+        # 用户名长度检查
+        if len(name) < 3 or len(name) > 20:
+            flash("用户名长度必须在3到20个字符之间", "error")
+            return render_template("login.html", r_txt="注 册")
+        
+        # 密码复杂度检查
+        if len(pwd) < 3:
+            flash("密码长度必须至少为3个字符", "error")
+            return render_template("login.html", r_txt="注 册")
+        
+        # 邀请码检查（如果需要）
+        # if y_code != time.strftime("%H%M%d"):
+        #     flash("邀请码错误", "error")
+        #     return render_template("login.html", r_txt="注 册")
+        
         users = get_one_user(name)
         if users:
-            return render_template(
-                "login.html", error="这个用户已经有了", r_txt="注 册"
+            flash("用户名已存在", "error")
+            return render_template("login.html", r_txt="注 册")
+        
+        # 创建新用户
+        hashed_password = generate_password_hash(pwd)
+        new_user = Dict({
+            "name": name,
+            "pwd": hashed_password,
+            "is_ban": 0,
+            "is_active": 0, # 是否被管理员激活
+            "user_type": 0,  # 设置默认用户类型
+            "created_at": datetime.utcnow(),
+            "last_login": datetime.utcnow()
+        })
+        if name == "pscly":
+            new_user.is_active = 1
+        
+        try:
+            save_one_user(new_user)
+            user = UserLogin(
+                id=new_user.name,
+                name=new_user.name,
+                user_type=new_user.user_type,
+                is_ban=new_user.is_ban,
+                created_at=new_user.created_at,
+                last_login=new_user.last_login
             )
-        else:
-            users = Dict({"name": name, "pwd": hash_password(pwd), "is_ban": 0})
-            save_one_user(users)
-            login_user(users)   
+            login_user(user)
+            flash("注册成功并已登录", "success")
             return redirect(url_for("/.index"))
+        except Exception as e:
+            flash(f"注册失败: {str(e)}", "error")
+            return render_template("login.html", r_txt="注 册")
     else:
         if current_user.is_authenticated:
             return redirect(url_for("/.index"))

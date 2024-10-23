@@ -11,11 +11,12 @@ from werkzeug.security import check_password_hash
 
 
 class UserLogin(UserMixin):
-    def __init__(self, id, name, user_type, is_ban, created_at, last_login):
+    def __init__(self, id, name, user_type, is_ban, is_active, created_at, last_login):
         self.id = id
         self.name = name
         self.user_type = user_type
         self.is_ban = is_ban
+        self.is_active = is_active
         self.created_at = created_at
         self.last_login = last_login
 
@@ -30,6 +31,7 @@ class UserLogin(UserMixin):
                 name=user['name'],
                 user_type=user['user_type'],
                 is_ban=user['is_ban'],
+                is_active=user['is_active'],
                 created_at=user['created_at'],
                 last_login=user['last_login']
             )

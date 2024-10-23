@@ -14,6 +14,15 @@ from pyaml_env import parse_config
 from entities.mypgsql import YSqlTool
 from utils.database import get_db
 
+# 新增：导入必要的模块
+from alembic.config import Config
+from alembic import command
+from alembic.script import ScriptDirectory
+from alembic.runtime.environment import EnvironmentContext
+from alembic.migration import MigrationContext
+from alembic.operations import Operations
+from sqlalchemy import inspect
+
 def load_conf(mode: str, conf_name: str = "config.yaml"):
     """
     读取conf，
@@ -42,6 +51,45 @@ def save_json(data, path="configs/y_data.json"):
         json.dump(data, f, ensure_ascii=False, indent=4)
 
 
+def check_and_apply_migrations(app):
+    """检查并应用数据库迁移"""
+    alembic_cfg = Config("alembic.ini")
+    script = ScriptDirectory.from_config(alembic_cfg)
+
+    with app.app_context():
+        # 获取数据库连接
+        engine = get_db().engine
+
+        def get_current_revision(connection):
+            context = MigrationContext.configure(connection)
+            return context.get_current_revision()
+
+        with engine.connect() as connection:
+            current_rev = get_current_revision(connection)
+
+        # 获取最新的迁移版本
+        head_rev = script.get_current_head()
+
+        print(f"数据库的版本: {current_rev}")    # 意思是 
+        print(f"迁移脚本的版本: {head_rev}")
+
+        if current_rev is None and head_rev is None:
+            print("数据库和迁移脚本都是空的。正在创建初始迁移...")
+            # 创建初始迁移
+            command.revision(alembic_cfg, autogenerate=True, message="init db")
+            command.upgrade(alembic_cfg, "head")
+            head_rev = script.get_current_head()
+            print(f"创建了初始迁移: {head_rev}")
+
+        if current_rev != head_rev:
+            print("检测到数据库需要更新，正在应用迁移...")
+            command.revision(alembic_cfg, autogenerate=True, message="update db")
+            command.upgrade(alembic_cfg, "head")
+            print("数据库迁移完成。")
+        else:
+            print("数据库已是最新版本。")
+
+
 def create_app():
     app = Flask(
         "app",
@@ -57,6 +105,13 @@ def create_app():
     with app.app_context():
         db = get_db()
         app.db = db
+
+    # 设置 Alembic 配置
+    alembic_cfg = Config("alembic.ini")
+    alembic_cfg.set_main_option("sqlalchemy.url", app.config['SQLALCHEMY_DATABASE_URI'])
+
+    # 新增：检查并应用数据库迁移
+    check_and_apply_migrations(app)
 
     # 静态资源文件夹为 static和files
     os.y.root_path1 = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

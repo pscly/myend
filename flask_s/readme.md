@@ -3,12 +3,33 @@
 ## toc
 
 1. [简介](#简介)
-   1. [关于支付模块](#关于支付模块)
+   1. [数据库迁移](#数据库迁移)
+   2. [关于支付模块](#关于支付模块)
       1. [发起支付请求](#发起支付请求)
       2. [支付请求1](#支付请求1)
-   2. [发起支付请求](#发起支付请求-1)
-   3. [支付请求2](#支付请求2)
-   4. [发起支付请求](#发起支付请求-2)
+   3. [发起支付请求](#发起支付请求-1)
+   4. [支付请求2](#支付请求2)
+   5. [发起支付请求](#发起支付请求-2)
+
+## 数据库迁移
+
+初始化，创建 alembic 文件夹(现在不用这个)  (这个似乎非得要用那个ini文件, 但是修改env.py 后似乎就可以不用了)
+alembic init alembic
+
+初始化
+alembic upgrade head 
+
+生成迁移脚本
+alembic revision --autogenerate -m "init db"
+
+应用迁移到数据库
+alembic upgrade head
+
+后续更新
+alembic revision --autogenerate -m "update db"
+alembic upgrade head
+
+
 
 ## 关于支付模块
 

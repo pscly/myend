@@ -20,6 +20,10 @@ class Users(Base):
     pwd = Column(String, nullable=False)
     user_type = Column(Integer, default=0)
     is_ban = Column(Integer, default=0)
+    is_active = Column(Integer, default=1)
+    is_active2 = Column(Integer, default=1)
+    is_active4 = Column(Integer, default=1)
+    is_active5 = Column(Integer, default=1)
     created_at = Column(DateTime, default=datetime.utcnow)
     last_login = Column(DateTime)
 

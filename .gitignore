@@ -142,3 +142,5 @@ geng/
 
 mydatabase.db
 x.json
+
+*init_db.py
