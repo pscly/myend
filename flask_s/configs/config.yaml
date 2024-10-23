@@ -2,15 +2,15 @@ COMMON: &common
   PORT: 31001
 
   # 数据库配置
-  SQLALCHEMY_DATABASE_URI: mysql+pymysql://root:@127.0.0.1/myend?charset=utf8
-  SQLALCHEMY_TRACK_MODIFICATIONS: False
-  SQLALCHEMY_ECHO: False
+  SQLALCHEMY_DATABASE_URI: postgresql://pscly:@yzb0uLPnTzOKqfN5M9iwe43p1eWuzzqg29XG/yend
+  SQLALCHEMY_TRACK_MODIFICATIONS: False    # 这个用于记录sql语句
+  SQLALCHEMY_ECHO: False    # 这个用于打印sql语句
   JSON_AS_ASCII: False
   UP_FILE: 1 # 是否可以匿名上传
-  # mongodb_ip: "mongodb"
-  mongodb_ip: "127.0.0.1"
-  mongodb_port: 27017
-  mongodb_user: root
+  # # mongodb_ip: "mongodb"
+  # mongodb_ip: "127.0.0.1"
+  # mongodb_port: 27017
+  # mongodb_user: root
   # max_content_length: 150 *  1024 * 1024  # 这里是限制上传文件大小的，通过flask进行限制
   #  SQLALCHEMY_POOL_SIZE: 100
 
@@ -18,13 +18,13 @@ DEVELOPMENT: &development
   # 开发
   <<: *common
   SQLALCHEMY_DATABASE_URI: mysql+pymysql://root:@127.0.0.1/myend?charset=utf8
-  mongodb_port: 27017
-  mongodb_ip: "127.0.0.1"
-  mongodb_pwd: y2YhNRHkIpYB54P3Tupt8PJz3D2BcTZaKRMZ
+  # mongodb_port: 27017
+  # mongodb_ip: "127.0.0.1"
+  # mongodb_pwd: y2YhNRHkIpYB54P3Tupt8PJz3D2BcTZaKRMZ
 
 PRODUCTION: &production
   <<: *common
-  mongodb_ip: "y_end_mongodb"
-  mongodb_port: 27017
+  # mongodb_ip: "y_end_mongodb"
+  # mongodb_port: 27017
   # python pyaml_env 读取的话必须加 !ENV
-  mongodb_pwd: !ENV ${MONGODB_PWD:mongodb_pwd1234}
+  # mongodb_pwd: !ENV ${MONGODB_PWD:mongodb_pwd1234}

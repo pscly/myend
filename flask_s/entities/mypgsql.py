@@ -172,8 +172,7 @@ class YSqlTool:
 
 
 if __name__ == '__main__':
-    # pgsql = YSqlTool('postgresql://pscly:yzb0uLPnTzOKqfN5M9iwe43p1eWuzzqg29XG@192.168.3.5:5432/yend')
-    pgsql = YSqlTool('postgresql://pscly:yzb0uLPnTzOKqfN5M9iwe43p1eWuzzqg29XG@192.168.3.5:5432/yend')
+    pgsql = YSqlTool('postgresql://pscly:111111@192.168.3.5:5432/yend')
     # pgsql.insert('Users', {'name': 'pscly', 'pwd': '12345'})
     # print(pgsql.search_by_dict('Users', {'name': 'pscly'}))
     # print(pgsql.select('Users', to_dict=True))

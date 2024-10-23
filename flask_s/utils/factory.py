@@ -11,6 +11,7 @@ from utils.login1 import User, get_all_users
 from utils.webpy import WebFunc
 
 from pyaml_env import parse_config
+from entities.mypgsql import YSqlTool
 
 def load_conf(mode: str, conf_name: str = "config.yaml"):
     """
@@ -48,7 +49,7 @@ def create_app():
         static_url_path="/static",
     )
     mode = os.environ.get("MODE", "production")
-    conf = load_conf(mode)
+    conf = load_conf(mode)  #读取的是yaml configs/config.
     app.config.update(conf)
     # 静态资源文件夹为 static和files
     os.y.root_path1 = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
