@@ -3,6 +3,7 @@ COMMON: &common
 
   # 数据库配置
   SQLALCHEMY_DATABASE_URI: postgresql://pscly:yzb0uLPnTzOKqfN5M9iwe43p1eWuzzqg29XG@192.168.3.5:5432/yend
+  # SQLALCHEMY_DATABASE_URI: mysql+pymysql://root:yzb0uLPnTzOKqfN5M9iwe43p1eWuzzqg29XG@192.168.3.5:3306/yend
   SQLALCHEMY_TRACK_MODIFICATIONS: False    # 这个用于记录sql语句
   SQLALCHEMY_ECHO: False    # 这个用于打印sql语句
   JSON_AS_ASCII: False

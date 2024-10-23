@@ -6,13 +6,12 @@ from sqlalchemy import pool
 from alembic import context
 
 # 导入您的模型
-from entities.pgmodels import Base
-# from pgmodels import Base
+from entities.models import Base
+# from models import Base
 
 # 新增：导入必要的模块来读取 YAML 配置文件
 import os
 from utils.factory import load_conf
-from pyaml_env import parse_config
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

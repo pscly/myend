@@ -28,15 +28,12 @@ class YSqlTool:
 
     def load_models(self):
         """动态加载模型类并自动创建表"""
-        models_module = importlib.import_module('entities.pgmodels')
+        models_module = importlib.import_module('entities.models')
         Base = models_module.Base
 
         for name, cls in models_module.__dict__.items():
-            if  'app'  in  name.lower():
-                print()
             if isinstance(cls, type) and issubclass(cls, Base) and cls != Base:
                 self.models[name] = cls
-                
                 # 检查表是否存在，如果不存在则创建
                 if not inspect(self.engine).has_table(cls.__tablename__):
                     cls.__table__.create(self.engine)

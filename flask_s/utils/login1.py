@@ -3,7 +3,7 @@ from utils.db import get_db
 from addict import Dict
 from datetime import datetime
 from utils.ip_location import get_ip_location
-from entities.pgmodels import LoginRecord, Users as DBUsers
+from entities.models import LoginRecord, Users as DBUsers
 from utils.database import get_session
 from flask import request
 from flask_login import login_user as flask_login_user
