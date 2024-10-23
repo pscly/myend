@@ -12,7 +12,6 @@ from utils.webpy import WebFunc
 
 from pyaml_env import parse_config
 from entities.mypgsql import YSqlTool
-from utils.database import init_db, db_session
 
 def load_conf(mode: str, conf_name: str = "config.yaml"):
     """
@@ -94,10 +93,10 @@ def create_app():
     # 注册过滤器
     WebFunc(app)
 
-    init_db(app)
-
+    # 注册数据库关闭函数
     @app.teardown_appcontext
-    def shutdown_session(exception=None):
-        db.session_factory.remove()
+    def close_db(error):
+        if hasattr(app, 'db'):
+            app.db.close()
 
     return app

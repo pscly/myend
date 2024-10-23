@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>管理员页面 - 登录记录</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>用户名</th>
+            <th>IP 地址</th>
+            <th>IP 归属地</th>
+            <th>登录时间</th>
+            <th>User Agent</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for record in login_records %}
+        <tr>
+            <td>{{ record.user.username }}</td>
+            <td>{{ record.ip_address }}</td>
+            <td>{{ record.ip_location }}</td>
+            <td>{{ record.login_time.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+            <td>{{ record.user_agent }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
