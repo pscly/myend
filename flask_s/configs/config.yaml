@@ -2,7 +2,7 @@ COMMON: &common
   PORT: 31001
 
   # 数据库配置
-  SQLALCHEMY_DATABASE_URI: postgresql://pscly:@yzb0uLPnTzOKqfN5M9iwe43p1eWuzzqg29XG/yend
+  SQLALCHEMY_DATABASE_URI: postgresql://pscly:yzb0uLPnTzOKqfN5M9iwe43p1eWuzzqg29XG@192.168.3.5:5432/yend
   SQLALCHEMY_TRACK_MODIFICATIONS: False    # 这个用于记录sql语句
   SQLALCHEMY_ECHO: False    # 这个用于打印sql语句
   JSON_AS_ASCII: False
@@ -17,14 +17,14 @@ COMMON: &common
 DEVELOPMENT: &development
   # 开发
   <<: *common
-  SQLALCHEMY_DATABASE_URI: postgresql://dev_user:dev_password@localhost/dev_db
+  # SQLALCHEMY_DATABASE_URI: postgresql://dev_user:dev_password@localhost/dev_db
   # mongodb_port: 27017
   # mongodb_ip: "127.0.0.1"
   # mongodb_pwd: y2YhNRHkIpYB54P3Tupt8PJz3D2BcTZaKRMZ
 
 PRODUCTION: &production
   <<: *common
-  SQLALCHEMY_DATABASE_URI: postgresql://prod_user:prod_password@prod_host/prod_db
+  # SQLALCHEMY_DATABASE_URI: postgresql://prod_user:prod_password@prod_host/prod_db
   # mongodb_ip: "y_end_mongodb"
   # mongodb_port: 27017
   # python pyaml_env 读取的话必须加 !ENV

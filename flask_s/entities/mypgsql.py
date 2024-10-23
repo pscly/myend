@@ -1,3 +1,13 @@
+import sys
+import os
+
+# 获取当前文件的目录
+current_dir = os.path.dirname(os.path.abspath(__file__))
+# 获取项目根目录（假设 entities 目录直接位于项目根目录下）
+project_root = os.path.dirname(current_dir)
+# 将项目根目录添加到 Python 的模块搜索路径中
+sys.path.insert(0, project_root)
+
 import importlib
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
@@ -29,13 +39,15 @@ class YSqlTool:
 
     def load_models(self):
         """动态加载模型类并自动创建表"""
-        models_module = importlib.import_module('pgmodels')
+        # 修改这行
+        models_module = importlib.import_module('entities.pgmodels')
         Base = models_module.Base
 
         for name, cls in models_module.__dict__.items():
             if  'app'  in  name.lower():
                 print()
             if isinstance(cls, type) and issubclass(cls, Base) and cls != Base:
+                print(name)
                 self.models[name] = cls
                 
                 # 检查表是否存在，如果不存在则创建
@@ -172,10 +184,11 @@ class YSqlTool:
 
 
 if __name__ == '__main__':
-    pgsql = YSqlTool('postgresql://pscly:111111@192.168.3.5:5432/yend')
+    # pgsql = YSqlTool('postgresql://pscly:111111@192.168.3.5:5432/yend')
+    pgsql = YSqlTool('postgresql://pscly:yzb0uLPnTzOKqfN5M9iwe43p1eWuzzqg29XG@192.168.3.5:5432/yend')
     # pgsql.insert('Users', {'name': 'pscly', 'pwd': '12345'})
     # print(pgsql.search_by_dict('Users', {'name': 'pscly'}))
-    # print(pgsql.select('Users', to_dict=True))
+    print(pgsql.select('Users', to_dict=True))
     # pgsql.insert('Users', {'name': 'pscly', 'pwd': '12345'})
     
 

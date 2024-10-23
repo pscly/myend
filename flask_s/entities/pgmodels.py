@@ -24,16 +24,16 @@ class Users(Base):
     last_login = Column(DateTime)
 
 class LoginRecord(Base):
-    __tablename__ = 'login_records'
+    __tablename__ = 'LoginRecord'
 
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey('users.id'))
+    user_id = Column(Integer, ForeignKey('Users.id'))
     ip_address = Column(String)
     ip_location = Column(String)
     login_time = Column(DateTime(timezone=True), server_default=func.now())
     user_agent = Column(String)
 
-    user = relationship("User", back_populates="login_records")
+    user = relationship("Users", back_populates="LoginRecord")
 
 # 在 User 类中添加关系
-User.login_records = relationship("LoginRecord", back_populates="user")
+Users.LoginRecord = relationship("LoginRecord", back_populates="user")

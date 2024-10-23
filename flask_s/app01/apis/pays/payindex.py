@@ -32,7 +32,6 @@ from entities import data_saves
 from entities.mymongo import MyMongo1
 from utils import send_email
 from utils.core import hash_password, verify_password
-from utils.login1 import User, get_one_user, save_one_user
 from utils.up_dns import up_dns1
 from utils.db import get_db
 

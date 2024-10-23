@@ -1,4 +1,4 @@
-from flask import Flask, Blueprint
+from flask import Flask, Blueprint, g
 import yaml
 import os
 import json
@@ -7,11 +7,12 @@ from pathlib import Path
 from flask_login import LoginManager, UserMixin
 
 from app01.route import routers
-from utils.login1 import User, get_all_users
+from utils.login1 import UserLogin, get_all_users
 from utils.webpy import WebFunc
 
 from pyaml_env import parse_config
 from entities.mypgsql import YSqlTool
+from utils.database import get_db
 
 def load_conf(mode: str, conf_name: str = "config.yaml"):
     """
@@ -53,12 +54,9 @@ def create_app():
     app.config.update(conf)
 
     # 初始化数据库连接
-    db_url = app.config.get('SQLALCHEMY_DATABASE_URI')
-    if not db_url:
-        raise ValueError("SQLALCHEMY_DATABASE_URI not set in configuration")
-    
-    db = YSqlTool(db_url)
-    app.db = db
+    with app.app_context():
+        db = get_db()
+        app.db = db
 
     # 静态资源文件夹为 static和files
     os.y.root_path1 = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -96,7 +94,7 @@ def create_app():
     # 注册数据库关闭函数
     @app.teardown_appcontext
     def close_db(error):
-        if hasattr(app, 'db'):
-            app.db.close()
+        if hasattr(g, 'db'):
+            g.db.close()
 
     return app

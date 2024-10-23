@@ -3,11 +3,14 @@ from utils.db import get_db
 from addict import Dict
 from datetime import datetime
 from utils.ip_location import get_ip_location
-from entities.pgmodels import LoginRecord
-from utils.database import SessionLocal
+from entities.pgmodels import LoginRecord, Users as DBUsers
+from utils.database import get_session
+from flask import request
+from flask_login import login_user as flask_login_user
+from werkzeug.security import check_password_hash
 
 
-class User(UserMixin):
+class UserLogin(UserMixin):
     def __init__(self, id, name, user_type, is_ban, created_at, last_login):
         self.id = id
         self.name = name
@@ -22,7 +25,7 @@ class User(UserMixin):
         user = db.search_by_dict('Users', {'id': user_id}, to_dict=True)
         if user:
             user = user[0]
-            return User(
+            return UserLogin(
                 id=user['id'],
                 name=user['name'],
                 user_type=user['user_type'],
@@ -66,26 +69,44 @@ def update_last_login(user_id: int):
     db.update('Users', {'id': user_id}, {'last_login': datetime.utcnow()})
 
 
-def login_user(username, password, request):
-    # ... 现有的登录验证代码 ...
+def login_user(username, password):
+    # 获取用户
+    user = DBUsers.query.filter_by(name=username).first()
 
-    if user and verify_password(password, user.hashed_password):
+    if user and check_password_hash(user.pwd, password):
         # 登录成功，记录登录信息
-        db = SessionLocal()
-        ip_address = request.client.host
-        ip_location = get_ip_location(ip_address)
-        user_agent = request.headers.get("user-agent", "Unknown")
+        try:
+            session = get_session()
+            ip_address = request.remote_addr
+            ip_location = get_ip_location(ip_address)
+            user_agent = request.headers.get("User-Agent", "Unknown")
 
-        login_record = LoginRecord(
-            user_id=user.id,
-            ip_address=ip_address,
-            ip_location=ip_location,
-            user_agent=user_agent
-        )
-        db.add(login_record)
-        db.commit()
-        db.close()
+            login_record = LoginRecord(
+                user_id=user.id,
+                ip_address=ip_address,
+                ip_location=ip_location,
+                user_agent=user_agent
+            )
+            session.add(login_record)
+            session.commit()
 
-        # ... 返回登录成功的代码 ...
+            # 创建UserLogin对象并使用Flask-Login的login_user函数
+            user_login = UserLogin(
+                id=user.id,
+                name=user.name,
+                user_type=user.user_type,
+                is_ban=user.is_ban,
+                created_at=user.created_at,
+                last_login=user.last_login
+            )
+            flask_login_user(user_login)
 
-    # ... 返回登录失败的代码 ...
+            return {"message": "Login successful", "user_id": user.id}, 200
+        except Exception as e:
+            session.rollback()
+            return {"message": f"Login failed: {str(e)}"}, 500
+        finally:
+            session.close()
+    else:
+        # 登录失败
+        return {"message": "Invalid username or password"}, 401

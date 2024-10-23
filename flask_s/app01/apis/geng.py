@@ -22,9 +22,10 @@ import os
 from utils.core import hash_password, verify_password
 
 from utils.login1 import (
-    User,
+    UserLogin,
     get_one_user,
     save_one_user,
+    login_user as custom_login_user
 )
 
 service_name = "/"
@@ -110,8 +111,8 @@ def register():
         name = request.form.get("name")
         pwd = request.form.get("pwd")
         y_code = request.form.get("y_code")
-        if y_code != time.strftime("%H%M%d"):
-            return render_template("login.html", error="邀请码错误", r_txt="注 册")
+        # if y_code != time.strftime("%H%M%d"):
+        #     return render_template("login.html", error="邀请码错误", r_txt="注 册")
         if not (name and pwd):
             return render_template("login.html", error="用户名或密码不全", r_txt="注 册")
         users = get_one_user(name)
@@ -122,7 +123,7 @@ def register():
         else:
             users = Dict({"name": name, "pwd": hash_password(pwd), "is_ban": 0})
             save_one_user(users)
-            login_user(users)
+            login_user(users)   
             return redirect(url_for("/.index"))
     else:
         if current_user.is_authenticated:
