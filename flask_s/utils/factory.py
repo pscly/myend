@@ -12,6 +12,7 @@ from utils.webpy import WebFunc
 
 from pyaml_env import parse_config
 from entities.mypgsql import YSqlTool
+from utils.database import init_db, db_session
 
 def load_conf(mode: str, conf_name: str = "config.yaml"):
     """
@@ -51,6 +52,15 @@ def create_app():
     mode = os.environ.get("MODE", "production")
     conf = load_conf(mode)  #读取的是yaml configs/config.
     app.config.update(conf)
+
+    # 初始化数据库连接
+    db_url = app.config.get('SQLALCHEMY_DATABASE_URI')
+    if not db_url:
+        raise ValueError("SQLALCHEMY_DATABASE_URI not set in configuration")
+    
+    db = YSqlTool(db_url)
+    app.db = db
+
     # 静态资源文件夹为 static和files
     os.y.root_path1 = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     os.y.up_files_path = os.path.join(os.y.root_path1, "static", "up_files")
@@ -71,25 +81,23 @@ def create_app():
     login_manager.init_app(app)
 
     @login_manager.user_loader
-    def user_loader(name):
-        # 数据库
-        users = get_all_users()
-        if name not in users:
-            return
-        user = User()
-        user.id = name
-        return user
+    def user_loader(user_id):
+        return User.get(int(user_id))
 
     @login_manager.request_loader
     def request_loader(request):
-        users = get_all_users()
-        name = request.form.get("name")
-        if name not in users:
-            return
-        user = User()
-        user.id = name
-        return user
+        user_id = request.form.get('user_id')
+        if user_id:
+            return User.get(int(user_id))
+        return None
 
     # 注册过滤器
     WebFunc(app)
+
+    init_db(app)
+
+    @app.teardown_appcontext
+    def shutdown_session(exception=None):
+        db.session_factory.remove()
+
     return app

@@ -17,13 +17,14 @@ COMMON: &common
 DEVELOPMENT: &development
   # 开发
   <<: *common
-  SQLALCHEMY_DATABASE_URI: mysql+pymysql://root:@127.0.0.1/myend?charset=utf8
+  SQLALCHEMY_DATABASE_URI: postgresql://dev_user:dev_password@localhost/dev_db
   # mongodb_port: 27017
   # mongodb_ip: "127.0.0.1"
   # mongodb_pwd: y2YhNRHkIpYB54P3Tupt8PJz3D2BcTZaKRMZ
 
 PRODUCTION: &production
   <<: *common
+  SQLALCHEMY_DATABASE_URI: postgresql://prod_user:prod_password@prod_host/prod_db
   # mongodb_ip: "y_end_mongodb"
   # mongodb_port: 27017
   # python pyaml_env 读取的话必须加 !ENV

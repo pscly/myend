@@ -34,6 +34,9 @@ from utils import send_email
 from utils.core import hash_password, verify_password
 from utils.login1 import User, get_one_user, save_one_user
 from utils.up_dns import up_dns1
+from utils.db import get_db
+from utils.database import db_session
+from entities.pgmodels import AppConfig
 
 service_name = "pays"
 
@@ -200,3 +203,16 @@ def any_pay():
             msg="支付失败，参数错误_ p_type  money",
         )
     return render_template("anypay.html")
+
+
+@bp.route('/config', methods=['GET', 'POST'])
+def config():
+    with db_session() as session:
+        if request.method == 'POST':
+            data = request.json
+            config = AppConfig(**data)
+            session.add(config)
+            return jsonify({"message": "Config saved successfully"}), 200
+        else:
+            configs = session.query(AppConfig).all()
+            return jsonify([config.to_dict() for config in configs]), 200
