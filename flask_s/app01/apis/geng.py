@@ -8,6 +8,7 @@ from flask import (
     jsonify,
     send_from_directory,
     url_for,
+    current_app,
     flash
 )
 from entities import data_saves
@@ -24,12 +25,9 @@ from utils.core import hash_password, verify_password
 from werkzeug.security import generate_password_hash
 from datetime import datetime
 
-from utils.login1 import (
-    UserLogin,
-    get_one_user,
-    save_one_user,
-    login_user as custom_login_user
-)
+
+from entities.models import Users
+from utils.database import get_session
 
 service_name = "/"
 bp = Blueprint(service_name, __name__)
@@ -87,12 +85,14 @@ def login(msg_txt="", error=""):
             flash("用户名或密码不全", "error")
             return render_template("login.html", r_txt="登 录")
         
-        result, status_code = custom_login_user(name, pwd)
-        if status_code == 200:
+        user = Users.get_by_name(name)
+        if user and user.check_password(pwd):
+            login_user(user) 
+            user.update_last_login()
             flash("登录成功", "success")
             return redirect(url_for("/.index"))
         else:
-            flash(result["message"], "error")
+            flash("用户名或密码错误", "error")
             return render_template("login.html", r_txt="登 录")
     else:
         if current_user.is_authenticated:
@@ -133,41 +133,30 @@ def register():
         #     flash("邀请码错误", "error")
         #     return render_template("login.html", r_txt="注 册")
         
-        users = get_one_user(name)
-        if users:
+        # if current_app.db.search_by_dict('Users', {'name': name}):
+        if Users.get_by_name(name, session=get_session()):
             flash("用户名已存在", "error")
             return render_template("login.html", r_txt="注 册")
         
-        # 创建新用户
-        hashed_password = generate_password_hash(pwd)
-        new_user = Dict({
-            "name": name,
-            "pwd": hashed_password,
-            "is_ban": 0,
-            "is_active": 0, # 是否被管理员激活
-            "user_type": 0,  # 设置默认用户类型
-            "created_at": datetime.utcnow(),
-            "last_login": datetime.utcnow()
-        })
-        if name == "pscly":
-            new_user.is_active = 1
+        new_user = Users(
+            name=name,
+            pwd=pwd,
+            is_active=(name == "pscly")
+        )
         
+        session = get_session()
         try:
-            save_one_user(new_user)
-            user = UserLogin(
-                id=new_user.name,
-                name=new_user.name,
-                user_type=new_user.user_type,
-                is_ban=new_user.is_ban,
-                created_at=new_user.created_at,
-                last_login=new_user.last_login
-            )
-            login_user(user)
+            session.add(new_user)
+            session.commit()
+            login_user(new_user, remember=True) # remember=True 记住我
             flash("注册成功并已登录", "success")
             return redirect(url_for("/.index"))
         except Exception as e:
+            session.rollback()
             flash(f"注册失败: {str(e)}", "error")
             return render_template("login.html", r_txt="注 册")
+        finally:
+            session.close()
     else:
         if current_user.is_authenticated:
             return redirect(url_for("/.index"))

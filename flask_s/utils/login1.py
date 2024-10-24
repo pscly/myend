@@ -44,7 +44,7 @@ def get_all_users():
     return {user['name']: Dict(user) for user in users}
 
 
-def get_one_user(name):
+def get_one_user(name):     #似乎需要的是没有 session 也要查的出来，似乎我得想个办法？
     db = get_db()
     users = db.search_by_dict('Users', {'name': name}, to_dict=True)
     return Dict(users[0]) if users else None

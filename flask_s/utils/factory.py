@@ -7,11 +7,11 @@ from pathlib import Path
 from flask_login import LoginManager, UserMixin
 
 from app01.route import routers
-from utils.login1 import UserLogin, get_all_users
 from utils.webpy import WebFunc
 
 from pyaml_env import parse_config
 from entities.mypgsql import YSqlTool
+from entities.models import Users
 from utils.database import get_db
 
 # 新增：导入必要的模块
@@ -134,13 +134,13 @@ def create_app():
 
     @login_manager.user_loader
     def user_loader(user_id):
-        return User.get(int(user_id))
+        return Users.get(user_id)
 
     @login_manager.request_loader
     def request_loader(request):
         user_id = request.form.get('user_id')
         if user_id:
-            return User.get(int(user_id))
+            return Users.get(user_id)
         return None
 
     # 注册过滤器
