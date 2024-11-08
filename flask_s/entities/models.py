@@ -1,11 +1,17 @@
 # pgmodels.py
+import os
 from sqlalchemy import Column, String, Integer, DateTime, ForeignKey, Boolean
 from sqlalchemy.orm import DeclarativeBase, relationship
 from sqlalchemy.sql import func
-from datetime import datetime
+from datetime import datetime, timedelta
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.orm import Session
+
+
+def get_session():
+    return os.y.Session()
+
 
 class Base(DeclarativeBase):
     pass
@@ -23,9 +29,11 @@ class Users(Base, UserMixin):
     pwd = Column(String(255), nullable=False)
     user_type = Column(Integer, default=0)
     is_ban = Column(Boolean, default=False)
-    is_active = Column(Boolean, default=True)
-    created_at = Column(DateTime, default=datetime.utcnow)
-    last_login = Column(DateTime, default=datetime.utcnow)
+    is_active = Column(Boolean, default=True)   # 如果是 False 则不能登录 (似乎flask默认有这个判断？)
+    created_at = Column(DateTime, default=lambda: datetime.now())
+    last_login = Column(DateTime, default=lambda: datetime.now())
+
+    login_records = relationship("LoginRecord", back_populates="user")
 
     def __init__(self, name, pwd, user_type=0, is_ban=False, is_active=True):
         self.name = name
@@ -41,18 +49,20 @@ class Users(Base, UserMixin):
         return check_password_hash(self.pwd, pwd)
 
     @classmethod
-    def get(cls, user_id, session: Session = None):
-        if session:
-            return session.query(cls).get(int(user_id))
-        else:
-            return cls.query.get(int(user_id))
+    def get(cls, user_id):
+        session = get_session()
+        return session.query(cls).get(int(user_id))
 
     @classmethod
-    def get_by_name(cls, name, session: Session):
+    def get_by_name(cls, name):
+        session = get_session()
         return session.query(cls).filter_by(name=name).first()
 
     def update_last_login(self):
-        self.last_login = datetime.utcnow()
+        self.last_login = datetime.now()
+        session = get_session()
+        session.commit()
+        session.close()
 
     def to_dict(self):
         return {
@@ -75,9 +85,4 @@ class LoginRecord(Base):
     login_time = Column(DateTime(timezone=True), server_default=func.now())
     user_agent = Column(String)
 
-    user = relationship("Users", back_populates="LoginRecord")
-
-# 在 User 类中添加关系
-Users.LoginRecord = relationship("LoginRecord", back_populates="user")
-
-
+    user = relationship("Users", back_populates="login_records")

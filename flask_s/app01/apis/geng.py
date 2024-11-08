@@ -88,7 +88,7 @@ def login(msg_txt="", error=""):
         user = Users.get_by_name(name)
         if user and user.check_password(pwd):
             login_user(user) 
-            user.update_last_login()
+            user.update_last_login()    # 更新最后登录时间 
             flash("登录成功", "success")
             return redirect(url_for("/.index"))
         else:
@@ -134,14 +134,16 @@ def register():
         #     return render_template("login.html", r_txt="注 册")
         
         # if current_app.db.search_by_dict('Users', {'name': name}):
-        if Users.get_by_name(name, session=get_session()):
+        if Users.get_by_name(name):
+            session = get_session()
             flash("用户名已存在", "error")
+            session.close()
             return render_template("login.html", r_txt="注 册")
         
         new_user = Users(
             name=name,
             pwd=pwd,
-            is_active=(name == "pscly")
+            # is_active=(name == "pscly")
         )
         
         session = get_session()
@@ -158,7 +160,7 @@ def register():
         finally:
             session.close()
     else:
-        if current_user.is_authenticated:
+        if current_user.is_authenticated:   # 如果用户已经登录 
             return redirect(url_for("/.index"))
         return render_template("login.html", r_txt="注 册")
 

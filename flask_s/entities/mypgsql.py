@@ -1,4 +1,5 @@
 import importlib
+import os
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.inspection import inspect
@@ -17,8 +18,10 @@ class YSqlTool:
         if not hasattr(self, 'engine'):
             try:
                 self.error = None
-                self.engine = create_engine(db_url)
-                self.Session = sessionmaker(bind=self.engine)
+                # self.engine = create_engine(db_url)
+                # self.Session = sessionmaker(bind=self.engine)
+                self.engine = os.y.engine
+                self.Session = os.y.Session
                 self.models = {}
                 self.load_models()
             except Exception as e:

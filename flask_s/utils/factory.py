@@ -22,6 +22,9 @@ from alembic.runtime.environment import EnvironmentContext
 from alembic.migration import MigrationContext
 from alembic.operations import Operations
 from sqlalchemy import inspect
+from utils.extensions import init_extensions
+
+
 
 def load_conf(mode: str, conf_name: str = "configs/config.yaml"):
     """
@@ -130,21 +133,12 @@ def create_app():
         if isinstance(router, Blueprint):
             app.register_blueprint(router)
 
-    login_manager = LoginManager()
-    login_manager.init_app(app)
 
-    @login_manager.user_loader
-    def user_loader(user_id):
-        return Users.get(user_id)
+    # 登录的地方
+    # login_manager = LoginManager()
+    # login_manager.init_app(app)
+    init_extensions(app)        # 例如判断是否登录的地方
 
-    @login_manager.request_loader
-    def request_loader(request):
-        user_id = request.form.get('user_id')
-        if user_id:
-            return Users.get(user_id)
-        return None
-
-    # 注册过滤器
     WebFunc(app)
 
     # 注册数据库关闭函数

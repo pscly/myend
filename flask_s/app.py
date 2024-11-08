@@ -20,6 +20,7 @@ os.y.data2 = Dict(
 )  # {'E_USER':'','E_PWD':'','E_HOST':''}
 app = factory.create_app()
 
+
 if __name__ == "__main__":
     port = app.config.get("PORT", 31001)
     threading.Thread(
