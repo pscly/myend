@@ -79,3 +79,5 @@ class LoginRecord(Base):
 
 # 在 User 类中添加关系
 Users.LoginRecord = relationship("LoginRecord", back_populates="user")
+
+

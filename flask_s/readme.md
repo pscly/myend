@@ -1,15 +1,24 @@
+<!--
+ * @Author: Pscly pscly@outlook.com
+ * @Date: 2024-09-29 11:16:54
+ * @LastEditors: Pscly pscly@outlook.com
+ * @LastEditTime: 2024-11-08 14:11:23
+ * @FilePath: \flask_s\readme.md
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
 # 简介
 
 ## toc
 
 1. [简介](#简介)
    1. [数据库迁移](#数据库迁移)
-   2. [关于支付模块](#关于支付模块)
+   2. [todo](#todo)
+   3. [关于支付模块](#关于支付模块)
       1. [发起支付请求](#发起支付请求)
       2. [支付请求1](#支付请求1)
-   3. [发起支付请求](#发起支付请求-1)
-   4. [支付请求2](#支付请求2)
-   5. [发起支付请求](#发起支付请求-2)
+   4. [发起支付请求](#发起支付请求-1)
+   5. [支付请求2](#支付请求2)
+   6. [发起支付请求](#发起支付请求-2)
 
 ## 数据库迁移
 
@@ -29,7 +38,11 @@ alembic upgrade head
 alembic revision --autogenerate -m "update db"
 alembic upgrade head
 
+## todo
 
+> 2024-11-07 13:44:35
+
+添加一个功能： 自动url转换为 我本地网的公网映射路径 (stun)
 
 ## 关于支付模块
 

@@ -1,4 +1,5 @@
 import importlib
+from addict import Dict
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.inspection import inspect
@@ -56,16 +57,6 @@ class YSqlTool:
         finally:
             session.close()
 
-    def run_sql(self, sql):
-        """执行 sql 语句"""
-        try:
-            session = self.get_session()
-            session.execute(text(sql))
-            session.commit()
-        except Exception as e:
-            print(f'执行 sql 语句失败: {e}')
-            return []
-
     def execute_update(self, query, params=None):
         """执行更新操作"""
         session = self.get_session()
@@ -97,7 +88,7 @@ class YSqlTool:
         """更新数据"""
         model = self.models.get(table_name)
         if not model:
-            raise ValueError(f"模型表 {table_name} 不存在")
+            raise ValueError(f"Model {table_name} not found")
         session = self.get_session()
         try:
             instances = session.query(model).filter_by(**filter_by).all()
@@ -113,11 +104,11 @@ class YSqlTool:
         """查询所有数据"""
         model = self.models.get(table_name)
         if not model:
-            raise ValueError(f"模型表 {table_name} 不存在")
+            raise ValueError(f"Model {table_name} not found")
         session = self.get_session()
         try:
             if to_dict:
-                return self.dbdata_to_dict(session.query(model).all())
+                return Dict(self.dbdata_to_dict(session.query(model).all()))
             else:
                 return session.query(model).all()
         finally:
@@ -131,7 +122,7 @@ class YSqlTool:
         session = self.get_session()
         try:
             if to_dict:
-                return self.dbdata_to_dict(session.query(model).filter_by(**filter_by).all())
+                return Dict(self.dbdata_to_dict(session.query(model).filter_by(**filter_by).all()))
             else:
                 return session.query(model).filter_by(**filter_by).all()
         finally:
@@ -142,23 +133,12 @@ class YSqlTool:
         将数据库数据转换为字典
         """
         if not data:
-            return []
+            return Dict()
         if isinstance(data, list):
-            return [dict(item._mapping) for item in data]
+            return [Dict(self._object_to_dict(item)) for item in data]
         else:
-            return dict(data._mapping)
-        return []
-    # def dbdata_to_dict(self, data):
-    #     """
-    #     将数据库数据转换为字典
-    #     """
-    #     if not data:
-    #         return []
-    #     if isinstance(data, list):
-    #         return [self._object_to_dict(item) for item in data]
-    #     else:
-    #         return self._object_to_dict(data)
-    #     return []
+            return Dict(self._object_to_dict(data))
+        return Dict()
 
     def _object_to_dict(self, obj):
         """
