@@ -30,9 +30,10 @@ def get_url():
     # 获取当前环境
     mode = os.environ.get("MODE", "DEVELOPMENT").upper()
     # 读取配置文件
-    yaml_config = load_conf(mode, "config.yaml")
+    yaml_config = load_conf(mode, "configs/config.yaml")
     # 获取对应环境的数据库 URL
     config.set_main_option("sqlalchemy.url", yaml_config["SQLALCHEMY_DATABASE_URI"])
+    print(yaml_config["SQLALCHEMY_DATABASE_URI"])
     return yaml_config["SQLALCHEMY_DATABASE_URI"]
 
 get_url()

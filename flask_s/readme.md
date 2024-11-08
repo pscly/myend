@@ -30,8 +30,11 @@ alembic upgrade head
 
 生成迁移脚本
 alembic revision --autogenerate -m "init db"
-
 应用迁移到数据库
+alembic upgrade head
+
+
+alembic revision --autogenerate -m "init db"
 alembic upgrade head
 
 后续更新

@@ -144,3 +144,6 @@ mydatabase.db
 x.json
 
 *init_db.py
+
+configs/config.yaml
+flask_s/configs/config.yaml

@@ -118,15 +118,15 @@ def register():
             flash("用户名或密码不能为空", "error")
             return render_template("login.html", r_txt="注 册")
         
-        # 用户名长度检查
-        if len(name) < 3 or len(name) > 20:
-            flash("用户名长度必须在3到20个字符之间", "error")
-            return render_template("login.html", r_txt="注 册")
+        # # 用户名长度检查
+        # if len(name) < 3 or len(name) > 20:
+        #     flash("用户名长度必须在3到20个字符之间", "error")
+        #     return render_template("login.html", r_txt="注 册")
         
-        # 密码复杂度检查
-        if len(pwd) < 3:
-            flash("密码长度必须至少为3个字符", "error")
-            return render_template("login.html", r_txt="注 册")
+        # # 密码复杂度检查
+        # if len(pwd) < 3:
+        #     flash("密码长度必须至少为3个字符", "error")
+        #     return render_template("login.html", r_txt="注 册")
         
         # 邀请码检查（如果需要）
         # if y_code != time.strftime("%H%M%d"):

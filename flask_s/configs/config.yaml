@@ -1,3 +1,4 @@
+# 公共配置 会被项目目录下的 y_data.yaml 覆盖
 COMMON: &common
   PORT: 31001
 

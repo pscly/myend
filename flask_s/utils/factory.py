@@ -23,7 +23,7 @@ from alembic.migration import MigrationContext
 from alembic.operations import Operations
 from sqlalchemy import inspect
 
-def load_conf(mode: str, conf_name: str = "config.yaml"):
+def load_conf(mode: str, conf_name: str = "configs/config.yaml"):
     """
     读取conf，
     mode: 是什么环境， 开发还是生产(DEVELOPMENT, PRODUCTION)
@@ -32,12 +32,12 @@ def load_conf(mode: str, conf_name: str = "config.yaml"):
     print(f'使用的是 {mode} 环境', )
     # with open(f"configs/{conf_name}", encoding="utf-8") as f:
     #     conf = yaml.safe_load(f)
-    conf = parse_config(f"configs/{conf_name}")
+    conf = parse_config(f"{conf_name}")
     # save_json(conf[mode.upper()], 'configs/x.json')
     return conf[mode.upper()]
 
 
-def load_json(path="configs/y_data.json"):
+def load_json(path="configs/config.json"):
     js_path = Path(path)
     if (not js_path.exists()) or (os.path.getsize(path) < 3):
         with open(path, "w", encoding="utf-8") as f:
@@ -46,7 +46,7 @@ def load_json(path="configs/y_data.json"):
         return Dict(json.load(f))
 
 
-def save_json(data, path="configs/y_data.json"):
+def save_json(data, path="configs/config.json"):
     with open(path, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
 
@@ -98,7 +98,8 @@ def create_app():
         static_url_path="/static",
     )
     mode = os.environ.get("MODE", "production")
-    conf = load_conf(mode)  #读取的是yaml configs/config.
+    conf = load_conf(mode, "configs/config.yaml")  #读取的是yaml configs/config.
+    conf.update(os.y.data2)
     app.config.update(conf)
 
     # 初始化数据库连接
