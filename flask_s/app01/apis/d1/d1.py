@@ -63,7 +63,7 @@ webhook = "https://oapi.dingtalk.com/robot/send?access_token=62bd90531b3260a49f6
 secret = "SEC03d2b63a1495d35b199980c73a6b46a0ed0eb8f2c879df0dd4e0a400a6c5bc17"
 xiaoding = DingtalkChatbot(webhook, secret=secret)
 
-@bp.route("/", methods=["POST", "GET"])
+@bp.route("", methods=["POST", "GET"])
 def send_message():
     """
     发送消息到钉钉群的接口
@@ -93,6 +93,8 @@ def send_message():
     datas = myfuncs.get_datas(request)
     bt = datas.get('data', {}).get('bt')
     content = datas.get('data', {}).get('content') or datas.get('data', {})
+    if request.json and request.json.get('content'):
+        content = request.json.get('content')
 
     content = f"# {bt}\n\n{content}\n\n---\n\n> {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
     
