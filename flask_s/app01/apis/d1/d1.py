@@ -123,29 +123,29 @@ def send_message():
 @bp.route("/wifi", methods=["POST", "GET"])
 def send_message_wifi():
     """
-    
-    这个专门用于wifi推送的
-    发送消息到钉钉群的接口
+        
+        这个专门用于wifi推送的
+        发送消息到钉钉群的接口
 
-    此接口接收POST或GET请求，用于发送消息到指定的钉钉群。
+        此接口接收POST或GET请求，用于发送消息到指定的钉钉群。
 
-    请求参数:
-    - bt (str, 可选): 消息标题
-    - content (str 或 dict): 消息内容
+        请求参数:
+        - bt (str, 可选): 消息标题
+        - content (str 或 dict): 消息内容
 
-    返回:
-    - JSON对象:
-        - message (str): 操作结果描述
-        - 消息内容是 (str): 发送的消息内容
-        - 标题是 (str): 发送的消息标题
+        返回:
+        - JSON对象:
+            - message (str): 操作结果描述
+            - 消息内容是 (str): 发送的消息内容
+            - 标题是 (str): 发送的消息标题
 
-    使用方法:
-    1. 如果提供了 'bt' (标题)，将使用markdown格式发送消息，标题为 'bt'，内容为 'content'
-    2. 如果没有提供 'bt'，将把整个请求数据作为JSON发送，标题默认为 "无标题的消息(json)"
+        使用方法:
+        1. 如果提供了 'bt' (标题)，将使用markdown格式发送消息，标题为 'bt'，内容为 'content'
+        2. 如果没有提供 'bt'，将把整个请求数据作为JSON发送，标题默认为 "无标题的消息(json)"
 
-    注意:
-    - 本接口使用了钉钉机器人API，确保 webhook 和 secret 已正确配置
-    - 消息发送是同步的，可能会影响接口响应时间
+        注意:
+        - 本接口使用了钉钉机器人API，确保 webhook 和 secret 已正确配置
+        - 消息发送是同步的，可能会影响接口响应时间
     """
 
     
@@ -179,6 +179,28 @@ def send_message_wifi():
     """
     content = re.sub(r"<b>(.*?)</b>", r"- \1", content)
     content = re.sub(r"----", "", content)
+
+    """
+        
+        - 当前有 3 台在线设备，具体如下
+            IP 地址         在线时间   客户端名
+            192.168.4.10   2天12小时  PCCY LAN
+            192.168.4.146  2天12小时  Evan
+            192.168.4.159  2天12小时  小爱音响
+        
+        改成
+        
+        - 当前有 3 台在线设备，具体如下
+            - IP 地址         在线时间   客户端名
+            -  192.168.4.10, 2天12小时,  PCCY LAN
+            -  192.168.4.146, 2天12小时,  Evan
+            -  192.168.4.159, 2天12小时,  小爱音响
+
+    """
+    content = re.sub(r"(IP 地址.*?)", r"- \1", content)
+    content = re.sub(r"(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s+(\d+天\d+小时)\s+(\w+)", r"- \1, \2, \3", content)
+    
+    
 
     if bt:
         xiaoding.send_markdown(title=bt, text=content)
