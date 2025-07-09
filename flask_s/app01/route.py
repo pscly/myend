@@ -13,6 +13,7 @@ from app01.apis.to_url.view_url import bp as to_url_bp      # xl 一次性网页
 # from app01.apis.qita.ddns import bp as ddns_bp              # ddns
 from app01.apis.pays.payindex import bp as paypb              # ddns
 from app01.apis.d1.d1 import bp as d1_bp              # 用钉钉发消息
+from app01.apis.w1.w1 import bp as w1_bp              # 用钉钉发消息
 
 
 routers = [
@@ -30,4 +31,5 @@ routers = [
     # msg2_bp,  # 钉钉消息 相关
     paypb,  # 支付 相关
     d1_bp,  # 用钉钉发消息
+    w1_bp,  # 用企业微信发消息
 ]
