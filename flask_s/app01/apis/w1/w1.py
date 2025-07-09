@@ -96,8 +96,19 @@ def send_message():
     
     content = f"# {bt}\n\n{content}\n\n---\n\n> {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
     
+    access_token_url = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=wwff191116308ecae6&corpsecret=0EFrzsD9cUbS5MnKcfOSmZw-qddkNp2YRByOs4aXS9E"
+    access_token = ''
+    try:
+        res1 = requests.get(access_token_url, timeout=10, proxies=None)
+        access_token = res1.json().get('access_token')
+    except:
+        return jsonify({
+        "message": "发送错误   accesstoken报错", 
+        "消息内容是": content,
+        "返回内容是": "accesstoken报错",
+            }), 201
     
-    url = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=kMr6Ud1bxegttQnyoMALOCa62ad-osnPWfreikrTTNwFxdo_uScbhy6LWofl8MNZRy9z7-gl7qgHoimF6f2QUhY2X6lFtfYEJyop7ep5N6YPdGir1k0Vb6IpKPD0DozHEoSi1WDJrOrGUUibGHffZ6Y1UhcXk5WmmVl0eX-2NUS3vjIiTKl-tyHj9AiEgAMDAXk4n26fa9hHc_4uHRASCQ"
+    url = f"https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token={access_token}"
 
     jqrid = datas.get('jqrid') or 1000004
     try:
