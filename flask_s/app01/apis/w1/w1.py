@@ -121,7 +121,7 @@ def send_message():
     payload = {
     "touser": "ChenLiYuan",
     "msgtype": "text",            # 
-    "agentid": datas.get('jqrid'),           # 机器人id
+    "agentid": jqrid,           # 机器人id
     "text": {
         "content": content,
     },
