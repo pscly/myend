@@ -1,38 +1,56 @@
 [project]
-name = ""
-version = ""
-description = ""
+name = "myend"
+version = "0.1.0"
+description = "Personal Flask backend service"
+readme = "1readme.md"
+requires-python = ">=3.12,<3.13"
+license = { text = "MIT" }
 authors = [
-    {name = "pscly", email = "pscly@outlook.com"},
+    { name = "pscly", email = "pscly@outlook.com" },
 ]
 dependencies = [
-    "certifi==2021.5.30",
-    "click==8.0.1",
-    "colorama==0.4.4",
-    "flask==2.0.1",
-    "itsdangerous==2.0.1",
-    "jinja2==3.0.1",
-    "markupsafe==2.0.1",
-    "pyyaml==5.4.1",
-    "werkzeug==2.0.1",
-    "wincertstore==0.2",
-    "yagmail>=0.15.277",
-    "addict>=2.4.0",
-    "pymongo>=4.1.1",
+    "addict",
+    "bcrypt",
+    "blinker",
+    "cachetools",
+    "certifi",
+    "charset-normalizer",
+    "click",
+    "colorama",
+    "crypto",
+    "cssselect",
+    "cssutils",
+    "DingtalkChatbot",
+    "dnspython",
+    "Flask",
+    "Flask-Login",
+    "greenlet",
+    "gunicorn",
+    "idna",
+    "itsdangerous",
+    "Jinja2",
+    "lxml",
+    "MarkupSafe",
+    "more-itertools",
+    "Naked",
+    "premailer",
+    "psycopg[binary]",
+    "pyaml-env",
+    "pycryptodome",
+    "pymongo",
+    "PyYAML",
+    "requests",
+    "shellescape",
+    "SQLAlchemy",
+    "tencentcloud-sdk-python",
+    "typing_extensions",
+    "urllib3",
+    "Werkzeug",
+    "wincertstore",
+    "yagmail",
 ]
-requires-python = ">=3.7"
-license = {text = "MIT"}
 
-[tool.pdm]
-[[tool.pdm.source]]
-name = "pypi"
-url = "https://pypi.org/simple"
-verify_ssl = true
+[tool.uv]
+package = false
 
-[build-system]
-requires = ["pdm-pep517"]
-build-backend = "pdm.pep517.api"
-
-[tool.pdm.scripts]
-start = "python app.py"
-
+default-groups = []

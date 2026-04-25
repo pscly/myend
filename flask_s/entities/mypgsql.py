@@ -1,8 +1,18 @@
 import importlib
+import os
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.inspection import inspect
 from sqlalchemy.ext.declarative import declarative_base
+
+
+def normalize_db_url(db_url: str | None) -> str | None:
+    """Return a SQLAlchemy URL that uses the psycopg3 PostgreSQL driver."""
+    if db_url is None:
+        return None
+    if db_url.startswith("postgresql://"):
+        return db_url.replace("postgresql://", "postgresql+psycopg://", 1)
+    return db_url
 
 
 class YSqlTool:
@@ -18,7 +28,7 @@ class YSqlTool:
         if not hasattr(self, 'engine'):
             try:
                 self.error = None
-                self.engine = create_engine(db_url)
+                self.engine = create_engine(normalize_db_url(db_url))
                 self.Session = sessionmaker(bind=self.engine)
                 self.models = {}
                 self.load_models()
@@ -172,11 +182,12 @@ class YSqlTool:
 
 
 if __name__ == '__main__':
-    # pgsql = YSqlTool('postgresql://pscly:yzb0uLPnTzOKqfN5M9iwe43p1eWuzzqg29XG@192.168.3.5:5432/yend')
-    pgsql = YSqlTool('postgresql://pscly:yzb0uLPnTzOKqfN5M9iwe43p1eWuzzqg29XG@192.168.3.5:5432/yend')
+    db_url = os.environ.get("MYEND_POSTGRES_URL")
+    if not db_url:
+        raise SystemExit("请先通过 MYEND_POSTGRES_URL 提供 PostgreSQL 连接串")
+    pgsql = YSqlTool(db_url)
     # pgsql.insert('Users', {'name': 'pscly', 'pwd': '12345'})
     # print(pgsql.search_by_dict('Users', {'name': 'pscly'}))
     # print(pgsql.select('Users', to_dict=True))
     # pgsql.insert('Users', {'name': 'pscly', 'pwd': '12345'})
     
-

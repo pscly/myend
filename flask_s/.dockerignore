@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.pdm-build/
+.pdm-python
+pdm.lock
+requirements.txt
+y_data.yaml
+configs/y_data.yaml
+static/up_files/
+static/up_files2/
+*.log

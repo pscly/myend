@@ -1,1 +1,5 @@
-pip3 install -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/;python3 app.py
+#!/usr/bin/env bash
+set -euo pipefail
+cd "$(dirname "$0")"
+uv sync
+uv run python app.py

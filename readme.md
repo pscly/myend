@@ -14,22 +14,18 @@
 
 1. docker-compose up -d
    
-### 使用python
-
-### 使用原生python运行
+### 使用 uv 本地运行
 
 ```bash
 cd flask_s
-python3 install -r ./requirements.txt
-python3 app.py 0.0.0.0:80
+uv sync
+uv run python app.py
 ```
 
-#### 使用pdm (python虚拟环境管理运行)
+也可以直接运行脚本：
 
-```
-cd flask_s
-pdm update
-pdm run start
+```bash
+./flask_s/run.sh
 ```
 
 

@@ -142,3 +142,30 @@ geng/
 
 mydatabase.db
 x.json
+
+# Local AI agent/runtime state
+# Keep project-local orchestration/session files out of source control.
+.omx/
+.omx-*/
+.codex/
+.codex-*/
+.ai_session.md
+codex-*.log
+omx-*.log
+
+# Local environment / secrets
+.env.*
+!.env.example
+!.env.*.example
+y_data.yaml
+flask_s/y_data.yaml
+
+# Local Python tooling caches
+.ruff_cache/
+.pytype/
+.pdm-python
+.pdm-build/
+
+# Runtime-generated upload/data folders
+flask_s/static/up_files/
+flask_s/static/up_files2/
