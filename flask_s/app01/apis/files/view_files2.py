@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, current_app, g, send_file, render_template
+from flask import Blueprint, request, jsonify, current_app, g, send_file, render_template, redirect
 from app01 import myfuncs
 from addict import Dict
 from utils import send_email
@@ -11,6 +11,18 @@ from utils import core
 service_name = 'files2'
 
 bp = Blueprint(service_name, __name__, url_prefix=f'/{service_name}')
+
+
+def get_files2_pwd():
+    return str(os.y.config.get('FILES2_PWD') or 'y')
+
+
+def check_files2_pwd():
+    return request.values.get('pwd') == get_files2_pwd()
+
+
+def redirect_to_files():
+    return redirect('/files')
 
 
 def get_size(fobj):
@@ -31,14 +43,18 @@ def get_size(fobj):
 
 @bp.route('/', methods=('GET', 'POST'))
 def index():
+    if not check_files2_pwd():
+        return redirect_to_files()
     datas = myfuncs.get_datas(request)
     data_saves.save_data(datas, 1, service_name)
     files = core.get_files(f'{os.y.up_files_path}2')
-    return render_template('down.html', files=files)
+    return render_template('down.html', files=files, require_pwd=True, pwd=request.values.get('pwd', ''))
 
 
 @bp.route('/<string:file_name>', methods=('GET',))
 def down(file_name):
+    if not check_files2_pwd():
+        return redirect_to_files()
     datas = myfuncs.get_datas(request)
     data_saves.save_data(datas, 1, f'{service_name}/down')
     x = os.path.join(f'{os.y.up_files_path}2', file_name)
@@ -49,13 +65,12 @@ def down(file_name):
 
 @bp.route(rule='/up', methods=('GET', 'POST'))
 def up_file():
+    if not check_files2_pwd():
+        return redirect_to_files()
     datas = myfuncs.get_datas(request)
     data_saves.save_data(datas, 1, f'{service_name}/up')
     if request.method == "GET":
-        date1 = time.strftime("%d%H")
-        if os.y.config.get('UP_FILE') or request.args.get('y') == date1:
-            return render_template('up_file.html')
-        return jsonify({'msg': '请求错误，此页面暂时不允许访问', 'y': request.args.get('y')})
+        return render_template('up_file.html', require_pwd=True, pwd=request.values.get('pwd', ''))
 
     if request.method == 'POST':
         file = request.files.get('file')

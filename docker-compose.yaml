@@ -12,6 +12,7 @@ services:
       - TZ=Asia/Shanghai
       - NODETYPE=${NODETYPE}
       - MONGODB_PWD=${MONGODB_PWD}
+      - FILES2_PWD=${FILES2_PWD:-y}
     ports:
       - "31002:31001"
     volumes:

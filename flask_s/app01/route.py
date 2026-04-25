@@ -21,7 +21,7 @@ routers = [
     end1_bp,  # 后端1的路由
     emi_bp,  # 邮件路由
     files_bp,  # 文件共享路由
-    # files2_bp,  # 文件共享路由
+    files2_bp,  # 文件共享路由
     # rum_bp,  # rum 相关
     # texts_bp,  # rum 相关
     # datas_bp,  # rum 相关

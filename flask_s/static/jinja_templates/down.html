@@ -20,7 +20,7 @@
         {% for item in files %}
         <tr>
             <th scope="row">{{loop.index}}</th>
-            <td><a href="{{ item[1] }}">{{item[1]}}</a></td>
+            <td><a href="{{ item[1] }}{% if require_pwd %}?pwd={{ pwd|urlencode }}{% endif %}">{{item[1]}}</a></td>
             <!-- <td>{{ item[1] }}</td> -->
             <td>{{ item[0] }}</td>
             <!-- <td><a href="{{ item[0] }}">下载</a></td> -->

@@ -13,6 +13,13 @@
         <label for="exampleInputPassword1">文件名(选填)记得写上后缀名</label>
         <input type="text" class="form-control" name="file_name">
     </div>
+    {% if require_pwd %}
+    <div class="form-group">
+        <label for="files2Password">访问密码</label>
+        <input type="password" class="form-control" id="files2Password" name="pwd" value="{{ pwd or '' }}" required>
+        <small class="form-text text-muted">files2 上传需要输入密码才能成功。</small>
+    </div>
+    {% endif %}
     <input type="hidden" name="y" value="y">
     <div class="form-group">
         <label for="exampleInputPassword1">上传用户</label>

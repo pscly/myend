@@ -7,6 +7,7 @@ COMMON: &common
   SQLALCHEMY_ECHO: False
   JSON_AS_ASCII: False
   UP_FILE: 1 # 是否可以匿名上传
+  FILES2_PWD: !ENV ${FILES2_PWD:y} # files2 访问/上传密码
   # mongodb_ip: "mongodb"
   mongodb_ip: "127.0.0.1"
   mongodb_port: 27017
