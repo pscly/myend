@@ -39,7 +39,6 @@ class Files2PasswordTest(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn("下载".encode(), response.data)
 
-
     def test_files2_index_keeps_password_on_download_links(self):
         with open(f"{os.y.up_files_path}2/sample.txt", "wb") as f:
             f.write(b"sample")
@@ -49,11 +48,20 @@ class Files2PasswordTest(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'href="sample.txt?pwd=y"', response.data)
 
-    def test_files2_upload_page_without_password_redirects_to_files(self):
+    def test_files2_upload_page_without_password_shows_password_input(self):
         response = self.client.get("/files2/up")
 
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.headers["Location"], "/files")
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'name="pwd"', response.data)
+        self.assertIn("files2 上传需要输入密码才能成功".encode(), response.data)
+
+    def test_upload_page_uses_custom_clean_card_styles(self):
+        response = self.client.get("/files2/up")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'/static/css/app.css', response.data)
+        self.assertIn(b'class="upload-panel"', response.data)
+        self.assertIn("上传文件".encode(), response.data)
 
     def test_files2_upload_page_with_password_shows_password_input(self):
         response = self.client.get("/files2/up?pwd=y")
@@ -62,16 +70,27 @@ class Files2PasswordTest(unittest.TestCase):
         self.assertIn(b'name="pwd"', response.data)
         self.assertIn(b'value="y"', response.data)
 
-    def test_files2_upload_without_password_does_not_save_file(self):
+    def test_files2_upload_without_password_stays_on_form_and_does_not_save_file(self):
         response = self.client.post(
             "/files2/up",
             data={"file": (io.BytesIO(b"secret"), "no-password.txt")},
             content_type="multipart/form-data",
         )
 
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.headers["Location"], "/files")
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("密码错误，文件未上传".encode(), response.data)
         self.assertFalse(os.path.exists(f"{os.y.up_files_path}2/no-password.txt"))
+
+    def test_files2_upload_with_wrong_password_stays_on_form_and_does_not_save_file(self):
+        response = self.client.post(
+            "/files2/up",
+            data={"pwd": "bad", "file": (io.BytesIO(b"secret"), "wrong-password.txt")},
+            content_type="multipart/form-data",
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("密码错误，文件未上传".encode(), response.data)
+        self.assertFalse(os.path.exists(f"{os.y.up_files_path}2/wrong-password.txt"))
 
     def test_files2_upload_with_password_saves_to_up_files2(self):
         response = self.client.post(

@@ -65,14 +65,19 @@ def down(file_name):
 
 @bp.route(rule='/up', methods=('GET', 'POST'))
 def up_file():
-    if not check_files2_pwd():
-        return redirect_to_files()
     datas = myfuncs.get_datas(request)
     data_saves.save_data(datas, 1, f'{service_name}/up')
     if request.method == "GET":
         return render_template('up_file.html', require_pwd=True, pwd=request.values.get('pwd', ''))
 
     if request.method == 'POST':
+        if not check_files2_pwd():
+            return render_template(
+                'up_file.html',
+                require_pwd=True,
+                pwd=request.values.get('pwd', ''),
+                error_msg='密码错误，文件未上传',
+            )
         file = request.files.get('file')
         # 如果文件大小超过300mb, 则返回错误
 

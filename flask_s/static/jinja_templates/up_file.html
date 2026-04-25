@@ -2,34 +2,40 @@
 {% block title %}上传{% endblock %}
 
 {% block content %}
-<h1>上传</h1>
-<form action="" method="post" enctype="multipart/form-data">
-    <div class="form-group">
-        <label for="exampleFormControlFile1">选择上传文件(不能超过150mb,稳着点🤞)</label>
-        <input type="file" class="form-control-file" name="file">
+<section class="upload-panel">
+    <div>
+        <div class="page-kicker">File Share</div>
+        <h1 class="page-title">上传文件</h1>
+        <p class="page-subtitle">选择文件、按需改名，然后提交。files2 上传会在提交时校验密码。</p>
     </div>
-    <input type="hidden" name="y" value="y">
-    <div class="form-group">
-        <label for="exampleInputPassword1">文件名(选填)记得写上后缀名</label>
-        <input type="text" class="form-control" name="file_name">
-    </div>
-    {% if require_pwd %}
-    <div class="form-group">
-        <label for="files2Password">访问密码</label>
-        <input type="password" class="form-control" id="files2Password" name="pwd" value="{{ pwd or '' }}" required>
-        <small class="form-text text-muted">files2 上传需要输入密码才能成功。</small>
-    </div>
+
+    {% if error_msg %}
+    <div class="alert alert-danger" role="alert">{{ error_msg }}</div>
     {% endif %}
-    <input type="hidden" name="y" value="y">
-    <div class="form-group">
-        <label for="exampleInputPassword1">上传用户</label>
-        <input type="text" class="form-control" name="user">
-    </div>
-    <!-- <div class="form-group">
-        <label for="exampleInputPassword1">上传用户</label>
-        <input type="text" class="form-control" name="user">
-    </div> -->
-    <br>
-    <button type="submit" class="btn btn-primary">上传</button>
-</form>
+
+    <form class="upload-form" action="" method="post" enctype="multipart/form-data">
+        <div>
+            <label class="form-label" for="uploadFile">选择上传文件</label>
+            <input type="file" class="form-control" id="uploadFile" name="file">
+            <div class="form-text">建议不超过 150MB，稳着点 🤞</div>
+        </div>
+        <div>
+            <label class="form-label" for="fileName">文件名（选填）</label>
+            <input type="text" class="form-control" id="fileName" name="file_name" placeholder="记得写上后缀名">
+        </div>
+        {% if require_pwd %}
+        <div>
+            <label class="form-label" for="files2Password">访问密码</label>
+            <input type="password" class="form-control" id="files2Password" name="pwd" value="{{ pwd or '' }}" required>
+            <div class="form-text">files2 上传需要输入密码才能成功。</div>
+        </div>
+        {% endif %}
+        <input type="hidden" name="y" value="y">
+        <div>
+            <label class="form-label" for="uploadUser">上传用户</label>
+            <input type="text" class="form-control" id="uploadUser" name="user" placeholder="选填">
+        </div>
+        <button type="submit" class="btn btn-primary upload-submit">上传</button>
+    </form>
+</section>
 {% endblock %}

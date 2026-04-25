@@ -1,0 +1,199 @@
+:root {
+  --app-bg: #f4f7fb;
+  --app-card: #ffffff;
+  --app-ink: #1f2937;
+  --app-muted: #667085;
+  --app-line: #e5eaf2;
+  --app-primary: #2f6fed;
+  --app-primary-dark: #2458c7;
+  --app-soft: #eef4ff;
+  --app-radius: 22px;
+  --app-shadow: 0 18px 50px rgba(31, 41, 55, 0.10);
+}
+
+body {
+  min-height: 100vh;
+  color: var(--app-ink);
+  background:
+    radial-gradient(circle at top left, rgba(47, 111, 237, 0.12), transparent 34rem),
+    linear-gradient(180deg, #fbfdff 0%, var(--app-bg) 42%, #eef3f9 100%);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+a {
+  color: var(--app-primary);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--app-primary-dark);
+  text-decoration: underline;
+}
+
+.bd-navbar {
+  margin: 14px auto 0;
+  width: min(1120px, calc(100% - 24px));
+  border: 1px solid rgba(229, 234, 242, 0.9);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.84);
+  box-shadow: 0 10px 30px rgba(31, 41, 55, 0.08);
+  backdrop-filter: blur(14px);
+}
+
+.nav-tabs {
+  gap: 6px;
+  border-bottom: 0;
+}
+
+.nav-tabs .nav-link,
+.nav .nav-link {
+  border: 0;
+  border-radius: 999px;
+  color: var(--app-muted);
+  font-weight: 600;
+}
+
+.nav-tabs .nav-link.active,
+.nav .nav-link:hover {
+  color: var(--app-primary);
+  background: var(--app-soft);
+}
+
+.page-shell {
+  padding-top: 30px;
+  padding-bottom: 22px;
+}
+
+.content-card {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: clamp(22px, 4vw, 42px);
+  border: 1px solid rgba(229, 234, 242, 0.9);
+  border-radius: var(--app-radius);
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: var(--app-shadow);
+}
+
+.page-footer {
+  max-width: 920px;
+  margin: 0 auto 28px;
+  padding: 0 18px;
+  color: var(--app-muted);
+  font-size: 0.92rem;
+}
+
+.upload-panel,
+.file-panel {
+  display: grid;
+  gap: 22px;
+}
+
+.page-kicker {
+  margin-bottom: 8px;
+  color: var(--app-primary);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.page-title {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 3.1rem);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+}
+
+.page-subtitle {
+  max-width: 620px;
+  margin: 12px 0 0;
+  color: var(--app-muted);
+  line-height: 1.7;
+}
+
+.upload-form {
+  display: grid;
+  gap: 18px;
+}
+
+.form-label {
+  color: #344054;
+  font-weight: 700;
+}
+
+.form-control {
+  border-color: var(--app-line);
+  border-radius: 14px;
+  padding: 0.78rem 0.95rem;
+}
+
+.form-control:focus {
+  border-color: rgba(47, 111, 237, 0.55);
+  box-shadow: 0 0 0 0.22rem rgba(47, 111, 237, 0.14);
+}
+
+.form-text {
+  color: var(--app-muted);
+}
+
+.btn-primary {
+  border-color: var(--app-primary);
+  border-radius: 999px;
+  background: var(--app-primary);
+  box-shadow: 0 12px 24px rgba(47, 111, 237, 0.22);
+  font-weight: 800;
+}
+
+.btn-primary:hover {
+  border-color: var(--app-primary-dark);
+  background: var(--app-primary-dark);
+}
+
+.upload-submit {
+  width: 100%;
+  padding: 0.86rem 1.2rem;
+}
+
+.alert {
+  border-radius: 16px;
+}
+
+.table-responsive {
+  border: 1px solid var(--app-line);
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.table {
+  margin-bottom: 0;
+  vertical-align: middle;
+}
+
+.table thead th {
+  background: #f7f9fc;
+  color: #475467;
+  font-size: 0.88rem;
+}
+
+.file-link {
+  font-weight: 700;
+}
+
+.empty-state {
+  padding: 32px;
+  border: 1px dashed #cad5e5;
+  border-radius: 18px;
+  color: var(--app-muted);
+  background: #f8fbff;
+  text-align: center;
+}
+
+@media (max-width: 576px) {
+  .bd-navbar {
+    border-radius: 24px;
+  }
+
+  .content-card {
+    padding: 22px 18px;
+  }
+}
