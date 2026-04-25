@@ -7,6 +7,7 @@ import time
 import os
 from entities import data_saves
 from utils import core
+from flask_login import current_user
 
 service_name = 'files2'
 
@@ -19,6 +20,14 @@ def get_files2_pwd():
 
 def check_files2_pwd():
     return request.values.get('pwd') == get_files2_pwd()
+
+
+def is_files2_allowed():
+    return current_user.is_authenticated or check_files2_pwd()
+
+
+def should_require_pwd_input():
+    return not current_user.is_authenticated
 
 
 def redirect_to_files():
@@ -43,17 +52,22 @@ def get_size(fobj):
 
 @bp.route('/', methods=('GET', 'POST'))
 def index():
-    if not check_files2_pwd():
+    if not is_files2_allowed():
         return redirect_to_files()
     datas = myfuncs.get_datas(request)
     data_saves.save_data(datas, 1, service_name)
     files = core.get_files(f'{os.y.up_files_path}2')
-    return render_template('down.html', files=files, require_pwd=True, pwd=request.values.get('pwd', ''))
+    return render_template(
+        'down.html',
+        files=files,
+        require_pwd=should_require_pwd_input(),
+        pwd=request.values.get('pwd', ''),
+    )
 
 
 @bp.route('/<string:file_name>', methods=('GET',))
 def down(file_name):
-    if not check_files2_pwd():
+    if not is_files2_allowed():
         return redirect_to_files()
     datas = myfuncs.get_datas(request)
     data_saves.save_data(datas, 1, f'{service_name}/down')
@@ -68,13 +82,18 @@ def up_file():
     datas = myfuncs.get_datas(request)
     data_saves.save_data(datas, 1, f'{service_name}/up')
     if request.method == "GET":
-        return render_template('up_file.html', require_pwd=True, pwd=request.values.get('pwd', ''))
+        return render_template(
+            'up_file.html',
+            require_pwd=should_require_pwd_input(),
+            pwd=request.values.get('pwd', ''),
+        )
 
     if request.method == 'POST':
-        if not check_files2_pwd():
+        require_pwd = should_require_pwd_input()
+        if not is_files2_allowed():
             return render_template(
                 'up_file.html',
-                require_pwd=True,
+                require_pwd=require_pwd,
                 pwd=request.values.get('pwd', ''),
                 error_msg='密码错误，文件未上传',
             )
